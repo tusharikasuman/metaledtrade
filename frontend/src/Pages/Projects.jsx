@@ -171,10 +171,10 @@ export default function Projects() {
         <section className="relative h-[65vh] flex flex-col justify-end overflow-hidden">
           <div className="absolute inset-0 z-0">
             <div 
-              className="w-full h-full bg-cover bg-center opacity-60 grayscale hover:grayscale-0 transition-all duration-1000"
+              className="w-full h-full bg-cover bg-center opacity-70 transition-all duration-1000"
               style={{ backgroundImage: `url(${heroBg})` }}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#131313] via-[#131313]/45 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#131313] via-[#131313]/55 to-transparent" />
           </div>
           
           <div className="relative z-10 w-full max-w-[1440px] mx-auto px-5 md:px-20 pb-12">
@@ -400,8 +400,6 @@ export default function Projects() {
           </div>
         </section>
       </main>
-
-      <Footer />
     </div>
   );
 }
