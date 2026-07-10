@@ -1,19 +1,82 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg: #0b0d10;
-  --color-bg-alt: #131619;
-  --color-surface: #1a1d22;
-  --color-ivory: #f4f1ea;
-  --color-steel: #9aa0a6;
-  --color-gold: #c9a24b;
-  --color-gold-soft: rgba(201, 162, 75, 0.16);
+  /* Colors */
+  --color-on-secondary-fixed-variant: #474646;
+  --color-secondary-fixed: #e5e2e1;
+  --color-on-primary-fixed-variant: #464747;
+  --color-on-tertiary-container: #604c00;
+  --color-surface-container-high: #2a2a2a;
+  --color-on-primary-fixed: #1a1c1c;
+  --color-surface-variant: #353535;
+  --color-surface-container: #1f2020;
+  --color-primary-fixed: #e3e2e2;
+  --color-on-surface: #e4e2e1;
+  --color-surface-container-highest: #353535;
+  --color-tertiary-fixed: #ffe088;
+  --color-surface-dim: #131313;
+  --color-outline: #8e9192;
+  --color-primary: #dcdcdc;
+  --color-on-primary-container: #4d4e4f;
+  --color-surface: #131313;
+  --color-on-surface-variant: #c4c7c7;
+  --color-on-error: #690005;
+  --color-error: #ffb4ab;
+  --color-on-secondary: #313030;
+  --color-outline-variant: #444748;
+  --color-error-container: #93000a;
+  --color-tertiary-fixed-dim: #e9c349;
+  --color-background: #131313;
+  --color-on-tertiary-fixed: #241a00;
+  --color-secondary: #c8c6c5;
+  --color-tertiary: #ffd862;
+  --color-surface-container-lowest: #0e0e0e;
+  --color-on-tertiary-fixed-variant: #574500;
+  --color-inverse-on-surface: #303030;
+  --color-secondary-fixed-dim: #c8c6c5;
+  --color-surface-tint: #c6c6c6;
+  --color-surface-bright: #393939;
+  --color-primary-fixed-dim: #c6c6c6;
+  --color-primary-container: #c0c0c0;
+  --color-on-secondary-container: #bab8b7;
+  --color-on-error-container: #ffdad6;
+  --color-secondary-container: #4a4949;
+  --color-inverse-primary: #5d5e5f;
+  --color-on-secondary-fixed: #1c1b1b;
+  --color-on-background: #e4e2e1;
+  --color-on-primary: #2f3131;
+  --color-on-tertiary: #3c2f00;
+  --color-tertiary-container: #e2bc43;
+  --color-surface-container-low: #1b1c1c;
+  --color-inverse-surface: #e4e2e1;
 
-  --font-display: "Fraunces", "Georgia", serif;
-  --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  /* Font Families */
+  --font-headline-lg: 'Montserrat', sans-serif;
+  --font-body-lg: 'Inter', sans-serif;
+  --font-display-lg: 'Montserrat', sans-serif;
+  --font-body-md: 'Inter', sans-serif;
+  --font-headline-md: 'Montserrat', sans-serif;
+  --font-headline-lg-mobile: 'Montserrat', sans-serif;
+  --font-label-sm: 'JetBrains Mono', monospace;
+  --font-label-md: 'JetBrains Mono', monospace;
+
+  /* Spacing */
+  --spacing-unit-sm: 8px;
+  --spacing-unit-xl: 64px;
+  --spacing-unit-xs: 4px;
+  --spacing-margin-mobile: 20px;
+  --spacing-margin-desktop: 80px;
+  --spacing-unit-lg: 32px;
+  --spacing-gutter: 24px;
+  --spacing-unit-md: 16px;
+  --spacing-container-max: 1440px;
 }
 
-html, body {
+/* Custom styles and overrides */
+body {
+  background-color: #131313;
+  color: #e4e2e1;
+  scroll-behavior: smooth;
   margin: 0;
   padding: 0;
   width: 100%;
@@ -29,9 +92,26 @@ html, body {
   flex-direction: column;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.001ms !important;
-    transition-duration: 0.001ms !important;
-  }
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.machined-edge {
+  box-shadow: inset 0 1px 0 0 rgba(192, 192, 192, 0.1);
+}
+
+.gold-accent-hover:hover {
+  color: #D4AF37;
+  transition: color 0.3s ease;
+}
+
+.luxury-gradient {
+  background: linear-gradient(135deg, rgba(26, 26, 26, 1) 0%, rgba(18, 18, 18, 1) 100%);
 }
