@@ -2,6 +2,8 @@ import React from 'react'
 import About from './Pages/About.jsx'
 import Home from './Pages/Home.jsx'
 import Products from './Pages/Products.jsx'
+import Contact from './Pages/Contact.jsx'
+import Careers from './Pages/Careers.jsx'
 import Projects from './Pages/Projects.jsx'
 import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar.jsx'
@@ -18,6 +20,8 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/products" element={<Products />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/careers" element={<Careers />} />
           <Route path="/projects" element={<Projects />} />
         </Routes>
       </main>

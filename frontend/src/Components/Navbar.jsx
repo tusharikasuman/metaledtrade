@@ -1,19 +1,19 @@
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { HiMenu, HiX, HiChevronDown } from "react-icons/hi";
 import logo from "../assets/metaled logo.jpeg";
 
 const NAV_LINKS = [
-  { label: "Home", to: "/" },
-  { label: "About Us", to: "/about" },
-  { label: "Products", to: "/products", dropdown: true },
-  { label: "Projects", to: "/projects" },
-  { label: "Contact Us", to: "#contact" },
+  { label: "Home", href: "/" },
+  { label: "About Us", href: "/about" },
+  { label: "Products", href: "/products", dropdown: true },
+  { label: "Projects", href: "/projects" },
+  { label: "Careers", href: "/careers" },
+  { label: "Contact Us", href: "/contact" },
 ];
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
-  const location = useLocation();
 
   const handleLinkClick = (e, to) => {
     setOpen(false);
@@ -39,32 +39,19 @@ export default function Navbar() {
         >
           <HiX />
         </button>
-        {NAV_LINKS.map(({ label, to, dropdown }) => {
-          const isContact = to === "#contact";
-          const isActive = !isContact && location.pathname === to;
-          return isContact ? (
-            <a
-              key={label}
-              href={to}
-              onClick={(e) => handleLinkClick(e, to)}
-              className="flex items-center gap-1 text-sm font-medium text-[#e4e2e1] hover:text-gold transition-colors"
-            >
+        {NAV_LINKS.map(({ label, href, dropdown }) => (
+          href.startsWith('#') ? (
+            <a key={label} href={href} onClick={(e) => handleLinkClick(e, href)} className="flex items-center gap-1 text-sm font-medium hover:text-[#ffe088] text-[#e4e2e1] transition-colors">
               {label}
+              {dropdown && <HiChevronDown className="text-xs" />}
             </a>
           ) : (
-            <Link
-              key={label}
-              to={to}
-              onClick={(e) => handleLinkClick(e, to)}
-              className={`flex items-center gap-1 text-sm font-medium transition-colors ${
-                isActive ? "text-gold font-semibold" : "text-[#e4e2e1] hover:text-gold"
-              }`}
-            >
+            <Link key={label} to={href} onClick={(e) => handleLinkClick(e, href)} className="flex items-center gap-1 text-sm font-medium hover:text-[#ffe088] text-[#e4e2e1] transition-colors">
               {label}
               {dropdown && <HiChevronDown className="text-xs" />}
             </Link>
-          );
-        })}
+          )
+        ))}
       </nav>
 
       <button
