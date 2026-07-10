@@ -2,6 +2,18 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer";
+import { Globe3D } from "../components/ui/3d-globe";
+
+const GLOBE_MARKERS = [
+  { lat: 25.2048, lng: 55.2708, src: "https://assets.aceternity.com/avatars/10.webp", label: "Dubai (HQ)" },
+  { lat: 25.2854, lng: 51.531,  src: "https://assets.aceternity.com/avatars/1.webp",  label: "Doha, Qatar" },
+  { lat: 24.4539, lng: 54.3773, src: "https://assets.aceternity.com/avatars/2.webp",  label: "Abu Dhabi" },
+  { lat: 31.2304, lng: 121.4737, src: "https://assets.aceternity.com/avatars/9.webp", label: "Shanghai" },
+  { lat: 19.076,  lng: 72.8777, src: "https://assets.aceternity.com/avatars/6.webp",  label: "Mumbai" },
+  { lat: -26.2041, lng: 28.0473, src: "https://assets.aceternity.com/avatars/5.webp", label: "Johannesburg" },
+  { lat: 1.3521,  lng: 103.8198, src: "https://assets.aceternity.com/avatars/12.webp", label: "Singapore" },
+  { lat: 10.8231, lng: 106.6297, src: "https://assets.aceternity.com/avatars/13.webp", label: "Ho Chi Minh" },
+];
 
 // Local assets for mock photos grid
 import heroBg from "../assets/projects/hero_projects.jpg";
@@ -281,7 +293,22 @@ export default function Projects() {
           </div>
         </section>
 
-        {/* Typographic Landmark Index (Focus Dimming Grid) */}
+        <section className="bg-[#0a0a0a] border-y border-[#444748]/20 py-24 relative overflow-hidden select-none">
+          <div className="max-w-[1440px] mx-auto px-5 md:px-20 text-center relative z-10 mb-12">
+            <span className="font-label-md text-xs text-[#ffd862] uppercase tracking-[0.25em] block mb-2">Global Operations</span>
+            <h2 className="font-headline-lg text-3xl md:text-5xl text-[#dcdcdc] uppercase tracking-wide">Worldwide Supply Chain</h2>
+          </div>
+          
+          <div style={{ width: '100%', maxWidth: '700px', margin: '0 auto', position: 'relative' }}>
+            <Globe3D
+              markers={GLOBE_MARKERS}
+              config={{ bumpScale: 3, autoRotateSpeed: 0.4, showAtmosphere: false }}
+              onMarkerClick={(m) => console.log(m.label)}
+            />
+          </div>
+        </section>
+
+        {/* OPTION 2: SIDE-BY-SIDE TYPOGRAPHIC LANDMARK INDEX */}
         <section className="px-5 md:px-20 py-24 max-w-[1440px] mx-auto border-t border-[#444748]/10">
           <div className="text-left mb-16 max-w-2xl">
             <span className="font-label-md text-xs text-[#ffd862] uppercase tracking-[0.25em] block mb-2">Portfolio</span>
@@ -292,10 +319,21 @@ export default function Projects() {
             </p>
           </div>
 
-          <div 
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-12 gap-x-16"
-            onMouseLeave={() => setHoveredIndex(null)}
-          >
+          <div className="flex flex-col lg:flex-row gap-16 items-center">
+            <div style={{ width: '100%', maxWidth: '550px', position: 'relative' }}>
+              <Globe3D
+                markers={GLOBE_MARKERS}
+                config={{ bumpScale: 3, autoRotateSpeed: 0.4, showAtmosphere: false }}
+                onMarkerClick={(m) => console.log(m.label)}
+              />
+            </div>
+
+            {/* List Column */}
+            <div className="w-full lg:w-1/2">
+              <div 
+                className="grid grid-cols-1 sm:grid-cols-2 gap-y-12 gap-x-12"
+                onMouseLeave={() => setHoveredIndex(null)}
+              >
             {LANDMARK_PROJECTS.map((project, idx) => {
               const isHovered = hoveredIndex === idx;
               const isAnyHovered = hoveredIndex !== null;
@@ -340,6 +378,8 @@ export default function Projects() {
                 </div>
               );
             })}
+              </div>
+            </div>
           </div>
         </section>
 
