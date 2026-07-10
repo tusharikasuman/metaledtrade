@@ -4,6 +4,7 @@ import Home from './Pages/Home.jsx'
 import Products from './Pages/Products.jsx'
 import { Routes, Route } from 'react-router-dom';
 
+import Home from './Pages/Home.jsx'
 
 function App() {
   return (
