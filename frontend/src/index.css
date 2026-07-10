@@ -2,6 +2,12 @@
 
 @theme {
   /* Colors */
+  --color-gold: #ffd862;
+  --color-gold-soft: #ffe088;
+  --color-bg: #131313;
+  --color-bg-alt: #1a1c1c;
+  --color-ivory: #e4e2e1;
+  --color-steel: #8e9192;
   --color-on-secondary-fixed-variant: #474646;
   --color-secondary-fixed: #e5e2e1;
   --color-on-primary-fixed-variant: #464747;
@@ -114,4 +120,23 @@ body {
 
 .luxury-gradient {
   background: linear-gradient(135deg, rgba(26, 26, 26, 1) 0%, rgba(18, 18, 18, 1) 100%);
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 25s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
 }

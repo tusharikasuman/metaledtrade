@@ -2,9 +2,10 @@ import React from 'react'
 import About from './Pages/About.jsx'
 import Home from './Pages/Home.jsx'
 import Products from './Pages/Products.jsx'
+import Projects from './Pages/Projects.jsx'
 import { Routes, Route } from 'react-router-dom';
 
-import Home from './Pages/Home.jsx'
+
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/products" element={<Products />} />
+          <Route path="/projects" element={<Projects />} />
         </Routes>
       </main>
     </div>
