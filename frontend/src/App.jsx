@@ -6,12 +6,15 @@ import Contact from './Pages/Contact.jsx'
 import Careers from './Pages/Careers.jsx'
 import Projects from './Pages/Projects.jsx'
 import { Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar.jsx'
+import Footer from './components/Footer.jsx'
 
 
 
 function App() {
   return (
     <div className="relative min-h-screen bg-[#131313] text-on-surface font-body-md antialiased overflow-x-hidden flex flex-col justify-between">
+      <Navbar/>
       <main className="flex-grow">
         <Routes>
           <Route path="/" element={<Home />} />
@@ -22,6 +25,7 @@ function App() {
           <Route path="/projects" element={<Projects />} />
         </Routes>
       </main>
+      <Footer/>
     </div>
   )
 }

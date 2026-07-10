@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 import bgImg from "../assets/homebg.png";
 import { longProducts, flatProducts } from "../data/productsData";
 import { HiOutlineArrowRight, HiOutlineCube, HiOutlineViewBoards } from "react-icons/hi";
@@ -29,7 +27,6 @@ export default function Products() {
 
   return (
     <div className="min-h-screen bg-[#131313] text-[#e4e2e1] font-body flex flex-col">
-      <Navbar />
 
       <main className="flex-grow pt-32 pb-20 px-6 md:px-12 max-w-[1440px] mx-auto w-full">
         {/* Header Section */}
@@ -210,8 +207,6 @@ export default function Products() {
         </div>
 
       </main>
-
-      <Footer />
     </div>
   );
 }
