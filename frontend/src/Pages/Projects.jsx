@@ -201,11 +201,7 @@ export default function Projects() {
               className="w-full h-full bg-cover bg-center opacity-70 transition-all duration-1000"
               style={{ backgroundImage: `url(${themeMode === "light" ? heroBgLight : heroBg})` }}
             />
-            <div className={`absolute inset-0 ${
-              themeMode === "light" 
-                ? "bg-gradient-to-t from-bg via-bg/40 to-transparent" 
-                : "bg-gradient-to-t from-bg via-bg/55 to-transparent"
-            }`} />
+            <div className="absolute inset-0 bg-gradient-to-t from-bg via-black/55 to-transparent" />
           </div>
           
           <div className="relative z-10 w-full max-w-[1440px] mx-auto px-5 md:px-20 pb-12">
@@ -213,11 +209,11 @@ export default function Projects() {
               <p className="font-label-md text-xs md:text-sm text-[#ffd862] mb-3 uppercase tracking-[0.25em]">
                 Global Portfolio
               </p>
-              <h1 className="font-display-lg text-4xl sm:text-5xl md:text-7xl text-[#dcdcdc] leading-[1.1] mb-4 uppercase">
+              <h1 className="font-display-lg text-4xl sm:text-5xl md:text-7xl text-white leading-[1.1] mb-4 uppercase">
                 Architectural <br />
                 Integrity
               </h1>
-              <p className="font-body-lg text-sm md:text-base text-[#c4c7c7] leading-relaxed">
+              <p className="font-body-lg text-sm md:text-base text-zinc-300 leading-relaxed">
                 Forging the backbone of the world&apos;s most ambitious skylines with premium industrial alloys and structural precision.
               </p>
             </div>
@@ -228,7 +224,7 @@ export default function Projects() {
         <section className="px-5 md:px-20 py-16 max-w-[1440px] mx-auto">
           <div className="text-left mb-12">
             <span className="font-label-md text-xs text-[#ffd862] uppercase tracking-widest block mb-2">Featured Case Studies</span>
-            <h2 className="font-headline-lg text-2xl md:text-4xl text-[#dcdcdc] uppercase">Infrastructure Showcases</h2>
+            <h2 className="font-headline-lg text-2xl md:text-4xl text-primary uppercase">Infrastructure Showcases</h2>
             <div className="w-12 h-[2px] bg-[#ffd862] mt-3" />
           </div>
 
@@ -312,10 +308,10 @@ export default function Projects() {
           </div>
         </section>
 
-        <section className="bg-[#0a0a0a] border-y border-[#444748]/20 py-24 relative overflow-hidden select-none">
+        <section className="bg-surface-container-lowest border-y border-[#444748]/20 py-24 relative overflow-hidden select-none">
           <div className="max-w-[1440px] mx-auto px-5 md:px-20 text-center relative z-10 mb-12">
             <span className="font-label-md text-xs text-[#ffd862] uppercase tracking-[0.25em] block mb-2">Global Operations</span>
-            <h2 className="font-headline-lg text-3xl md:text-5xl text-[#dcdcdc] uppercase tracking-wide">Worldwide Supply Chain</h2>
+            <h2 className="font-headline-lg text-3xl md:text-5xl text-primary uppercase tracking-wide">Worldwide Supply Chain</h2>
           </div>
           
           <div style={{ width: '100%', maxWidth: '700px', margin: '0 auto', position: 'relative' }}>
@@ -331,9 +327,9 @@ export default function Projects() {
         <section className="px-5 md:px-20 py-24 max-w-[1440px] mx-auto border-t border-[#444748]/10">
           <div className="text-left mb-16 max-w-2xl">
             <span className="font-label-md text-xs text-[#ffd862] uppercase tracking-[0.25em] block mb-2">Portfolio</span>
-            <h2 className="font-headline-lg text-2xl md:text-4xl text-[#dcdcdc] uppercase tracking-wide">Key Regional Footprints</h2>
+            <h2 className="font-headline-lg text-2xl md:text-4xl text-primary uppercase tracking-wide">Key Regional Footprints</h2>
             <div className="w-12 h-[2px] bg-[#ffd862] mt-3 mb-4" />
-            <p className="font-body-md text-sm text-[#c4c7c7] leading-relaxed">
+            <p className="font-body-md text-sm text-steel leading-relaxed">
               MetalEd Trade has supplied certified steel and custom metal alloys to some of the most iconic developments across the region.
             </p>
           </div>
@@ -385,7 +381,7 @@ export default function Projects() {
                     </div>
 
                     {/* Project Name */}
-                    <h3 className="font-display-lg text-2xl md:text-3xl font-extrabold uppercase tracking-wide text-white group-hover:text-[#ffd862] transition-colors duration-300">
+                    <h3 className="font-display-lg text-2xl md:text-3xl font-extrabold uppercase tracking-wide text-ivory group-hover:text-[#ffd862] transition-colors duration-300">
                       {project.name}
                     </h3>
 
@@ -419,12 +415,12 @@ export default function Projects() {
         </section>
 
         {/* Partners Showcase Section (Infinite Marquee) */}
-        <section className="bg-[#1b1c1c] border-y border-[#444748]/30 py-12 relative overflow-hidden">
+        <section className="bg-bg-alt border-y border-[#444748]/30 py-12 relative overflow-hidden">
           <div className="max-w-[1440px] mx-auto mb-8 px-5 md:px-20 text-center">
             <span className="font-label-md text-xs text-[#ffd862] uppercase tracking-[0.25em] block mb-2">
               Mill Collaborations
             </span>
-            <h2 className="font-headline-lg text-xl md:text-2xl text-[#dcdcdc] uppercase tracking-wide">
+            <h2 className="font-headline-lg text-xl md:text-2xl text-primary uppercase tracking-wide">
               Global Smelting Partners
             </h2>
             <div className="w-12 h-[2px] bg-[#ffd862] mx-auto mt-2" />

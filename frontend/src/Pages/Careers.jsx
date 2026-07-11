@@ -94,8 +94,7 @@ export default function Careers() {
   };
 
   return (
-    <div className="min-h-screen bg-[#131313] text-[#e4e2e1] font-body flex flex-col relative">
-      <Navbar />
+    <div className="min-h-screen bg-bg text-ivory font-body flex flex-col relative">
 
       <main className="flex-grow pt-32 pb-20 px-6 md:px-12 max-w-[1440px] mx-auto w-full">
         
@@ -128,15 +127,15 @@ export default function Careers() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: idx * 0.1 }}
-                className="bg-[#1a1c1c] border border-[#2a2a2a] p-8 rounded-sm hover:border-[#ffe088] transition-colors duration-300 flex flex-col justify-between"
+                className="bg-bg-alt border border-outline-variant/30 p-8 rounded-sm hover:border-[#ffe088] transition-colors duration-300 flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-center gap-3 mb-4">
-                    <span className="text-[10px] font-bold tracking-widest text-[#8e9192] uppercase bg-[#131313] px-3 py-1 border border-[#353535]">
+                    <span className="text-[10px] font-bold tracking-widest text-[#8e9192] uppercase bg-bg px-3 py-1 border border-outline-variant/30">
                       {job.department}
                     </span>
                   </div>
-                  <h3 className="font-display text-2xl font-semibold mb-6 text-[#e4e2e1]">
+                  <h3 className="font-display text-2xl font-semibold mb-6 text-ivory">
                     {job.title}
                   </h3>
                   
@@ -154,7 +153,7 @@ export default function Careers() {
 
                 <button 
                   onClick={() => openModal(job)}
-                  className="w-full sm:w-auto self-start px-6 py-3 border border-[#353535] text-xs font-bold tracking-widest text-[#e4e2e1] uppercase hover:bg-[#ffe088] hover:text-[#131313] hover:border-[#ffe088] transition-colors flex items-center gap-2"
+                  className="w-full sm:w-auto self-start px-6 py-3 border border-outline-variant/40 text-xs font-bold tracking-widest text-ivory uppercase hover:bg-accent hover:text-bg hover:border-accent transition-colors flex items-center gap-2"
                 >
                   Apply Now
                   <HiOutlineArrowRight />
@@ -164,8 +163,6 @@ export default function Careers() {
           </div>
         </section>
       </main>
-
-      <Footer />
 
       {/* Application Modal Overlay */}
       <AnimatePresence>
@@ -185,10 +182,10 @@ export default function Careers() {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-xl bg-[#1a1c1c] border border-[#2a2a2a] shadow-2xl rounded-sm overflow-hidden z-10"
+              className="relative w-full max-w-xl bg-bg-alt border border-outline-variant/30 shadow-2xl rounded-sm overflow-hidden z-10"
             >
               {/* Modal Header */}
-              <div className="flex justify-between items-center p-6 border-b border-[#2a2a2a]">
+              <div className="flex justify-between items-center p-6 border-b border-outline-variant/30">
                 <div>
                   <span className="text-[10px] font-bold tracking-widest text-[#ffe088] uppercase block mb-1">
                     Applying for
@@ -219,7 +216,7 @@ export default function Careers() {
                       transition={{ duration: 0.3 }}
                       className="w-full"
                     >
-                      <label className="block font-display text-2xl mb-6 text-[#e4e2e1]">
+                      <label className="block font-display text-2xl mb-6 text-ivory">
                         What is your full name?
                       </label>
                       <input 
@@ -229,12 +226,12 @@ export default function Careers() {
                         onChange={(e) => setFormData({...formData, name: e.target.value})}
                         onKeyDown={(e) => handleKeyDown(e, "EMAIL")}
                         placeholder="John Doe"
-                        className="w-full bg-transparent border-b-2 border-[#353535] py-4 text-xl md:text-2xl text-white focus:outline-none focus:border-[#ffe088] transition-colors placeholder-[#353535]"
+                        className="w-full bg-transparent border-b-2 border-outline-variant/40 py-4 text-xl md:text-2xl text-white focus:outline-none focus:border-[#ffe088] transition-colors placeholder-[#353535]"
                       />
                       <button 
                         onClick={() => formData.name.trim() !== "" && setAppState("EMAIL")}
                         disabled={formData.name.trim() === ""}
-                        className="mt-8 px-6 py-3 bg-[#e4e2e1] text-[#131313] text-xs font-bold uppercase tracking-widest hover:bg-[#ffe088] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="mt-8 px-6 py-3 bg-ivory text-bg text-xs font-bold uppercase tracking-widest hover:bg-[#ffe088] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         Next Step
                       </button>
@@ -251,7 +248,7 @@ export default function Careers() {
                       transition={{ duration: 0.3 }}
                       className="w-full"
                     >
-                      <label className="block font-display text-2xl mb-6 text-[#e4e2e1]">
+                      <label className="block font-display text-2xl mb-6 text-ivory">
                         What is your email address?
                       </label>
                       <input 
@@ -261,19 +258,19 @@ export default function Careers() {
                         onChange={(e) => setFormData({...formData, email: e.target.value})}
                         onKeyDown={(e) => handleKeyDown(e, "RESUME")}
                         placeholder="john@example.com"
-                        className="w-full bg-transparent border-b-2 border-[#353535] py-4 text-xl md:text-2xl text-white focus:outline-none focus:border-[#ffe088] transition-colors placeholder-[#353535]"
+                        className="w-full bg-transparent border-b-2 border-outline-variant/40 py-4 text-xl md:text-2xl text-white focus:outline-none focus:border-[#ffe088] transition-colors placeholder-[#353535]"
                       />
                       <div className="mt-8 flex gap-4">
                         <button 
                           onClick={() => setAppState("NAME")}
-                          className="px-6 py-3 border border-[#353535] text-[#e4e2e1] text-xs font-bold uppercase tracking-widest hover:bg-[#2a2a2a] transition-colors"
+                          className="px-6 py-3 border border-outline-variant/40 text-ivory text-xs font-bold uppercase tracking-widest hover:bg-bg-alt/20 transition-colors"
                         >
                           Back
                         </button>
                         <button 
                           onClick={() => formData.email.trim() !== "" && setAppState("RESUME")}
                           disabled={formData.email.trim() === ""}
-                          className="px-6 py-3 bg-[#e4e2e1] text-[#131313] text-xs font-bold uppercase tracking-widest hover:bg-[#ffe088] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="px-6 py-3 bg-ivory text-bg text-xs font-bold uppercase tracking-widest hover:bg-[#ffe088] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           Next Step
                         </button>
@@ -291,7 +288,7 @@ export default function Careers() {
                       transition={{ duration: 0.3 }}
                       className="w-full"
                     >
-                      <label className="block font-display text-2xl mb-6 text-[#e4e2e1]">
+                      <label className="block font-display text-2xl mb-6 text-ivory">
                         Upload your Resume/CV
                       </label>
                       <label 
@@ -301,7 +298,7 @@ export default function Careers() {
                         className={`w-full h-48 border-2 border-dashed flex flex-col items-center justify-center cursor-pointer transition-all duration-300 rounded-sm ${
                           isDragging 
                             ? "border-[#ffe088] bg-[#ffe088]/5" 
-                            : "border-[#353535] hover:border-[#8e9192]"
+                            : "border-outline-variant/40 hover:border-[#8e9192]"
                         }`}
                       >
                         <input 
@@ -311,14 +308,14 @@ export default function Careers() {
                           accept=".pdf,.doc,.docx"
                         />
                         <HiOutlineCloudUpload className={`text-5xl mb-4 transition-colors ${isDragging ? 'text-[#ffe088]' : 'text-[#444748]'}`} />
-                        <span className="text-[#e4e2e1] text-sm font-medium">
+                        <span className="text-ivory text-sm font-medium">
                           {isDragging ? "Drop file to upload" : "Click or drag file here"}
                         </span>
                       </label>
                       <div className="mt-8 flex gap-4">
                         <button 
                           onClick={() => setAppState("EMAIL")}
-                          className="px-6 py-3 border border-[#353535] text-[#e4e2e1] text-xs font-bold uppercase tracking-widest hover:bg-[#2a2a2a] transition-colors"
+                          className="px-6 py-3 border border-outline-variant/40 text-ivory text-xs font-bold uppercase tracking-widest hover:bg-bg-alt/20 transition-colors"
                         >
                           Back
                         </button>
@@ -336,13 +333,13 @@ export default function Careers() {
                       transition={{ duration: 0.3 }}
                       className="w-full"
                     >
-                      <h3 className="font-display text-2xl mb-8 text-[#e4e2e1]">
+                      <h3 className="font-display text-2xl mb-8 text-ivory">
                         Review Your Application
                       </h3>
                       
                       <div className="space-y-4 mb-8">
                         {/* Name Summary Row */}
-                        <div className="flex items-center justify-between p-4 border border-[#2a2a2a] bg-[#131313] rounded-sm group">
+                        <div className="flex items-center justify-between p-4 border border-outline-variant/30 bg-bg rounded-sm group">
                           <div>
                             <span className="block text-[10px] font-bold tracking-widest text-[#8e9192] uppercase mb-1">Full Name</span>
                             <span className="text-white font-medium">{formData.name}</span>
@@ -351,9 +348,9 @@ export default function Careers() {
                             <HiOutlinePencil /> Edit
                           </button>
                         </div>
-
+ 
                         {/* Email Summary Row */}
-                        <div className="flex items-center justify-between p-4 border border-[#2a2a2a] bg-[#131313] rounded-sm group">
+                        <div className="flex items-center justify-between p-4 border border-outline-variant/30 bg-bg rounded-sm group">
                           <div>
                             <span className="block text-[10px] font-bold tracking-widest text-[#8e9192] uppercase mb-1">Email Address</span>
                             <span className="text-white font-medium">{formData.email}</span>
@@ -362,9 +359,9 @@ export default function Careers() {
                             <HiOutlinePencil /> Edit
                           </button>
                         </div>
-
+ 
                         {/* Resume Summary Row */}
-                        <div className="flex items-center justify-between p-4 border border-[#2a2a2a] bg-[#131313] rounded-sm group">
+                        <div className="flex items-center justify-between p-4 border border-outline-variant/30 bg-bg rounded-sm group">
                           <div className="overflow-hidden">
                             <span className="block text-[10px] font-bold tracking-widest text-[#8e9192] uppercase mb-1">Resume File</span>
                             <span className="text-white font-medium truncate block max-w-[200px] md:max-w-xs">{formData.resume}</span>
@@ -374,10 +371,10 @@ export default function Careers() {
                           </button>
                         </div>
                       </div>
-
+ 
                       <button 
                         onClick={() => setAppState("SUCCESS")}
-                        className="w-full py-4 bg-[#ffe088] text-[#131313] text-xs font-bold uppercase tracking-widest hover:bg-white transition-colors"
+                        className="w-full py-4 bg-gold text-bg text-xs font-bold uppercase tracking-widest hover:bg-white transition-colors"
                       >
                         Submit Application
                       </button>
@@ -403,7 +400,7 @@ export default function Careers() {
                       </p>
                       <button 
                         onClick={closeModal}
-                        className="px-8 py-3 border border-[#353535] text-[#e4e2e1] text-xs font-bold uppercase tracking-widest hover:bg-[#2a2a2a] transition-colors"
+                        className="px-8 py-3 border border-outline-variant/40 text-ivory text-xs font-bold uppercase tracking-widest hover:bg-bg-alt/20 transition-colors"
                       >
                         Close Window
                       </button>

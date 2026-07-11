@@ -228,7 +228,7 @@ export default function Footer() {
 
         {/* Giant Watermark Logo - Kinetic Cursor Hover Effect */}
         <div className="relative select-none border-t border-[#444748]/15 pt-12 mb-12 group overflow-hidden">
-          <h2 className="font-display-lg text-[64px] sm:text-[100px] md:text-[150px] lg:text-[190px] font-black text-center uppercase tracking-tighter leading-none text-[#1b1d24] group-hover:text-[#ffd862]/5 transition-all duration-1000">
+          <h2 className="font-display-lg text-[64px] sm:text-[100px] md:text-[150px] lg:text-[190px] font-black text-center uppercase tracking-tighter leading-none text-outline-variant/30 group-hover:text-[#ffd862]/5 transition-all duration-1000">
             METALED
           </h2>
           <div className="absolute inset-x-0 bottom-0 h-[2px] bg-gradient-to-r from-transparent via-[#ffd862]/30 to-transparent translate-y-2 group-hover:translate-y-0 transition-transform duration-700" />

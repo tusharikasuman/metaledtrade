@@ -61,7 +61,7 @@ export default function Navbar() {
         <img src={logo} alt="Metaled Trade FZCO" className="h-10 w-auto rounded border border-outline-variant/30" />
       </Link>
 
-      <nav className={`fixed inset-0 z-40 bg-bg-alt/95 flex flex-col items-start p-10 gap-6 transition-transform duration-300 md:static md:bg-transparent md:flex-row md:p-0 md:translate-x-0 md:items-center ${open ? "translate-x-0" : "-translate-x-full"}`}>
+      <nav className={`fixed inset-0 z-40 bg-bg-alt/95 flex flex-col items-start p-10 gap-6 transition-transform duration-300 md:static md:bg-transparent md:flex-row md:p-0 md:translate-x-0 md:items-center ml-auto md:mr-6 ${open ? "translate-x-0" : "-translate-x-full"}`}>
         <button 
           className="absolute top-6 right-6 text-2xl md:hidden text-ivory hover:text-gold transition-colors"
           onClick={() => setOpen(false)}
@@ -85,37 +85,14 @@ export default function Navbar() {
       </nav>
 
       <div className="flex items-center gap-3">
-        {/* Light/Dark Mode Pill Switcher */}
-        <div className="flex items-center bg-bg-alt/40 border border-outline-variant/30 rounded-full p-1 gap-1">
-          <button
-            onClick={() => {
-              if (!isLight) toggleTheme();
-            }}
-            className={`p-1.5 px-3 rounded-full text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all duration-300 cursor-pointer ${
-              isLight 
-                ? "bg-[#ffd862] text-[#131313] shadow-md" 
-                : "text-ivory hover:text-[#ffd862]"
-            }`}
-            aria-label="Light mode select button"
-          >
-            <HiSun className="text-sm" />
-            <span className="hidden sm:inline">Light</span>
-          </button>
-          <button
-            onClick={() => {
-              if (isLight) toggleTheme();
-            }}
-            className={`p-1.5 px-3 rounded-full text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all duration-300 cursor-pointer ${
-              !isLight 
-                ? "bg-[#ffd862] text-[#131313] shadow-md" 
-                : "text-ivory hover:text-[#ffd862]"
-            }`}
-            aria-label="Dark mode select button"
-          >
-            <HiMoon className="text-sm" />
-            <span className="hidden sm:inline">Dark</span>
-          </button>
-        </div>
+        {/* Light/Dark Mode Switcher */}
+        <button
+          onClick={toggleTheme}
+          className="p-2 text-ivory hover:text-gold transition-colors cursor-pointer"
+          aria-label="Toggle light and dark mode theme"
+        >
+          {isLight ? <HiMoon className="text-xl" /> : <HiSun className="text-xl" />}
+        </button>
 
         {/* Mobile menu trigger */}
         <button

@@ -27,11 +27,9 @@ const itemVariants = {
 
 export default function Contact() {
   return (
-    <div className="min-h-screen bg-[#131313] text-[#e4e2e1] font-body flex flex-col relative overflow-hidden">
+    <div className="min-h-screen bg-bg text-ivory font-body flex flex-col relative overflow-hidden">
       {/* Background ambient light effect */}
       <div className="absolute top-0 right-0 w-1/2 h-full bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[#ffe088]/5 via-[#131313]/0 to-transparent pointer-events-none" />
-      
-      <Navbar />
 
       <main className="flex-grow pt-32 pb-20 px-6 md:px-12 max-w-[1440px] mx-auto w-full relative z-10 flex items-center">
         
@@ -98,7 +96,7 @@ export default function Contact() {
                 </div>
                 <div>
                   <h4 className="text-[10px] font-bold tracking-widest text-[#8e9192] uppercase mb-1">Call Us</h4>
-                  <a href="tel:+9710000000" className="text-[#e4e2e1] font-medium leading-relaxed hover:text-[#ffe088] transition-colors">
+                  <a href="tel:+9710000000" className="text-ivory font-medium leading-relaxed hover:text-[#ffe088] transition-colors">
                     +971 (0) 00 000 0000
                   </a>
                 </div>
@@ -113,11 +111,11 @@ export default function Contact() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
           >
-            <form className="w-full max-w-lg bg-[#1a1c1c] p-8 md:p-12 border border-[#2a2a2a] shadow-2xl relative">
+            <form className="w-full max-w-lg bg-bg-alt p-8 md:p-12 border border-outline-variant/30 shadow-2xl relative">
               {/* Form Decorative Element */}
               <div className="absolute top-0 right-0 w-12 h-12 border-t-2 border-r-2 border-[#ffe088] opacity-30 m-4" />
               
-              <h3 className="font-display text-2xl font-medium mb-10 text-[#e4e2e1]">Send a Message</h3>
+              <h3 className="font-display text-2xl font-medium mb-10 text-ivory">Send a Message</h3>
 
               <div className="space-y-8">
                 {/* Name */}
@@ -126,7 +124,7 @@ export default function Contact() {
                     type="text" 
                     id="name"
                     required
-                    className="w-full bg-transparent border-b border-[#353535] py-3 text-[#e4e2e1] text-sm focus:outline-none focus:border-[#ffe088] transition-colors peer placeholder-transparent"
+                    className="w-full bg-transparent border-b border-outline-variant/40 py-3 text-ivory text-sm focus:outline-none focus:border-[#ffe088] transition-colors peer placeholder-transparent"
                     placeholder="Full Name"
                   />
                   <label 
@@ -143,7 +141,7 @@ export default function Contact() {
                     type="email" 
                     id="email"
                     required
-                    className="w-full bg-transparent border-b border-[#353535] py-3 text-[#e4e2e1] text-sm focus:outline-none focus:border-[#ffe088] transition-colors peer placeholder-transparent"
+                    className="w-full bg-transparent border-b border-outline-variant/40 py-3 text-ivory text-sm focus:outline-none focus:border-[#ffe088] transition-colors peer placeholder-transparent"
                     placeholder="Email Address"
                   />
                   <label 
@@ -160,7 +158,7 @@ export default function Contact() {
                     type="text" 
                     id="company"
                     required
-                    className="w-full bg-transparent border-b border-[#353535] py-3 text-[#e4e2e1] text-sm focus:outline-none focus:border-[#ffe088] transition-colors peer placeholder-transparent"
+                    className="w-full bg-transparent border-b border-outline-variant/40 py-3 text-ivory text-sm focus:outline-none focus:border-[#ffe088] transition-colors peer placeholder-transparent"
                     placeholder="Company Name"
                   />
                   <label 
@@ -177,7 +175,7 @@ export default function Contact() {
                     id="message"
                     required
                     rows="4"
-                    className="w-full bg-transparent border-b border-[#353535] py-3 text-[#e4e2e1] text-sm focus:outline-none focus:border-[#ffe088] transition-colors peer placeholder-transparent resize-none"
+                    className="w-full bg-transparent border-b border-outline-variant/40 py-3 text-ivory text-sm focus:outline-none focus:border-[#ffe088] transition-colors peer placeholder-transparent resize-none"
                     placeholder="Your Message"
                   ></textarea>
                   <label 
@@ -190,7 +188,7 @@ export default function Contact() {
 
                 <button 
                   type="submit"
-                  className="w-full mt-4 bg-[#e4e2e1] text-[#131313] py-4 text-xs font-bold uppercase tracking-widest hover:bg-[#ffe088] transition-colors duration-300"
+                  className="w-full mt-4 bg-ivory text-bg py-4 text-xs font-bold uppercase tracking-widest hover:bg-[#ffe088] transition-colors duration-300"
                 >
                   Submit Inquiry
                 </button>
@@ -200,8 +198,6 @@ export default function Contact() {
 
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 }

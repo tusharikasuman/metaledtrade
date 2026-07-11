@@ -130,11 +130,7 @@ const About = () => {
             {/* Hero Section */}
             <section className="relative h-[80vh] flex items-center overflow-hidden">
                 <div className="absolute inset-0 z-0">
-                    <div className={`absolute inset-0 z-10 ${
-                        themeMode === "light" 
-                            ? "bg-gradient-to-b from-white/20 via-white/50 to-bg" 
-                            : "bg-gradient-to-b from-black/85 via-black/50 to-bg"
-                    }`} />
+                    <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/50 to-bg z-10" />
                     <div
                         className="w-full h-full bg-cover bg-center bg-no-repeat transition-transform duration-[10s] scale-105"
                         style={{
@@ -146,14 +142,14 @@ const About = () => {
 
                 <div className="relative z-20 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto w-full">
                     <div className="max-w-4xl reveal">
-                        <span className="inline-block font-label-md text-label-md text-tertiary mb-3 uppercase tracking-[0.25em] bg-tertiary/10 px-3 py-1 border border-tertiary/20">
+                        <span className="inline-block font-label-md text-label-md text-[#ffd862] mb-3 uppercase tracking-[0.25em] bg-[#ffd862]/10 px-3 py-1 border border-[#ffd862]/20">
                             Dubai, UAE
                         </span>
-                        <h1 className="font-display-lg text-4xl sm:text-5xl md:text-7xl font-extrabold text-primary mb-6 leading-[1.1] tracking-tight uppercase">
+                        <h1 className="font-display-lg text-4xl sm:text-5xl md:text-7xl font-extrabold text-white mb-6 leading-[1.1] tracking-tight uppercase">
                             Gateway to Reliable <br />
-                            <span className="text-tertiary text-transparent bg-clip-text bg-gradient-to-r from-tertiary via-[#ffe088] to-tertiary">Steel Sourcing</span>
+                            <span className="text-[#ffd862] text-transparent bg-clip-text bg-gradient-to-r from-[#ffd862] via-[#ffe088] to-[#ffd862]">Steel Sourcing</span>
                         </h1>
-                        <div className="w-32 h-[3px] bg-tertiary mb-8 shadow-[0_0_15px_rgba(255,216,98,0.5)]"></div>
+                        <div className="w-32 h-[3px] bg-[#ffd862] mb-8 shadow-[0_0_15px_rgba(255,216,98,0.5)]"></div>
                     </div>
                 </div>
                 <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-bg to-transparent z-10"></div>

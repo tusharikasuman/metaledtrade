@@ -43,9 +43,7 @@ export default function Home() {
           id="home"
           className="relative min-h-screen flex items-center bg-cover bg-center"
           style={{ 
-            backgroundImage: themeMode === "light" 
-              ? `linear-gradient(180deg, rgba(245, 245, 247, 0.25) 0%, rgba(245, 245, 247, 0.95) 100%), url(${bgImgLight})`
-              : `linear-gradient(180deg, rgba(9, 10, 12, 0.35) 0%, rgba(9, 10, 12, 0.92) 100%), url(${bgImg})`
+            backgroundImage: `linear-gradient(180deg, rgba(9, 10, 12, 0.35) 0%, rgba(9, 10, 12, 0.92) 100%), url(${themeMode === "light" ? bgImgLight : bgImg})`
           }}
         >
           <motion.div
@@ -54,13 +52,13 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            <span className="inline-block text-[0.72rem] font-semibold tracking-[0.22em] uppercase text-gold mb-3">Established Excellence</span>
-            <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-semibold leading-[1.12] mb-6">
+            <span className="inline-block text-[0.72rem] font-semibold tracking-[0.22em] uppercase text-[#ffd862] mb-3">Established Excellence</span>
+            <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-semibold leading-[1.12] mb-6 text-white">
               A Legacy of Strength in
               <br /> the Heart of Dubai
             </h1>
-            <div className="w-16 h-0.5 bg-gold my-6" />
-            <p className="text-steel leading-relaxed max-w-[480px]">
+            <div className="w-16 h-0.5 bg-[#ffd862] my-6" />
+            <p className="text-zinc-300 leading-relaxed max-w-[480px]">
               At Metaled Trade FZCO, we bridge the gap between heavy industry and
               luxury architectural commodities, delivering resilient metal
               solutions to the world&apos;s most ambitious skylines.

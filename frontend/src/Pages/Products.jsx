@@ -26,7 +26,7 @@ export default function Products() {
   }, [activeCategory]);
 
   return (
-    <div className="min-h-screen bg-[#131313] text-[#e4e2e1] font-body flex flex-col">
+    <div className="min-h-screen bg-bg text-ivory font-body flex flex-col">
 
       <main className="flex-grow pt-32 pb-20 px-6 md:px-12 max-w-[1440px] mx-auto w-full">
         {/* Header Section */}
@@ -93,8 +93,8 @@ export default function Products() {
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-start min-h-[600px]">
           
           {/* Master List (Left Column) */}
-          <div className="w-full lg:w-1/3 flex flex-col border border-[#2a2a2a] bg-[#1a1c1c] rounded-sm overflow-hidden shadow-2xl h-[500px] lg:h-[700px]">
-            <div className="bg-[#1f2020] p-4 border-b border-[#2a2a2a]">
+          <div className="w-full lg:w-1/3 flex flex-col border border-outline-variant/30 bg-bg-alt rounded-sm overflow-hidden shadow-2xl h-[500px] lg:h-[700px]">
+            <div className="bg-surface-container p-4 border-b border-outline-variant/30">
               <span className="text-xs font-label-md text-[#8e9192] uppercase tracking-widest">
                 Select a Product
               </span>
@@ -106,15 +106,15 @@ export default function Products() {
                   <button
                     key={idx}
                     onClick={() => setActiveProduct(product)}
-                    className={`w-full text-left p-5 border-b border-[#2a2a2a] transition-all duration-300 flex justify-between items-center group ${
+                    className={`w-full text-left p-5 border-b border-outline-variant/30 transition-all duration-300 flex justify-between items-center group ${
                       isActive
-                        ? "bg-[#2a2a2a] border-l-4 border-l-[#ffe088]"
-                        : "hover:bg-[#252525] border-l-4 border-l-transparent"
+                        ? "bg-bg-alt/80 border-l-4 border-l-[#ffe088]"
+                        : "hover:bg-bg-alt/40 border-l-4 border-l-transparent"
                     }`}
                   >
                     <span
                       className={`font-display font-medium text-sm md:text-base ${
-                        isActive ? "text-[#ffe088]" : "text-[#c4c7c7] group-hover:text-[#e4e2e1]"
+                        isActive ? "text-[#ffe088]" : "text-[#c4c7c7] group-hover:text-ivory"
                       }`}
                     >
                       {product.product}
@@ -142,13 +142,13 @@ export default function Products() {
                 className="bg-transparent"
               >
                 {/* Visual Header */}
-                <div className="relative h-48 md:h-64 w-full overflow-hidden rounded-sm border border-[#2a2a2a] mb-8 group">
+                <div className="relative h-48 md:h-64 w-full overflow-hidden rounded-sm border border-outline-variant/30 mb-8 group">
                   <img
                     src={bgImg}
                     alt={activeProduct.product}
                     className="w-full h-full object-cover grayscale brightness-50 group-hover:brightness-75 group-hover:scale-105 transition-all duration-700"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#131313] via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-bg via-transparent to-transparent" />
                   <div className="absolute bottom-6 left-6 right-6">
                     <h2 className="font-display text-3xl md:text-5xl lg:text-6xl font-semibold text-white tracking-tight drop-shadow-lg">
                       {activeProduct.product}
@@ -160,18 +160,18 @@ export default function Products() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
                   
                   {/* Sizes Block */}
-                  <div className="bg-[#1a1c1c] border border-[#2a2a2a] p-6 rounded-sm relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-16 h-16 bg-[#2a2a2a] rotate-45 translate-x-8 -translate-y-8 opacity-20" />
+                  <div className="bg-bg-alt border border-outline-variant/30 p-6 rounded-sm relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-16 h-16 bg-outline-variant/10 rotate-45 translate-x-8 -translate-y-8 opacity-20" />
                     <span className="text-[10px] font-bold tracking-[0.2em] text-[#8e9192] uppercase mb-4 block">
                       Dimensions & Sizes
                     </span>
-                    <p className="text-[#e4e2e1] font-label-md text-sm leading-relaxed border-l-2 border-[#444748] pl-4">
+                    <p className="text-ivory font-label-md text-sm leading-relaxed border-l-2 border-outline-variant/40 pl-4">
                       {activeProduct.size}
                     </p>
                   </div>
 
                   {/* Grades Block */}
-                  <div className="bg-[#1a1c1c] border border-[#2a2a2a] p-6 rounded-sm">
+                  <div className="bg-bg-alt border border-outline-variant/30 p-6 rounded-sm">
                     <span className="text-[10px] font-bold tracking-[0.2em] text-[#8e9192] uppercase mb-4 block">
                       Supported Grades
                     </span>
@@ -179,7 +179,7 @@ export default function Products() {
                       {parseGrades(activeProduct.grade).map((grade, idx) => (
                         <span
                           key={idx}
-                          className="px-3 py-1.5 border border-[#444748] text-xs font-label-md text-[#c4c7c7] rounded-sm bg-[#131313] hover:border-[#ffe088] hover:text-[#ffe088] transition-colors cursor-default"
+                          className="px-3 py-1.5 border border-outline-variant/40 text-xs font-label-md text-ivory rounded-sm bg-bg hover:border-[#ffe088] hover:text-[#ffe088] transition-colors cursor-default"
                         >
                           {grade}
                         </span>
@@ -190,12 +190,12 @@ export default function Products() {
                 </div>
 
                 {/* Action Row */}
-                <div className="mt-12 flex items-center justify-between border-t border-[#2a2a2a] pt-8">
+                <div className="mt-12 flex items-center justify-between border-t border-outline-variant/30 pt-8">
                   <div className="hidden md:block">
                     <span className="text-xs text-[#8e9192] block">Can't find your specification?</span>
-                    <span className="text-sm font-medium text-[#c4c7c7]">Contact us for custom requirements.</span>
+                    <span className="text-sm font-medium text-ivory">Contact us for custom requirements.</span>
                   </div>
-                  <button className="w-full md:w-auto bg-[#ffe088] text-[#131313] px-8 py-4 font-bold tracking-widest uppercase text-xs hover:bg-white transition-colors flex items-center justify-center gap-3">
+                  <button className="w-full md:w-auto bg-gold text-bg px-8 py-4 font-bold tracking-widest uppercase text-xs hover:bg-white transition-colors flex items-center justify-center gap-3">
                     Request Quote
                     <HiOutlineArrowRight className="text-lg" />
                   </button>
