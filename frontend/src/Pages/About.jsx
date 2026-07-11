@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import heroBg from '../assets/about/hero_bg.jpg'
 import buildingDetail from '../assets/about/building_detail.jpg'
 import ahmedCeo from '../assets/about/ahmed_ceo.jpg'
@@ -28,6 +28,31 @@ const About = () => {
         }
     }, [])
 
+    const [scrollProgress, setScrollProgress] = useState(0);
+    const timelineRef = useRef(null);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (!timelineRef.current) return;
+            const rect = timelineRef.current.getBoundingClientRect();
+            const viewportHeight = window.innerHeight;
+            
+            const elementTop = rect.top;
+            const elementHeight = rect.height;
+            
+            const start = viewportHeight / 2;
+            
+            let progress = (start - elementTop) / elementHeight;
+            progress = Math.max(0, Math.min(1, progress));
+            setScrollProgress(progress * 100);
+        };
+
+        window.addEventListener("scroll", handleScroll);
+        handleScroll();
+
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
     const whyUsPillars = [
         {
             title: 'Integrity & Honesty',
@@ -55,6 +80,34 @@ const About = () => {
         { title: 'For Steel Producers', desc: 'Metaled Trade provides low cost marketing and financial services to secure customers in export markets.' },
         { title: 'For Steel Buyers', desc: 'Metaled Trade provides a reliable and flexible sourcing channel with financial support.' },
         { title: 'Value Additions', desc: 'We provide safe handling of products, inspection, securing delivery, insurance, and a single platform for sourcing multiple products.' }
+    ]
+
+    const journeyMilestones = [
+        {
+            year: "2012",
+            title: "Company Inception",
+            desc: "MetalEd Trade was founded in Dubai, UAE, starting with regional steel deliveries and key local distribution.",
+        },
+        {
+            year: "2015",
+            title: "First Overseas Office",
+            desc: "Opened our first international desk in India, establishing direct mill-sourcing operations and trade integrations.",
+        },
+        {
+            year: "2018",
+            title: "African Operations Desk",
+            desc: "Launched dedicated logistics and sales operations desks targeting massive public infrastructure works across East and West Africa.",
+        },
+        {
+            year: "2021",
+            title: "DMCC Hub Consolidation",
+            desc: "Consolidated all global trade desks under the DMCC Free Zone in Dubai, optimizing trade finance and logistics capabilities.",
+        },
+        {
+            year: "2024",
+            title: "Smelting Mill Integrations",
+            desc: "Integrated logistics channels with A1 Chinese mills and local GCC smelting plants to cater to high-tonnage supply contracts.",
+        }
     ]
 
     return (
@@ -105,6 +158,80 @@ const About = () => {
                         <p className="font-body-md text-base text-on-surface-variant/80 leading-relaxed font-light">
                             We supply from all major steel producing Hubs such as India, Vietnam, A1 Chinese Mills and reputed Local mills in GCC to cater to our esteemed customers. We provide customized financial and distribution options to our customers. Metaled Trade have a strong network of experienced partners and expert employees who enable us to nurture and develop solutions for supplying steel from world class mills.
                         </p>
+                    </div>
+                </div>
+            </section>
+
+            {/* Our Journey Section (Timeline) */}
+            <section className="py-unit-xl bg-[#0e0e0e] border-y border-outline-variant/35 relative">
+                <div className="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+                    <div className="text-center mb-20 reveal">
+                        <span className="font-label-sm text-label-sm text-tertiary uppercase tracking-widest block mb-2">Milestones</span>
+                        <h2 className="font-display-lg text-3xl sm:text-4xl font-bold text-primary uppercase">Our Journey</h2>
+                        <div className="w-16 h-[2px] bg-tertiary mx-auto mt-4"></div>
+                    </div>
+
+                    <div ref={timelineRef} className="relative">
+                        {/* Central vertical line */}
+                        <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-[2px] bg-outline-variant/20 -translate-x-1/2" />
+                        
+                        {/* Active glowing progress line */}
+                        <div 
+                            className="absolute left-4 md:left-1/2 top-0 w-[2px] bg-[#ffd862] shadow-[0_0_12px_#ffd862] -translate-x-1/2 transition-all duration-100 ease-out origin-top"
+                            style={{ height: `${scrollProgress}%` }}
+                        />
+
+                        <div className="space-y-16">
+                            {journeyMilestones.map((milestone, idx) => {
+                                const isEven = idx % 2 === 0;
+                                const isDotActive = scrollProgress >= (idx * 25) - 5;
+                                return (
+                                    <div 
+                                        key={milestone.year}
+                                        className={`flex flex-col md:flex-row relative items-start md:items-center ${
+                                            isEven ? "md:flex-row-reverse" : ""
+                                        }`}
+                                    >
+                                        {/* Timeline Node dot */}
+                                        <div 
+                                            className={`absolute left-4 md:left-1/2 w-4 h-4 rounded-full -translate-x-1/2 z-20 transition-all duration-500 border-2 ${
+                                                isDotActive
+                                                    ? "bg-[#ffd862] border-[#ffd862] shadow-[0_0_12px_rgba(255,216,98,0.8)]"
+                                                    : "bg-[#131313] border-[#444748] shadow-none"
+                                            }`} 
+                                        />
+
+                                        {/* Empty column to offset content for staggered effect */}
+                                        <div className="hidden md:block w-1/2" />
+
+                                        {/* Card content */}
+                                        <div className="w-full md:w-1/2 pl-10 md:pl-0 md:px-12 reveal">
+                                            <div className="bg-[#131313] p-8 border border-outline-variant/30 hover:border-tertiary/20 transition-all duration-300 relative rounded-sm shadow-lg">
+                                                {/* Corner indicator */}
+                                                <span className="font-mono text-5xl font-black text-tertiary/10 absolute top-4 right-4 select-none">
+                                                    0{idx + 1}
+                                                </span>
+                                                
+                                                {/* Year Header */}
+                                                <span className="font-display-lg text-3xl font-extrabold text-tertiary block mb-2">
+                                                    {milestone.year}
+                                                </span>
+                                                
+                                                {/* Milestone Title */}
+                                                <h3 className="font-display-lg text-lg font-bold text-primary uppercase tracking-wide mb-3">
+                                                    {milestone.title}
+                                                </h3>
+                                                
+                                                {/* Milestone Desc */}
+                                                <p className="font-body-md text-sm text-on-surface-variant/80 leading-relaxed font-light">
+                                                    {milestone.desc}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
                     </div>
                 </div>
             </section>
@@ -192,7 +319,7 @@ const About = () => {
                         <div className="absolute inset-0 bg-black/30 group-hover:bg-black/0 transition-all duration-500 z-10"></div>
                         <img
                             className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 grayscale brightness-90 group-hover:grayscale-0 group-hover:brightness-100"
-                            alt="Ahmed Al-Maktoum Portrait"
+                            alt="Indronil Mukherjee Portrait"
                             src={ahmedCeo}
                         />
                     </div>
@@ -203,23 +330,16 @@ const About = () => {
                             Chief Executive Officer
                         </span>
                         <h3 className="font-display-lg text-3xl sm:text-4xl font-bold text-primary uppercase mb-4 tracking-wide group-hover:text-tertiary transition-colors duration-300">
-                            Ahmed Al-Maktoum
+                            Mr Indronil Mukherjee
                         </h3>
                         <div className="w-12 h-[2px] bg-tertiary mb-6"></div>
 
                         <p className="font-body-lg text-lg text-on-surface leading-relaxed font-light mb-6">
-                            Ahmed Al-Maktoum heads Metaled Trade's global commodities desks, overseeing relationships with elite smelting mills and organizing deep-sea logistics channels across the GCC, Africa, and Southeast Asia.
+                            We have continuously looked to innovate, understand market needs & provide freedom to our employees to demonstrate their ability since inception. Steel with its range of products, technical requirements & varied origins mixed with mill capabilities can be a very complex raw material to source.
                         </p>
                         <p className="font-body-md text-sm text-on-surface-variant/80 leading-relaxed font-light mb-8">
-                            Under his direction, the company has expanded its GCC footprint, partnering with A1 mills and local GCC smelting plants to secure stable, high-volume material flow for critical commercial and transit infrastructure developments.
+                            In addition to it are various risks of transport, payments & socio-political issues that may come up specially when importing large volumes via sea or land. We at Metaled Trade FZCO have been successfully and efficiently providing solutions to our esteemed customers for importing steel products for their project & stock requirements, whether it is in strategic sourcing, financing, or via supply chain.
                         </p>
-
-                        {/* Quote decoration */}
-                        <div className="relative border-l border-tertiary/50 pl-6 py-2 bg-tertiary/5">
-                            <p className="font-body-md text-base text-tertiary-fixed font-light italic">
-                                "Our single most focus once we sign the dotted line is consistent, timely execution. Delays in raw material sourcing carry immeasurable structural cost to our clients."
-                            </p>
-                        </div>
                     </div>
                 </div>
             </section>
