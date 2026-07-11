@@ -85,14 +85,37 @@ export default function Navbar() {
       </nav>
 
       <div className="flex items-center gap-3">
-        {/* Light/Dark Mode Switcher */}
-        <button
-          onClick={toggleTheme}
-          className="p-2.5 rounded-full border border-outline-variant/30 text-ivory hover:text-gold hover:border-gold/50 hover:bg-bg-alt/20 transition-all duration-300 cursor-pointer"
-          aria-label="Toggle light and dark mode theme"
-        >
-          {isLight ? <HiMoon className="text-lg" /> : <HiSun className="text-lg" />}
-        </button>
+        {/* Light/Dark Mode Pill Switcher */}
+        <div className="flex items-center bg-bg-alt/40 border border-outline-variant/30 rounded-full p-1 gap-1">
+          <button
+            onClick={() => {
+              if (!isLight) toggleTheme();
+            }}
+            className={`p-1.5 px-3 rounded-full text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all duration-300 cursor-pointer ${
+              isLight 
+                ? "bg-[#ffd862] text-[#131313] shadow-md" 
+                : "text-ivory hover:text-[#ffd862]"
+            }`}
+            aria-label="Light mode select button"
+          >
+            <HiSun className="text-sm" />
+            <span className="hidden sm:inline">Light</span>
+          </button>
+          <button
+            onClick={() => {
+              if (isLight) toggleTheme();
+            }}
+            className={`p-1.5 px-3 rounded-full text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all duration-300 cursor-pointer ${
+              !isLight 
+                ? "bg-[#ffd862] text-[#131313] shadow-md" 
+                : "text-ivory hover:text-[#ffd862]"
+            }`}
+            aria-label="Dark mode select button"
+          >
+            <HiMoon className="text-sm" />
+            <span className="hidden sm:inline">Dark</span>
+          </button>
+        </div>
 
         {/* Mobile menu trigger */}
         <button

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+import Navbar from "../Components/Navbar";
+import Footer from "../Components/Footer";
 import { HiOutlineArrowRight, HiOutlineX, HiOutlineCloudUpload, HiOutlineLocationMarker, HiOutlineBriefcase, HiOutlinePencil } from "react-icons/hi";
 
 const OPEN_POSITIONS = [

@@ -6,8 +6,8 @@ import Contact from './Pages/Contact.jsx'
 import Careers from './Pages/Careers.jsx'
 import Projects from './Pages/Projects.jsx'
 import { Routes, Route } from 'react-router-dom';
-import Navbar from './components/Navbar.jsx'
-import Footer from './components/Footer.jsx'
+import Navbar from './Components/Navbar.jsx'
+import Footer from './Components/Footer.jsx'
 
 
 

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { HiOutlineGlobeAlt } from "react-icons/hi";
 import { HiPlay } from "react-icons/hi2";
-import Navbar from "../components/Navbar";
+import Navbar from "../Components/Navbar";
 import bgImg from "../assets/homebg.png";
 import bgImgLight from "../assets/homebg_light.png";
 
