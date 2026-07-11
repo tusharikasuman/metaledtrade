@@ -17,6 +17,7 @@ const GLOBE_MARKERS = [
 
 // Local assets for mock photos grid
 import heroBg from "../assets/projects/hero_projects.jpg";
+import heroBgLight from "../assets/projects/hero_projects_light.jpg";
 import downtownDubai from "../assets/projects/downtown_dubai.jpg";
 import dubaiSouth from "../assets/projects/dubai_south.jpg";
 import jebelAli from "../assets/projects/jebel_ali.jpg";
@@ -162,8 +163,22 @@ const PARTNERS = [
 
 export default function Projects() {
   const [hoveredIndex, setHoveredIndex] = useState(null);
+  const [themeMode, setThemeMode] = useState(
+    document.documentElement.classList.contains("light") ? "light" : "dark"
+  );
+
   useEffect(() => {
     window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
+    const handleThemeChange = () => {
+      setThemeMode(
+        document.documentElement.classList.contains("light") ? "light" : "dark"
+      );
+    };
+    window.addEventListener("theme-change", handleThemeChange);
+    return () => window.removeEventListener("theme-change", handleThemeChange);
   }, []);
 
   const handleReachUsClick = (e) => {
@@ -175,7 +190,7 @@ export default function Projects() {
   };
 
   return (
-    <div className="min-h-screen bg-[#131313] text-[#e4e2e1] font-body-md overflow-x-hidden flex flex-col justify-between">
+    <div className="min-h-screen bg-bg text-ivory font-body-md overflow-x-hidden flex flex-col justify-between">
       <Navbar />
 
       <main className="flex-grow">
@@ -184,9 +199,13 @@ export default function Projects() {
           <div className="absolute inset-0 z-0">
             <div 
               className="w-full h-full bg-cover bg-center opacity-70 transition-all duration-1000"
-              style={{ backgroundImage: `url(${heroBg})` }}
+              style={{ backgroundImage: `url(${themeMode === "light" ? heroBgLight : heroBg})` }}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#131313] via-[#131313]/55 to-transparent" />
+            <div className={`absolute inset-0 ${
+              themeMode === "light" 
+                ? "bg-gradient-to-t from-bg via-bg/40 to-transparent" 
+                : "bg-gradient-to-t from-bg via-bg/55 to-transparent"
+            }`} />
           </div>
           
           <div className="relative z-10 w-full max-w-[1440px] mx-auto px-5 md:px-20 pb-12">
@@ -235,7 +254,7 @@ export default function Projects() {
                   
                   {isThird ? (
                     <>
-                      <div className="absolute inset-0 bg-[#131313]/40 group-hover:bg-[#ffd862]/10 transition-colors duration-500" />
+                      <div className="absolute inset-0 bg-bg/40 group-hover:bg-[#ffd862]/10 transition-colors duration-500" />
                       <div className="absolute inset-0 flex flex-col justify-center items-center text-center p-8 opacity-0 group-hover:opacity-100 transition-opacity duration-500 backdrop-blur-sm">
                         <p className="font-label-md text-xs text-[#ffd862] mb-3 uppercase tracking-widest">
                           {project.location}
@@ -250,10 +269,10 @@ export default function Projects() {
                     </>
                   ) : (
                     <>
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#131313]/90 via-transparent to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-bg/90 via-transparent to-transparent" />
                       {project.material && (
                         <div className="absolute top-4 right-4 z-20">
-                          <span className="font-label-sm text-[10px] bg-[#131313]/80 text-[#ffd862] border border-[#ffd862]/40 px-3 py-1 uppercase rounded-sm">
+                          <span className="font-label-sm text-[10px] bg-bg/80 text-[#ffd862] border border-[#ffd862]/40 px-3 py-1 uppercase rounded-sm">
                             {project.material}
                           </span>
                         </div>
@@ -412,10 +431,10 @@ export default function Projects() {
           </div>
 
           {/* Marquee Row */}
-          <div className="w-full overflow-hidden relative py-6 bg-[#131313]/30 border-y border-[#444748]/10">
+          <div className="w-full overflow-hidden relative py-6 bg-bg/30 border-y border-[#444748]/10">
             {/* Left/Right fading masks */}
-            <div className="absolute top-0 bottom-0 left-0 w-24 bg-gradient-to-r from-[#1b1c1c] via-[#1b1c1c]/40 to-transparent z-10 pointer-events-none" />
-            <div className="absolute top-0 bottom-0 right-0 w-24 bg-gradient-to-l from-[#1b1c1c] via-[#1b1c1c]/40 to-transparent z-10 pointer-events-none" />
+            <div className="absolute top-0 bottom-0 left-0 w-24 bg-gradient-to-r from-bg via-bg/40 to-transparent z-10 pointer-events-none" />
+            <div className="absolute top-0 bottom-0 right-0 w-24 bg-gradient-to-l from-bg via-bg/40 to-transparent z-10 pointer-events-none" />
 
             <div className="animate-marquee flex gap-24 items-center">
               {/* Loop of pure logos */}

@@ -12,8 +12,17 @@ import Footer from './components/Footer.jsx'
 
 
 function App() {
+  React.useEffect(() => {
+    const savedTheme = localStorage.getItem("theme") || "dark";
+    if (savedTheme === "light") {
+      document.documentElement.classList.add("light");
+    } else {
+      document.documentElement.classList.remove("light");
+    }
+  }, []);
+
   return (
-    <div className="relative min-h-screen bg-[#131313] text-on-surface font-body-md antialiased overflow-x-hidden flex flex-col justify-between">
+    <div className="relative min-h-screen bg-bg text-on-surface font-body-md antialiased overflow-x-hidden flex flex-col justify-between">
       <Navbar/>
       <main className="flex-grow">
         <Routes>

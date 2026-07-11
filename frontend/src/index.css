@@ -140,3 +140,35 @@ body {
 .animate-marquee:hover {
   animation-play-state: paused;
 }
+
+/* Light Mode Overrides */
+.light {
+  background-color: #f5f5f7;
+  color: #131313;
+
+  --color-bg: #f5f5f7;
+  --color-bg-alt: #ffffff;
+  --color-ivory: #131313;
+  --color-steel: #515255;
+  --color-on-surface: #131313;
+  --color-primary: #1c1c1e;
+  --color-surface: #f5f5f7;
+  --color-surface-container: #e4e4e7;
+  --color-surface-container-low: #f4f4f5;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-high: #eaeaea;
+  --color-outline-variant: #d4d4d8;
+  --color-on-surface-variant: #27272a;
+  --color-background: #f5f5f7;
+
+  /* Gold accents adjusted for contrast */
+  --color-gold: #c69300;
+  --color-gold-soft: #d97706;
+  --color-tertiary: #c69300;
+  --color-tertiary-fixed: #d97706;
+}
+
+.light body {
+  background-color: var(--color-bg);
+  color: var(--color-ivory);
+}

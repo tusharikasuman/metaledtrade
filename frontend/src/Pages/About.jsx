@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react'
 import heroBg from '../assets/about/hero_bg.jpg'
+import heroBgLight from '../assets/about/hero_bg_light.jpg'
 import buildingDetail from '../assets/about/building_detail.jpg'
 import ahmedCeo from '../assets/about/ahmed_ceo.jpg'
 
@@ -30,6 +31,19 @@ const About = () => {
 
     const [scrollProgress, setScrollProgress] = useState(0);
     const timelineRef = useRef(null);
+    const [themeMode, setThemeMode] = useState(
+        document.documentElement.classList.contains("light") ? "light" : "dark"
+    );
+
+    useEffect(() => {
+        const handleThemeChange = () => {
+            setThemeMode(
+                document.documentElement.classList.contains("light") ? "light" : "dark"
+            );
+        };
+        window.addEventListener("theme-change", handleThemeChange);
+        return () => window.removeEventListener("theme-change", handleThemeChange);
+    }, []);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -111,16 +125,20 @@ const About = () => {
     ]
 
     return (
-        <div className="bg-[#131313] text-on-surface font-body-md min-h-screen antialiased selection:bg-tertiary-container selection:text-on-tertiary-container">
+        <div className="bg-bg text-on-surface font-body-md min-h-screen antialiased selection:bg-tertiary-container selection:text-on-tertiary-container">
 
             {/* Hero Section */}
             <section className="relative h-[80vh] flex items-center overflow-hidden">
                 <div className="absolute inset-0 z-0">
-                    <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/50 to-[#131313] z-10"></div>
+                    <div className={`absolute inset-0 z-10 ${
+                        themeMode === "light" 
+                            ? "bg-gradient-to-b from-white/20 via-white/50 to-bg" 
+                            : "bg-gradient-to-b from-black/85 via-black/50 to-bg"
+                    }`} />
                     <div
                         className="w-full h-full bg-cover bg-center bg-no-repeat transition-transform duration-[10s] scale-105"
                         style={{
-                            backgroundImage: `url(${heroBg})`,
+                            backgroundImage: `url(${themeMode === "light" ? heroBgLight : heroBg})`,
                             backgroundAttachment: 'fixed'
                         }}
                     ></div>
@@ -138,7 +156,7 @@ const About = () => {
                         <div className="w-32 h-[3px] bg-tertiary mb-8 shadow-[0_0_15px_rgba(255,216,98,0.5)]"></div>
                     </div>
                 </div>
-                <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-[#131313] to-transparent z-10"></div>
+                <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-bg to-transparent z-10"></div>
             </section>
 
             {/* About Metaled Section */}
@@ -163,7 +181,7 @@ const About = () => {
             </section>
 
             {/* Our Journey Section (Timeline) */}
-            <section className="py-unit-xl bg-[#0e0e0e] border-y border-outline-variant/35 relative">
+            <section className="py-unit-xl bg-surface-container-lowest border-y border-outline-variant/35 relative">
                 <div className="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
                     <div className="text-center mb-20 reveal">
                         <span className="font-label-sm text-label-sm text-tertiary uppercase tracking-widest block mb-2">Milestones</span>
@@ -197,7 +215,7 @@ const About = () => {
                                             className={`absolute left-4 md:left-1/2 w-4 h-4 rounded-full -translate-x-1/2 z-20 transition-all duration-500 border-2 ${
                                                 isDotActive
                                                     ? "bg-[#ffd862] border-[#ffd862] shadow-[0_0_12px_rgba(255,216,98,0.8)]"
-                                                    : "bg-[#131313] border-[#444748] shadow-none"
+                                                    : "bg-bg border-[#444748] shadow-none"
                                             }`} 
                                         />
 
@@ -206,7 +224,7 @@ const About = () => {
 
                                         {/* Card content */}
                                         <div className="w-full md:w-1/2 pl-10 md:pl-0 md:px-12 reveal">
-                                            <div className="bg-[#131313] p-8 border border-outline-variant/30 hover:border-tertiary/20 transition-all duration-300 relative rounded-sm shadow-lg">
+                                            <div className="bg-bg-alt p-8 border border-outline-variant/30 hover:border-tertiary/20 transition-all duration-300 relative rounded-sm shadow-lg">
                                                 {/* Corner indicator */}
                                                 <span className="font-mono text-5xl font-black text-tertiary/10 absolute top-4 right-4 select-none">
                                                     0{idx + 1}
@@ -268,7 +286,7 @@ const About = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-gutter">
                     {competencies.map((comp, idx) => (
-                        <div key={idx} className="reveal bg-gradient-to-br from-[#1b1c1c] to-[#131313] p-8 border border-outline-variant/40 machined-edge hover:border-tertiary/30 transition-all duration-300 shadow-md">
+                        <div key={idx} className="reveal bg-gradient-to-br from-bg-alt to-bg p-8 border border-outline-variant/40 machined-edge hover:border-tertiary/30 transition-all duration-300 shadow-md">
                             <span className="font-label-sm text-label-sm text-tertiary mb-4 block">0{idx + 1}.</span>
                             <h3 className="font-display-lg text-xl font-bold text-primary mb-4 uppercase tracking-wide">{comp.title}</h3>
                             <p className="font-body-md text-sm text-on-surface-variant/80 leading-relaxed font-light">{comp.desc}</p>
@@ -278,7 +296,7 @@ const About = () => {
             </section>
 
             {/* Why Us Section */}
-            <section className="py-unit-xl bg-[#0e0e0e] border-y border-outline-variant/35 relative">
+            <section className="py-unit-xl bg-surface-container-lowest border-y border-outline-variant/35 relative">
                 <div className="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
                     <div className="text-center mb-16 reveal">
                         <span className="font-label-sm text-label-sm text-tertiary uppercase tracking-widest block mb-2">Competitive Edge</span>
@@ -288,7 +306,7 @@ const About = () => {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-gutter">
                         {whyUsPillars.map((pillar, idx) => (
-                            <div key={idx} className="reveal bg-[#131313]/50 p-8 border border-outline-variant/20 hover:border-tertiary/20 transition-all duration-300 flex gap-6 items-start">
+                            <div key={idx} className="reveal bg-bg-alt/50 p-8 border border-outline-variant/20 hover:border-tertiary/20 transition-all duration-300 flex gap-6 items-start">
                                 <div className="w-12 h-12 bg-tertiary/10 border border-tertiary/20 flex items-center justify-center text-tertiary shrink-0">
                                     <span className="material-symbols-outlined text-2xl">{pillar.icon}</span>
                                 </div>
@@ -311,7 +329,7 @@ const About = () => {
                 </div>
 
                 {/* Premium Single Executive Split Layout */}
-                <div className="reveal bg-gradient-to-br from-[#1b1c1c] to-[#0e0e0e] border border-outline-variant/40 p-8 md:p-12 flex flex-col lg:flex-row gap-unit-xl items-center shadow-2xl relative overflow-hidden group">
+                <div className="reveal bg-gradient-to-br from-bg-alt to-surface-container-lowest border border-outline-variant/40 p-8 md:p-12 flex flex-col lg:flex-row gap-unit-xl items-center shadow-2xl relative overflow-hidden group">
                     <div className="absolute -top-12 -left-12 w-64 h-64 bg-tertiary/5 rounded-full blur-[100px] pointer-events-none"></div>
 
                     {/* Leader Portrait */}

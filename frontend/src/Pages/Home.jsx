@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { HiOutlineGlobeAlt } from "react-icons/hi";
 import { HiPlay } from "react-icons/hi2";
 import Navbar from "../components/Navbar";
 import bgImg from "../assets/homebg.png";
+import bgImgLight from "../assets/homebg_light.png";
 
 
 
@@ -18,6 +19,19 @@ const THUMBNAIL = `https://img.youtube.com/vi/${VIDEO_ID}/maxresdefault.jpg`;
 
 export default function Home() {
   const [playing, setPlaying] = useState(false);
+  const [themeMode, setThemeMode] = useState(
+    document.documentElement.classList.contains("light") ? "light" : "dark"
+  );
+
+  useEffect(() => {
+    const handleThemeChange = () => {
+      setThemeMode(
+        document.documentElement.classList.contains("light") ? "light" : "dark"
+      );
+    };
+    window.addEventListener("theme-change", handleThemeChange);
+    return () => window.removeEventListener("theme-change", handleThemeChange);
+  }, []);
 
   return (
     <div className="min-h-screen bg-bg text-ivory font-body overflow-x-hidden">
@@ -28,7 +42,11 @@ export default function Home() {
         <section
           id="home"
           className="relative min-h-screen flex items-center bg-cover bg-center"
-          style={{ backgroundImage: `linear-gradient(180deg, rgba(9, 10, 12, 0.35) 0%, rgba(9, 10, 12, 0.92) 100%), url(${bgImg})` }}
+          style={{ 
+            backgroundImage: themeMode === "light" 
+              ? `linear-gradient(180deg, rgba(245, 245, 247, 0.25) 0%, rgba(245, 245, 247, 0.95) 100%), url(${bgImgLight})`
+              : `linear-gradient(180deg, rgba(9, 10, 12, 0.35) 0%, rgba(9, 10, 12, 0.92) 100%), url(${bgImg})`
+          }}
         >
           <motion.div
             className="w-full max-w-[620px] px-6 md:px-12"
