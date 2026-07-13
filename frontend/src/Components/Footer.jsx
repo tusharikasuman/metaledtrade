@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { PinContainer } from "./ui/3d-pin";
 
 // Subcomponent to display real-time clock and active desk status for global trade desks
 const TradeDesk = ({ city, timezone }) => {
@@ -207,20 +208,34 @@ export default function Footer() {
             </div>
 
             {/* Column 3 (Contact desk info) */}
-            <div className="col-span-2 md:col-span-1 border-t md:border-t-0 md:border-l border-[#444748]/20 pt-8 md:pt-0 md:pl-8">
-              <h4 className="font-label-md text-xs text-[#ffd862] uppercase tracking-[0.2em] mb-6">
-                Direct Desk
-              </h4>
-              <p className="font-body-md text-xs text-[#8e9192] uppercase tracking-wider mb-2">HEADQUARTERS</p>
-              <p className="font-body-md text-sm text-white mb-6 font-light leading-relaxed">
-                Jumeirah Lakes Towers,<br />
-                DMCC Free Zone,<br />
-                Dubai, UAE
-              </p>
-              <p className="font-body-md text-xs text-[#8e9192] uppercase tracking-wider mb-2">EMAIL ENQUIRIES</p>
-              <a href="mailto:trade@metaledtrade.com" className="font-mono text-sm text-[#ffd862] hover:text-white transition-colors block mb-4">
-                trade@metaledtrade.com
-              </a>
+            <div className="col-span-2 md:col-span-1 border-t md:border-t-0 md:border-l border-[#444748]/20 pt-8 md:pt-0 md:pl-8 flex flex-col justify-between">
+              <div>
+                <h4 className="font-label-md text-xs text-[#ffd862] uppercase tracking-[0.2em] mb-6">
+                  Direct Desk
+                </h4>
+                
+                <PinContainer title="Dubai Headquarters" href="https://maps.google.com/?q=Jumeirah+Lakes+Towers,+DMCC+Free+Zone,+Dubai">
+                  <div className="flex flex-col bg-[#141517]/80 border border-[#2a2c35]/40 rounded-xl p-6 shadow-lg backdrop-blur-sm transition-colors duration-300 hover:border-[#ffd862]/20 w-full max-w-[280px]">
+                    <span className="font-body-md text-[10px] text-[#8e9192] uppercase tracking-widest mb-3 block">Headquarters</span>
+                    <p className="font-body-md text-sm text-white font-light leading-relaxed">
+                      Jumeirah Lakes Towers,<br />
+                      DMCC Free Zone,<br />
+                      Dubai, UAE
+                    </p>
+                    <span className="text-[10px] font-mono text-[#ffd862] mt-4 flex items-center gap-1">
+                      <span className="material-symbols-outlined text-xs">location_on</span>
+                      Open in Maps
+                    </span>
+                  </div>
+                </PinContainer>
+              </div>
+
+              <div className="mt-8">
+                <p className="font-body-md text-xs text-[#8e9192] uppercase tracking-wider mb-2">EMAIL ENQUIRIES</p>
+                <a href="mailto:trade@metaledtrade.com" className="font-mono text-sm text-[#ffd862] hover:text-white transition-colors block">
+                  trade@metaledtrade.com
+                </a>
+              </div>
             </div>
           </div>
 
