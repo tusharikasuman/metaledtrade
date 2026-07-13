@@ -178,3 +178,12 @@ body {
   background-color: var(--color-bg);
   color: var(--color-ivory);
 }
+
+/* Hide scrollbar utility (used by StickyScrollReveal) */
+.hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}

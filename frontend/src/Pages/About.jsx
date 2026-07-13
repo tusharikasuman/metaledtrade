@@ -3,91 +3,164 @@ import heroBg from '../assets/about/hero_bg.jpg'
 import heroBgLight from '../assets/about/hero_bg_light.jpg'
 import buildingDetail from '../assets/about/building_detail.jpg'
 import ahmedCeo from '../assets/about/ahmed_ceo.jpg'
+import { motion, AnimatePresence } from 'framer-motion'
 
+// ── Aceternity-style Sticky Scroll Reveal ────────────────────────────────────
+// Correct pattern: fixed-height scrollable container. Left items each fill one
+// "screen" of the container and scroll past. Right panel is sticky inside it.
+function StickyScrollReveal({ content }) {
+    const [activeItem, setActiveItem] = useState(0)
+    const scrollContainerRef = useRef(null)
+    const itemRefs = useRef([])
+
+    // Use IntersectionObserver relative to the scrollable container
+    useEffect(() => {
+        const container = scrollContainerRef.current
+        if (!container) return
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        const idx = itemRefs.current.findIndex((r) => r === entry.target)
+                        if (idx !== -1) setActiveItem(idx)
+                    }
+                })
+            },
+            {
+                root: container,
+                // Trigger when the item crosses the middle of the container
+                rootMargin: '0px 0px -50% 0px',
+                threshold: 0,
+            }
+        )
+
+        itemRefs.current.forEach((ref) => ref && observer.observe(ref))
+        return () => observer.disconnect()
+    }, [content.length])
+
+    const CONTAINER_H = '600px'
+
+    return (
+        <div
+            ref={scrollContainerRef}
+            className="relative overflow-y-auto hide-scrollbar"
+            style={{ height: CONTAINER_H }}
+        >
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 w-full max-w-[1440px] mx-auto px-6 md:px-20">
+
+                {/* Left: each item fills the container height, scrolls naturally */}
+                <div>
+                    {content.map((item, idx) => (
+                        <div
+                            key={idx}
+                            ref={(el) => { itemRefs.current[idx] = el }}
+                            className="flex flex-col justify-center py-16 pr-0 lg:pr-12"
+                            style={{ minHeight: CONTAINER_H }}
+                        >
+                            <motion.span
+                                animate={{ color: activeItem === idx ? '#ffd862' : 'var(--color-steel)' }}
+                                transition={{ duration: 0.4 }}
+                                className="font-label-sm uppercase tracking-widest block mb-3 text-xs"
+                            >
+                                {item.label}
+                            </motion.span>
+                            <h3 className="font-display-lg text-3xl md:text-4xl font-bold text-primary uppercase leading-tight mb-4">
+                                {item.title}
+                            </h3>
+                            <motion.div
+                                animate={{ width: activeItem === idx ? '4rem' : '1rem' }}
+                                transition={{ duration: 0.4 }}
+                                className="h-[2px] bg-[#ffd862] mb-6"
+                            />
+                            <motion.div
+                                animate={{ opacity: activeItem === idx ? 1 : 0.45 }}
+                                transition={{ duration: 0.4 }}
+                            >
+                                {item.body}
+                            </motion.div>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Right: sticky panel, swaps visual based on active item */}
+                <div
+                    className="hidden lg:block"
+                    style={{ position: 'sticky', top: 0, height: CONTAINER_H, alignSelf: 'flex-start' }}
+                >
+                    <div className="h-full py-8">
+                        <AnimatePresence mode="wait">
+                            <motion.div
+                                key={activeItem}
+                                initial={{ opacity: 0, y: 12 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -12 }}
+                                transition={{ duration: 0.45, ease: 'easeOut' }}
+                                className="h-full rounded-xl overflow-hidden border border-outline-variant/30 shadow-2xl"
+                            >
+                                {content[activeItem].visual}
+                            </motion.div>
+                        </AnimatePresence>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+
+// ── Main About Page ──────────────────────────────────────────────────────────
 const About = () => {
-    // Use IntersectionObserver for scroll-reveal animations
     useEffect(() => {
         const reveals = document.querySelectorAll('.reveal')
         const observer = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active')
-                    }
+                    if (entry.isIntersecting) entry.target.classList.add('active')
                 })
             },
-            {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            }
+            { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
         )
-
         reveals.forEach((el) => observer.observe(el))
-
-        return () => {
-            reveals.forEach((el) => observer.unobserve(el))
-        }
+        return () => { reveals.forEach((el) => observer.unobserve(el)) }
     }, [])
 
-    const [scrollProgress, setScrollProgress] = useState(0);
-    const timelineRef = useRef(null);
+    const [scrollProgress, setScrollProgress] = useState(0)
+    const timelineRef = useRef(null)
     const [themeMode, setThemeMode] = useState(
-        document.documentElement.classList.contains("light") ? "light" : "dark"
-    );
+        document.documentElement.classList.contains('light') ? 'light' : 'dark'
+    )
 
     useEffect(() => {
         const handleThemeChange = () => {
             setThemeMode(
-                document.documentElement.classList.contains("light") ? "light" : "dark"
-            );
-        };
-        window.addEventListener("theme-change", handleThemeChange);
-        return () => window.removeEventListener("theme-change", handleThemeChange);
-    }, []);
+                document.documentElement.classList.contains('light') ? 'light' : 'dark'
+            )
+        }
+        window.addEventListener('theme-change', handleThemeChange)
+        return () => window.removeEventListener('theme-change', handleThemeChange)
+    }, [])
 
     useEffect(() => {
         const handleScroll = () => {
-            if (!timelineRef.current) return;
-            const rect = timelineRef.current.getBoundingClientRect();
-            const viewportHeight = window.innerHeight;
-            
-            const elementTop = rect.top;
-            const elementHeight = rect.height;
-            
-            const start = viewportHeight / 2;
-            
-            let progress = (start - elementTop) / elementHeight;
-            progress = Math.max(0, Math.min(1, progress));
-            setScrollProgress(progress * 100);
-        };
-
-        window.addEventListener("scroll", handleScroll);
-        handleScroll();
-
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
+            if (!timelineRef.current) return
+            const rect = timelineRef.current.getBoundingClientRect()
+            const viewportHeight = window.innerHeight
+            const start = viewportHeight / 2
+            let progress = (start - rect.top) / rect.height
+            progress = Math.max(0, Math.min(1, progress))
+            setScrollProgress(progress * 100)
+        }
+        window.addEventListener('scroll', handleScroll)
+        handleScroll()
+        return () => window.removeEventListener('scroll', handleScroll)
+    }, [])
 
     const whyUsPillars = [
-        {
-            title: 'Integrity & Honesty',
-            desc: 'The key pillars of our success are the values that guide us to be upfront and honest in all our transactions that helps us build trust and relationships.',
-            icon: 'gavel'
-        },
-        {
-            title: 'Consistent & Timely Delivery',
-            desc: 'We understand the cost of delays sometimes can be immeasurable. That is why on time delivery is our single most focus once we sign the dotted line.',
-            icon: 'schedule'
-        },
-        {
-            title: 'Financial Strength & Resources',
-            desc: 'Backed by financially strong credentials, we are fully equipped to take order sizes from small to large, from across the world.',
-            icon: 'account_balance'
-        },
-        {
-            title: 'Product Knowledge & Expertise',
-            desc: 'With a passionate team of experts on board who bring in a vast experience of product know-how and the domain expertise to better understand your requirement and deliver as per your satisfaction.',
-            icon: 'workspace_premium'
-        }
+        { title: 'Integrity & Honesty', desc: 'The key pillars of our success are the values that guide us to be upfront and honest in all our transactions that helps us build trust and relationships.', icon: 'gavel' },
+        { title: 'Consistent & Timely Delivery', desc: 'We understand the cost of delays sometimes can be immeasurable. That is why on time delivery is our single most focus once we sign the dotted line.', icon: 'schedule' },
+        { title: 'Financial Strength & Resources', desc: 'Backed by financially strong credentials, we are fully equipped to take order sizes from small to large, from across the world.', icon: 'account_balance' },
+        { title: 'Product Knowledge & Expertise', desc: 'With a passionate team of experts on board who bring in a vast experience of product know-how and the domain expertise to better understand your requirement.', icon: 'workspace_premium' }
     ]
 
     const competencies = [
@@ -97,30 +170,140 @@ const About = () => {
     ]
 
     const journeyMilestones = [
+        { year: '2012', title: 'Company Inception', desc: 'MetalEd Trade was founded in Dubai, UAE, starting with regional steel deliveries and key local distribution.' },
+        { year: '2015', title: 'First Overseas Office', desc: 'Opened our first international desk in India, establishing direct mill-sourcing operations and trade integrations.' },
+        { year: '2018', title: 'African Operations Desk', desc: 'Launched dedicated logistics and sales operations desks targeting massive public infrastructure works across East and West Africa.' },
+        { year: '2021', title: 'DMCC Hub Consolidation', desc: 'Consolidated all global trade desks under the DMCC Free Zone in Dubai, optimizing trade finance and logistics capabilities.' },
+        { year: '2024', title: 'Smelting Mill Integrations', desc: 'Integrated logistics channels with A1 Chinese mills and local GCC smelting plants to cater to high-tonnage supply contracts.' }
+    ]
+
+    // ── Sticky Scroll Content ────────────────────────────────────────────────
+    const stickyContent = [
         {
-            year: "2012",
-            title: "Company Inception",
-            desc: "MetalEd Trade was founded in Dubai, UAE, starting with regional steel deliveries and key local distribution.",
+            label: 'Our Mission',
+            title: 'Commitment to Consistency',
+            body: (
+                <div className="flex flex-col gap-4">
+                    <p className="font-body-lg text-lg text-on-surface-variant leading-relaxed font-light italic border-l-2 border-[#ffd862]/50 pl-5">
+                        "To provide our steel customers, products that are as per industry standards, competitively priced and delivered consistently on time."
+                    </p>
+                    <p className="text-sm text-on-surface-variant/70 leading-relaxed">
+                        Every decision we make is guided by this mission — from the mills we source from to the logistics partners we choose.
+                    </p>
+                </div>
+            ),
+            visual: (
+                <div className="relative w-full h-full bg-bg-alt flex flex-col items-center justify-center p-10 gap-6">
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#ffd862]/5 to-transparent" />
+                    <div className="absolute top-4 left-4 w-8 h-8 border-t-2 border-l-2 border-[#ffd862]/40" />
+                    <div className="absolute bottom-4 right-4 w-8 h-8 border-b-2 border-r-2 border-[#ffd862]/40" />
+                    <span className="text-8xl text-[#ffd862]/20 font-display font-black select-none leading-none">"</span>
+                    <blockquote className="text-center text-lg md:text-xl font-medium text-primary leading-relaxed">
+                        Industry standards. Competitive pricing. Consistent delivery.
+                    </blockquote>
+                    <div className="flex gap-3 mt-4">
+                        {['📦', '⏱️', '🌍'].map((icon, i) => (
+                            <div key={i} className="w-14 h-14 rounded-full bg-[#ffd862]/10 border border-[#ffd862]/20 flex items-center justify-center text-2xl">
+                                {icon}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )
         },
         {
-            year: "2015",
-            title: "First Overseas Office",
-            desc: "Opened our first international desk in India, establishing direct mill-sourcing operations and trade integrations.",
+            label: 'Core Competency',
+            title: 'Value Creation',
+            body: (
+                <div className="flex flex-col gap-4">
+                    <p className="text-sm text-on-surface-variant leading-relaxed">
+                        Our strength lies in our focus. We concentrate on products we have full knowledge and expertise of, delivering best-in-class solutions that facilitate trade between stakeholders.
+                    </p>
+                    <div className="flex flex-col gap-3 mt-2">
+                        {competencies.map((comp, i) => (
+                            <div key={i} className="flex items-start gap-3">
+                                <span className="text-[#ffd862] font-bold text-xs mt-0.5 shrink-0">0{i + 1}.</span>
+                                <div>
+                                    <p className="text-sm font-bold text-primary uppercase tracking-wide">{comp.title}</p>
+                                    <p className="text-xs text-on-surface-variant/80 mt-1 leading-relaxed">{comp.desc}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            ),
+            visual: (
+                <div className="w-full h-full bg-bg-alt flex flex-col">
+                    {competencies.map((comp, i) => (
+                        <div key={i} className="flex-1 flex items-center gap-6 p-8 border-b border-outline-variant/20 last:border-0 hover:bg-surface-container/50 transition-colors">
+                            <span className="text-5xl font-black text-[#ffd862]/15 font-label-sm shrink-0">0{i + 1}</span>
+                            <div>
+                                <p className="font-display-lg font-bold text-primary text-sm uppercase tracking-wide mb-1">{comp.title}</p>
+                                <p className="text-xs text-on-surface-variant/70 leading-relaxed">{comp.desc}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )
         },
         {
-            year: "2018",
-            title: "African Operations Desk",
-            desc: "Launched dedicated logistics and sales operations desks targeting massive public infrastructure works across East and West Africa.",
+            label: 'Competitive Edge',
+            title: 'Why Choose Us?',
+            body: (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {whyUsPillars.map((pillar, i) => (
+                        <div key={i} className="bg-bg-alt/50 border border-outline-variant/20 p-4 rounded-lg hover:border-[#ffd862]/20 transition-colors">
+                            <div className="w-8 h-8 bg-[#ffd862]/10 border border-[#ffd862]/20 flex items-center justify-center text-[#ffd862] mb-3 rounded">
+                                <span className="material-symbols-outlined text-sm">{pillar.icon}</span>
+                            </div>
+                            <p className="font-bold text-primary text-xs uppercase tracking-wide mb-1">{pillar.title}</p>
+                            <p className="text-xs text-on-surface-variant/75 leading-relaxed">{pillar.desc}</p>
+                        </div>
+                    ))}
+                </div>
+            ),
+            visual: (
+                <div className="w-full h-full bg-bg-alt grid grid-cols-2">
+                    {whyUsPillars.map((pillar, i) => (
+                        <div key={i} className="flex flex-col items-center justify-center gap-3 p-8 border-r border-b border-outline-variant/15 last:border-0 text-center hover:bg-surface-container/40 transition-colors">
+                            <div className="w-14 h-14 bg-[#ffd862]/10 border border-[#ffd862]/20 flex items-center justify-center text-[#ffd862] rounded-xl">
+                                <span className="material-symbols-outlined text-2xl">{pillar.icon}</span>
+                            </div>
+                            <p className="font-bold text-primary text-xs uppercase tracking-wide">{pillar.title}</p>
+                        </div>
+                    ))}
+                </div>
+            )
         },
         {
-            year: "2021",
-            title: "DMCC Hub Consolidation",
-            desc: "Consolidated all global trade desks under the DMCC Free Zone in Dubai, optimizing trade finance and logistics capabilities.",
-        },
-        {
-            year: "2024",
-            title: "Smelting Mill Integrations",
-            desc: "Integrated logistics channels with A1 Chinese mills and local GCC smelting plants to cater to high-tonnage supply contracts.",
+            label: 'Governance',
+            title: 'Leadership',
+            body: (
+                <div className="flex flex-col gap-4">
+                    <p className="text-xs uppercase tracking-widest text-[#ffd862] font-bold">Chief Executive Officer</p>
+                    <h4 className="text-xl font-bold text-primary font-display-lg uppercase">Mr Indronil Mukherjee</h4>
+                    <p className="text-sm text-on-surface leading-relaxed font-light">
+                        We have continuously looked to innovate, understand market needs & provide freedom to our employees to demonstrate their ability since inception. Steel with its range of products, technical requirements & varied origins can be a very complex raw material to source.
+                    </p>
+                    <p className="text-xs text-on-surface-variant/80 leading-relaxed">
+                        We at Metaled Trade FZCO have been successfully and efficiently providing solutions to our esteemed customers for importing steel products for their project & stock requirements, whether it is in strategic sourcing, financing, or via supply chain.
+                    </p>
+                </div>
+            ),
+            visual: (
+                <div className="relative w-full h-full overflow-hidden group">
+                    <div className="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-all duration-500 z-10" />
+                    <img
+                        className="w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105 grayscale brightness-90 group-hover:grayscale-0 group-hover:brightness-100"
+                        alt="Mr Indronil Mukherjee"
+                        src={ahmedCeo}
+                    />
+                    <div className="absolute bottom-0 left-0 right-0 p-6 z-20 bg-gradient-to-t from-black/80 to-transparent">
+                        <p className="text-[#ffd862] text-xs font-bold uppercase tracking-widest">Chief Executive Officer</p>
+                        <p className="text-white font-display-lg text-xl font-bold mt-1">Mr Indronil Mukherjee</p>
+                    </div>
+                </div>
+            )
         }
     ]
 
@@ -134,12 +317,11 @@ const About = () => {
                     <div
                         className="w-full h-full bg-cover bg-center bg-no-repeat transition-transform duration-[10s] scale-105"
                         style={{
-                            backgroundImage: `url(${themeMode === "light" ? heroBgLight : heroBg})`,
+                            backgroundImage: `url(${themeMode === 'light' ? heroBgLight : heroBg})`,
                             backgroundAttachment: 'fixed'
                         }}
                     ></div>
                 </div>
-
                 <div className="relative z-20 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto w-full">
                     <div className="max-w-4xl reveal">
                         <span className="inline-block font-label-md text-label-md text-[#ffd862] mb-3 uppercase tracking-[0.25em] bg-[#ffd862]/10 px-3 py-1 border border-[#ffd862]/20">
@@ -186,177 +368,54 @@ const About = () => {
                     </div>
 
                     <div ref={timelineRef} className="relative">
-                        {/* Central vertical line */}
                         <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-[2px] bg-outline-variant/20 -translate-x-1/2" />
-                        
-                        {/* Active glowing progress line */}
-                        <div 
+                        <div
                             className="absolute left-4 md:left-1/2 top-0 w-[2px] bg-[#ffd862] shadow-[0_0_12px_#ffd862] -translate-x-1/2 transition-all duration-100 ease-out origin-top"
                             style={{ height: `${scrollProgress}%` }}
                         />
-
                         <div className="space-y-16">
                             {journeyMilestones.map((milestone, idx) => {
-                                const isEven = idx % 2 === 0;
-                                const isDotActive = scrollProgress >= (idx * 25) - 5;
+                                const isEven = idx % 2 === 0
+                                const isDotActive = scrollProgress >= (idx * 25) - 5
                                 return (
-                                    <div 
+                                    <div
                                         key={milestone.year}
-                                        className={`flex flex-col md:flex-row relative items-start md:items-center ${
-                                            isEven ? "md:flex-row-reverse" : ""
-                                        }`}
+                                        className={`flex flex-col md:flex-row relative items-start md:items-center ${isEven ? 'md:flex-row-reverse' : ''}`}
                                     >
-                                        {/* Timeline Node dot */}
-                                        <div 
+                                        <div
                                             className={`absolute left-4 md:left-1/2 w-4 h-4 rounded-full -translate-x-1/2 z-20 transition-all duration-500 border-2 ${
                                                 isDotActive
-                                                    ? "bg-[#ffd862] border-[#ffd862] shadow-[0_0_12px_rgba(255,216,98,0.8)]"
-                                                    : "bg-bg border-[#444748] shadow-none"
-                                            }`} 
+                                                    ? 'bg-[#ffd862] border-[#ffd862] shadow-[0_0_12px_rgba(255,216,98,0.8)]'
+                                                    : 'bg-bg border-[#444748] shadow-none'
+                                            }`}
                                         />
-
-                                        {/* Empty column to offset content for staggered effect */}
                                         <div className="hidden md:block w-1/2" />
-
-                                        {/* Card content */}
                                         <div className="w-full md:w-1/2 pl-10 md:pl-0 md:px-12 reveal">
                                             <div className="bg-bg-alt p-8 border border-outline-variant/30 hover:border-tertiary/20 transition-all duration-300 relative rounded-sm shadow-lg">
-                                                {/* Corner indicator */}
                                                 <span className="font-mono text-5xl font-black text-tertiary/10 absolute top-4 right-4 select-none">
                                                     0{idx + 1}
                                                 </span>
-                                                
-                                                {/* Year Header */}
                                                 <span className="font-display-lg text-3xl font-extrabold text-tertiary block mb-2">
                                                     {milestone.year}
                                                 </span>
-                                                
-                                                {/* Milestone Title */}
                                                 <h3 className="font-display-lg text-lg font-bold text-primary uppercase tracking-wide mb-3">
                                                     {milestone.title}
                                                 </h3>
-                                                
-                                                {/* Milestone Desc */}
                                                 <p className="font-body-md text-sm text-on-surface-variant/80 leading-relaxed font-light">
                                                     {milestone.desc}
                                                 </p>
                                             </div>
                                         </div>
                                     </div>
-                                );
+                                )
                             })}
                         </div>
                     </div>
                 </div>
             </section>
 
-            {/* Mission Section (Stunning Accent Boxed) */}
-            <section className="py-12 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto relative z-10">
-                <div className="reveal bg-gradient-to-r from-tertiary/5 via-amber-500/10 to-tertiary/5 border border-tertiary/25 p-8 md:p-12 relative overflow-hidden">
-                    {/* Inner brackets decorative styling */}
-                    <div className="absolute top-4 left-4 w-6 h-6 border-t-2 border-l-2 border-tertiary/40"></div>
-                    <div className="absolute bottom-4 right-4 w-6 h-6 border-b-2 border-r-2 border-tertiary/40"></div>
-
-                    <div className="max-w-3xl mx-auto text-center">
-                        <span className="font-label-sm text-label-sm text-tertiary uppercase tracking-widest block mb-3">Our Mission</span>
-                        <h3 className="font-display-lg text-2xl md:text-3xl font-bold text-primary mb-6 uppercase tracking-wide">
-                            Commitment to Consistency
-                        </h3>
-                        <p className="font-body-lg text-lg sm:text-xl text-tertiary-fixed leading-relaxed font-light italic">
-                            "To provide our steel customers, products that are as per industry standards, competitively priced and delivered consistently on time."
-                        </p>
-                    </div>
-                </div>
-            </section>
-
-            {/* Core Competency Section */}
-            <section className="py-unit-xl px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto relative z-10">
-                <div className="text-center mb-16 reveal">
-                    <span className="font-label-sm text-label-sm text-tertiary uppercase tracking-widest block mb-2">Value Creation</span>
-                    <h2 className="font-display-lg text-3xl md:text-4xl font-extrabold text-primary uppercase">Core Competency</h2>
-                    <div className="w-16 h-[2px] bg-tertiary mx-auto mt-4"></div>
-                    <p className="font-body-md text-base text-on-surface-variant max-w-3xl mx-auto mt-6 leading-relaxed font-light">
-                        Our strength lies in our focus. We believe in concentrating on products, which we have full knowledge and expertise of. As we enlarge our activities and scope of service, we remain committed to give the best in class products and solutions which facilitate trade between stakeholders.
-                    </p>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-gutter">
-                    {competencies.map((comp, idx) => (
-                        <div key={idx} className="reveal bg-gradient-to-br from-bg-alt to-bg p-8 border border-outline-variant/40 machined-edge hover:border-tertiary/30 transition-all duration-300 shadow-md">
-                            <span className="font-label-sm text-label-sm text-tertiary mb-4 block">0{idx + 1}.</span>
-                            <h3 className="font-display-lg text-xl font-bold text-primary mb-4 uppercase tracking-wide">{comp.title}</h3>
-                            <p className="font-body-md text-sm text-on-surface-variant/80 leading-relaxed font-light">{comp.desc}</p>
-                        </div>
-                    ))}
-                </div>
-            </section>
-
-            {/* Why Us Section */}
-            <section className="py-unit-xl bg-surface-container-lowest border-y border-outline-variant/35 relative">
-                <div className="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
-                    <div className="text-center mb-16 reveal">
-                        <span className="font-label-sm text-label-sm text-tertiary uppercase tracking-widest block mb-2">Competitive Edge</span>
-                        <h2 className="font-display-lg text-3xl sm:text-4xl font-bold text-primary uppercase">Why Choose Us?</h2>
-                        <div className="w-16 h-[2px] bg-tertiary mx-auto mt-4"></div>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-gutter">
-                        {whyUsPillars.map((pillar, idx) => (
-                            <div key={idx} className="reveal bg-bg-alt/50 p-8 border border-outline-variant/20 hover:border-tertiary/20 transition-all duration-300 flex gap-6 items-start">
-                                <div className="w-12 h-12 bg-tertiary/10 border border-tertiary/20 flex items-center justify-center text-tertiary shrink-0">
-                                    <span className="material-symbols-outlined text-2xl">{pillar.icon}</span>
-                                </div>
-                                <div>
-                                    <h3 className="font-display-lg text-lg font-bold text-primary uppercase mb-2">{pillar.title}</h3>
-                                    <p className="font-body-md text-sm text-on-surface-variant/80 leading-relaxed font-light">{pillar.desc}</p>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* Single Leader Section */}
-            <section className="py-unit-xl px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto relative z-10">
-                <div className="text-center mb-16 reveal">
-                    <span className="font-label-sm text-label-sm text-tertiary uppercase tracking-widest block mb-2">Governance</span>
-                    <h2 className="font-display-lg text-3xl sm:text-4xl font-bold text-primary uppercase">Leadership</h2>
-                    <div className="w-16 h-[2px] bg-tertiary mx-auto mt-4"></div>
-                </div>
-
-                {/* Premium Single Executive Split Layout */}
-                <div className="reveal bg-gradient-to-br from-bg-alt to-surface-container-lowest border border-outline-variant/40 p-8 md:p-12 flex flex-col lg:flex-row gap-unit-xl items-center shadow-2xl relative overflow-hidden group">
-                    <div className="absolute -top-12 -left-12 w-64 h-64 bg-tertiary/5 rounded-full blur-[100px] pointer-events-none"></div>
-
-                    {/* Leader Portrait */}
-                    <div className="w-full lg:w-2/5 shrink-0 max-w-[380px] aspect-[3/4] overflow-hidden border border-outline-variant/40 shadow-lg relative">
-                        <div className="absolute inset-0 bg-black/30 group-hover:bg-black/0 transition-all duration-500 z-10"></div>
-                        <img
-                            className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 grayscale brightness-90 group-hover:grayscale-0 group-hover:brightness-100"
-                            alt="Indronil Mukherjee Portrait"
-                            src={ahmedCeo}
-                        />
-                    </div>
-
-                    {/* Leader Description & Quote */}
-                    <div className="w-full lg:w-3/5">
-                        <span className="font-label-sm text-label-sm text-tertiary uppercase tracking-widest font-semibold block mb-1">
-                            Chief Executive Officer
-                        </span>
-                        <h3 className="font-display-lg text-3xl sm:text-4xl font-bold text-primary uppercase mb-4 tracking-wide group-hover:text-tertiary transition-colors duration-300">
-                            Mr Indronil Mukherjee
-                        </h3>
-                        <div className="w-12 h-[2px] bg-tertiary mb-6"></div>
-
-                        <p className="font-body-lg text-lg text-on-surface leading-relaxed font-light mb-6">
-                            We have continuously looked to innovate, understand market needs & provide freedom to our employees to demonstrate their ability since inception. Steel with its range of products, technical requirements & varied origins mixed with mill capabilities can be a very complex raw material to source.
-                        </p>
-                        <p className="font-body-md text-sm text-on-surface-variant/80 leading-relaxed font-light mb-8">
-                            In addition to it are various risks of transport, payments & socio-political issues that may come up specially when importing large volumes via sea or land. We at Metaled Trade FZCO have been successfully and efficiently providing solutions to our esteemed customers for importing steel products for their project & stock requirements, whether it is in strategic sourcing, financing, or via supply chain.
-                        </p>
-                    </div>
-                </div>
-            </section>
+            {/* ── Sticky Scroll Reveal: Mission → Core Competency → Why Us → Leadership ── */}
+            <StickyScrollReveal content={stickyContent} />
 
         </div>
     )
