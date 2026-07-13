@@ -6,101 +6,115 @@ import ahmedCeo from '../assets/about/ahmed_ceo.jpg'
 import { motion, AnimatePresence } from 'framer-motion'
 
 // ── Aceternity-style Sticky Scroll Reveal ────────────────────────────────────
-// Correct pattern: fixed-height scrollable container. Left items each fill one
-// "screen" of the container and scroll past. Right panel is sticky inside it.
+// The outer div is n×100vh. The inner is sticky top-0 h-screen.
+// useScroll on the outer div drives which item is active.
+// Each AnimatePresence child captures its own snapshot of content (no stale refs).
 function StickyScrollReveal({ content }) {
+    const containerRef = useRef(null)
     const [activeItem, setActiveItem] = useState(0)
-    const scrollContainerRef = useRef(null)
-    const itemRefs = useRef([])
 
-    // Use IntersectionObserver relative to the scrollable container
     useEffect(() => {
-        const container = scrollContainerRef.current
-        if (!container) return
+        const handleScroll = () => {
+            const container = containerRef.current
+            if (!container) return
 
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        const idx = itemRefs.current.findIndex((r) => r === entry.target)
-                        if (idx !== -1) setActiveItem(idx)
-                    }
-                })
-            },
-            {
-                root: container,
-                // Trigger when the item crosses the middle of the container
-                rootMargin: '0px 0px -50% 0px',
-                threshold: 0,
-            }
-        )
+            const rect = container.getBoundingClientRect()
+            const viewportHeight = window.innerHeight
+            const totalScroll = rect.height - viewportHeight
 
-        itemRefs.current.forEach((ref) => ref && observer.observe(ref))
-        return () => observer.disconnect()
+            if (totalScroll <= 0) return
+
+            // Progress goes from 0 (top of container hits top of viewport)
+            // to 1 (bottom of container hits bottom of viewport)
+            let progress = -rect.top / totalScroll
+            progress = Math.max(0, Math.min(1, progress))
+
+            const step = 1 / content.length
+            const idx = Math.min(Math.floor(progress / step), content.length - 1)
+            
+            setActiveItem(idx)
+        }
+
+        window.addEventListener('scroll', handleScroll, { passive: true })
+        window.addEventListener('resize', handleScroll)
+        
+        // Run on mount to set initial state
+        setTimeout(handleScroll, 100)
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll)
+            window.removeEventListener('resize', handleScroll)
+        }
     }, [content.length])
 
-    const CONTAINER_H = '600px'
+    const item = content[activeItem] // stable snapshot for this render
 
     return (
         <div
-            ref={scrollContainerRef}
-            className="relative overflow-y-auto hide-scrollbar"
-            style={{ height: CONTAINER_H }}
+            ref={containerRef}
+            style={{ height: `${content.length * 100}vh` }}
+            className="relative"
         >
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 w-full max-w-[1440px] mx-auto px-6 md:px-20">
+            {/* Pinned viewport — fills screen while outer scrolls */}
+            <div className="sticky top-0 h-screen flex items-center overflow-hidden">
+                <div className="w-full max-w-[1440px] mx-auto px-6 md:px-20 h-full py-20 flex items-center">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 w-full items-center">
 
-                {/* Left: each item fills the container height, scrolls naturally */}
-                <div>
-                    {content.map((item, idx) => (
-                        <div
-                            key={idx}
-                            ref={(el) => { itemRefs.current[idx] = el }}
-                            className="flex flex-col justify-center py-16 pr-0 lg:pr-12"
-                            style={{ minHeight: CONTAINER_H }}
-                        >
-                            <motion.span
-                                animate={{ color: activeItem === idx ? '#ffd862' : 'var(--color-steel)' }}
-                                transition={{ duration: 0.4 }}
-                                className="font-label-sm uppercase tracking-widest block mb-3 text-xs"
-                            >
-                                {item.label}
-                            </motion.span>
-                            <h3 className="font-display-lg text-3xl md:text-4xl font-bold text-primary uppercase leading-tight mb-4">
-                                {item.title}
-                            </h3>
-                            <motion.div
-                                animate={{ width: activeItem === idx ? '4rem' : '1rem' }}
-                                transition={{ duration: 0.4 }}
-                                className="h-[2px] bg-[#ffd862] mb-6"
-                            />
-                            <motion.div
-                                animate={{ opacity: activeItem === idx ? 1 : 0.45 }}
-                                transition={{ duration: 0.4 }}
-                            >
-                                {item.body}
-                            </motion.div>
+                        {/* ── Left ── */}
+                        <div className="flex flex-col">
+                            {/* Progress dots — outside AnimatePresence so they persist */}
+                            <div className="flex items-center gap-2 mb-8">
+                                {content.map((_, i) => (
+                                    <motion.div
+                                        key={i}
+                                        animate={{
+                                            width: i === activeItem ? '2rem' : '0.5rem',
+                                            backgroundColor: i === activeItem ? '#ffd862' : '#444748',
+                                            opacity: i === activeItem ? 1 : 0.5
+                                        }}
+                                        transition={{ duration: 0.35 }}
+                                        className="h-[3px] rounded-full"
+                                        style={{ width: '0.5rem' }}
+                                    />
+                                ))}
+                            </div>
+
+                            {/* Content — each key change triggers enter/exit */}
+                            <AnimatePresence mode="wait">
+                                <motion.div
+                                    key={activeItem}
+                                    initial={{ opacity: 0, y: 24 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -24 }}
+                                    transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                                >
+                                    <span className="text-[#ffd862] font-label-sm uppercase tracking-widest text-xs mb-3 block">
+                                        {item.label}
+                                    </span>
+                                    <h3 className="font-display-lg text-3xl md:text-5xl font-bold text-primary uppercase leading-tight mb-4">
+                                        {item.title}
+                                    </h3>
+                                    <div className="h-[2px] w-16 bg-[#ffd862] mb-6" />
+                                    {item.body}
+                                </motion.div>
+                            </AnimatePresence>
                         </div>
-                    ))}
-                </div>
 
-                {/* Right: sticky panel, swaps visual based on active item */}
-                <div
-                    className="hidden lg:block"
-                    style={{ position: 'sticky', top: 0, height: CONTAINER_H, alignSelf: 'flex-start' }}
-                >
-                    <div className="h-full py-8">
-                        <AnimatePresence mode="wait">
-                            <motion.div
-                                key={activeItem}
-                                initial={{ opacity: 0, y: 12 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -12 }}
-                                transition={{ duration: 0.45, ease: 'easeOut' }}
-                                className="h-full rounded-xl overflow-hidden border border-outline-variant/30 shadow-2xl"
-                            >
-                                {content[activeItem].visual}
-                            </motion.div>
-                        </AnimatePresence>
+                        {/* ── Right ── */}
+                        <div className="hidden lg:block relative h-[65vh]">
+                            <AnimatePresence mode="wait">
+                                <motion.div
+                                    key={activeItem}
+                                    initial={{ opacity: 0, scale: 0.96, filter: 'blur(4px)' }}
+                                    animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+                                    exit={{ opacity: 0, scale: 1.02, filter: 'blur(4px)' }}
+                                    transition={{ duration: 0.45, ease: 'easeOut' }}
+                                    className="absolute inset-0 rounded-2xl overflow-hidden border border-outline-variant/30 shadow-2xl"
+                                >
+                                    {item.visual}
+                                </motion.div>
+                            </AnimatePresence>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -110,6 +124,7 @@ function StickyScrollReveal({ content }) {
 
 
 // ── Main About Page ──────────────────────────────────────────────────────────
+
 const About = () => {
     useEffect(() => {
         const reveals = document.querySelectorAll('.reveal')

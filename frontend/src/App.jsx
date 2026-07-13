@@ -22,7 +22,7 @@ function App() {
   }, []);
 
   return (
-    <div className="relative min-h-screen bg-bg text-on-surface font-body-md antialiased overflow-x-hidden flex flex-col justify-between">
+    <div className="relative min-h-screen bg-bg text-on-surface font-body-md antialiased overflow-x-clip flex flex-col justify-between">
       <Navbar/>
       <main className="flex-grow">
         <Routes>
