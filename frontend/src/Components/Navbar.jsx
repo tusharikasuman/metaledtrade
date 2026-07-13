@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { HiMenu, HiX, HiChevronDown, HiSun, HiMoon } from "react-icons/hi";
+import { motion, AnimatePresence } from "framer-motion";
 import logo from "../assets/metaled logo.jpeg";
 
 const NAV_LINKS = [
@@ -17,9 +18,10 @@ export default function Navbar() {
   const [isLight, setIsLight] = useState(
     document.documentElement.classList.contains("light")
   );
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
-    // Check initial local storage on mount
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme === "light") {
       document.documentElement.classList.add("light");
@@ -28,6 +30,18 @@ export default function Navbar() {
       document.documentElement.classList.remove("light");
       setIsLight(false);
     }
+
+    const handleScroll = () => {
+      if (window.scrollY > 80) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+        setIsExpanded(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const toggleTheme = () => {
@@ -40,12 +54,12 @@ export default function Navbar() {
       localStorage.setItem("theme", "light");
       setIsLight(true);
     }
-    // Dispatch a custom theme change event for other components to reload assets
     window.dispatchEvent(new Event("theme-change"));
   };
 
   const handleLinkClick = (e, to) => {
     setOpen(false);
+    setIsExpanded(false);
     if (to === "#contact") {
       e.preventDefault();
       const footer = document.querySelector("footer");
@@ -55,54 +69,163 @@ export default function Navbar() {
     }
   };
 
+  const showFullNavbar = !isScrolled || isExpanded;
+
   return (
-    <header className="absolute top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-6 md:px-12">
-      <Link to="/" className="shrink-0 animate-fade-in">
-        <img src={logo} alt="Metaled Trade FZCO" className="h-10 w-auto rounded border border-outline-variant/30" />
-      </Link>
+    <>
+      {/* Click-away backdrop overlay when scrolled and manually expanded */}
+      <AnimatePresence>
+        {isScrolled && isExpanded && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-40 bg-black/10 backdrop-blur-[1px] cursor-pointer"
+            onClick={() => setIsExpanded(false)}
+          />
+        )}
+      </AnimatePresence>
 
-      <nav className={`fixed inset-0 z-40 bg-bg-alt/95 flex flex-col items-start p-10 gap-6 transition-transform duration-300 md:static md:bg-transparent md:flex-row md:p-0 md:translate-x-0 md:items-center ml-auto md:mr-6 ${open ? "translate-x-0" : "-translate-x-full"}`}>
-        <button 
-          className="absolute top-6 right-6 text-2xl md:hidden text-ivory hover:text-gold transition-colors"
-          onClick={() => setOpen(false)}
-          aria-label="Close menu"
-        >
-          <HiX />
-        </button>
-        {NAV_LINKS.map(({ label, href, dropdown }) => (
-          href.startsWith('#') ? (
-            <a key={label} href={href} onClick={(e) => handleLinkClick(e, href)} className="flex items-center gap-1 text-sm font-medium hover:text-[#ffe088] text-ivory transition-colors">
-              {label}
-              {dropdown && <HiChevronDown className="text-xs" />}
-            </a>
-          ) : (
-            <Link key={label} to={href} onClick={(e) => handleLinkClick(e, href)} className="flex items-center gap-1 text-sm font-medium hover:text-[#ffe088] text-ivory transition-colors">
-              {label}
-              {dropdown && <HiChevronDown className="text-xs" />}
+      {/* Mobile fullscreen menu overlay — separate from the floating header */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ x: "-100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "-100%" }}
+            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            className="fixed inset-0 z-[60] bg-bg-alt/95 backdrop-blur-md flex flex-col items-start p-10 gap-6"
+          >
+            <button
+              className="absolute top-6 right-6 text-2xl text-ivory hover:text-gold transition-colors"
+              onClick={() => setOpen(false)}
+              aria-label="Close menu"
+            >
+              <HiX />
+            </button>
+            {NAV_LINKS.map(({ label, href, dropdown }) =>
+              href.startsWith("#") ? (
+                <a
+                  key={label}
+                  href={href}
+                  onClick={(e) => handleLinkClick(e, href)}
+                  className="flex items-center gap-1 text-lg font-medium hover:text-[#ffe088] text-ivory transition-colors"
+                >
+                  {label}
+                  {dropdown && <HiChevronDown className="text-xs" />}
+                </a>
+              ) : (
+                <Link
+                  key={label}
+                  to={href}
+                  onClick={(e) => handleLinkClick(e, href)}
+                  className="flex items-center gap-1 text-lg font-medium hover:text-[#ffe088] text-ivory transition-colors"
+                >
+                  {label}
+                  {dropdown && <HiChevronDown className="text-xs" />}
+                </Link>
+              )
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence mode="wait">
+        {showFullNavbar ? (
+          <motion.header
+            key="full-nav"
+            initial={{ y: -80, opacity: 0, x: "-50%" }}
+            animate={{ y: 0, opacity: 1, x: "-50%" }}
+            exit={{ y: -80, opacity: 0, x: "-50%" }}
+            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+            className="fixed top-6 z-50 bg-bg-alt/85 backdrop-blur-md border border-outline-variant/30 rounded-full py-1.5 px-4 shadow-xl flex items-center gap-3 w-auto"
+            style={{ left: "50%" }}
+          >
+            {/* Logo */}
+            <Link to="/" className="shrink-0" onClick={() => setIsExpanded(false)}>
+              <img
+                src={logo}
+                alt="Metaled Trade FZCO"
+                className="h-8 w-auto rounded border border-outline-variant/30"
+              />
             </Link>
-          )
-        ))}
-      </nav>
 
-      <div className="flex items-center gap-3">
-        {/* Light/Dark Mode Switcher */}
-        <button
-          onClick={toggleTheme}
-          className="p-2 text-ivory hover:text-gold transition-colors cursor-pointer"
-          aria-label="Toggle light and dark mode theme"
-        >
-          {isLight ? <HiMoon className="text-xl" /> : <HiSun className="text-xl" />}
-        </button>
+            {/* Desktop nav links */}
+            <nav className="hidden md:flex items-center gap-4">
+              {NAV_LINKS.map(({ label, href, dropdown }) =>
+                href.startsWith("#") ? (
+                  <a
+                    key={label}
+                    href={href}
+                    onClick={(e) => handleLinkClick(e, href)}
+                    className="flex items-center gap-1 text-sm font-medium hover:text-[#ffe088] text-ivory transition-colors whitespace-nowrap"
+                  >
+                    {label}
+                    {dropdown && <HiChevronDown className="text-xs" />}
+                  </a>
+                ) : (
+                  <Link
+                    key={label}
+                    to={href}
+                    onClick={(e) => handleLinkClick(e, href)}
+                    className="flex items-center gap-1 text-sm font-medium hover:text-[#ffe088] text-ivory transition-colors whitespace-nowrap"
+                  >
+                    {label}
+                    {dropdown && <HiChevronDown className="text-xs" />}
+                  </Link>
+                )
+              )}
+            </nav>
 
-        {/* Mobile menu trigger */}
-        <button
-          className="text-2xl md:hidden text-ivory hover:text-gold transition-colors"
-          onClick={() => setOpen(true)}
-          aria-label="Open menu"
-        >
-          <HiMenu />
-        </button>
-      </div>
-    </header>
+            {/* Right-side controls */}
+            <div className="flex items-center gap-2">
+              {/* Theme toggle */}
+              <button
+                onClick={toggleTheme}
+                className="p-1.5 text-ivory hover:text-gold transition-colors cursor-pointer"
+                aria-label="Toggle light and dark mode theme"
+              >
+                {isLight ? <HiMoon className="text-lg" /> : <HiSun className="text-lg" />}
+              </button>
+
+              {/* Collapse button (shown when manually expanded while scrolled) */}
+              {isScrolled && (
+                <button
+                  onClick={() => setIsExpanded(false)}
+                  className="p-1.5 text-ivory hover:text-gold transition-colors cursor-pointer"
+                  aria-label="Collapse navbar"
+                >
+                  <HiX className="text-lg" />
+                </button>
+              )}
+
+              {/* Mobile hamburger (only at top, not scrolled) */}
+              {!isScrolled && (
+                <button
+                  className="text-xl md:hidden text-ivory hover:text-gold transition-colors cursor-pointer"
+                  onClick={() => setOpen(true)}
+                  aria-label="Open menu"
+                >
+                  <HiMenu />
+                </button>
+              )}
+            </div>
+          </motion.header>
+        ) : (
+          <motion.button
+            key="collapsed-circle"
+            initial={{ scale: 0.5, opacity: 0, y: -20 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 0.5, opacity: 0, y: -20 }}
+            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            onClick={() => setIsExpanded(true)}
+            className="fixed top-6 right-6 md:right-12 w-12 h-12 rounded-full bg-bg-alt/90 backdrop-blur-md border border-outline-variant/40 shadow-lg flex items-center justify-center cursor-pointer hover:border-gold hover:scale-105 transition-all duration-300 text-ivory hover:text-gold z-50"
+            aria-label="Open navigation menu"
+          >
+            <HiMenu className="text-xl" />
+          </motion.button>
+        )}
+      </AnimatePresence>
+    </>
   );
 }

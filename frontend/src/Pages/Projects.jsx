@@ -111,7 +111,7 @@ const PARTNERS = [
         {/* Gold wave flowing across */}
         <path d="M 16 28 C 24 22, 28 34, 38 28 S 44 22, 48 28" stroke="#F59E0B" strokeWidth="2.5" fill="none" />
         {/* Text */}
-        <text x="32" y="56" fontFamily="'Inter', sans-serif" fontWeight="800" fontSize="8" fill="#dcdcdc" textAnchor="middle" letterSpacing="0.8">SHAGANG</text>
+        <text x="32" y="56" fontFamily="'Inter', sans-serif" fontWeight="800" fontSize="8" fill="currentColor" className="text-on-surface-variant" textAnchor="middle" letterSpacing="0.8">SHAGANG</text>
       </svg>
     )
   },
@@ -201,7 +201,13 @@ export default function Projects() {
               className="w-full h-full bg-cover bg-center opacity-70 transition-all duration-1000"
               style={{ backgroundImage: `url(${themeMode === "light" ? heroBgLight : heroBg})` }}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-bg via-black/55 to-transparent" />
+            <div 
+              className={`absolute inset-0 bg-gradient-to-t transition-all duration-1000 ${
+                themeMode === "light" 
+                  ? "from-bg/50 via-bg/20 to-transparent" 
+                  : "from-bg via-black/55 to-transparent"
+              }`}
+            />
           </div>
           
           <div className="relative z-10 w-full max-w-[1440px] mx-auto px-5 md:px-20 pb-12">
@@ -209,11 +215,15 @@ export default function Projects() {
               <p className="font-label-md text-xs md:text-sm text-[#ffd862] mb-3 uppercase tracking-[0.25em]">
                 Global Portfolio
               </p>
-              <h1 className="font-display-lg text-4xl sm:text-5xl md:text-7xl text-white leading-[1.1] mb-4 uppercase">
+              <h1 className={`font-display-lg text-4xl sm:text-5xl md:text-7xl leading-[1.1] mb-4 uppercase ${
+                themeMode === "light" ? "text-primary" : "text-white"
+              }`}>
                 Architectural <br />
                 Integrity
               </h1>
-              <p className="font-body-lg text-sm md:text-base text-zinc-300 leading-relaxed">
+              <p className={`font-body-lg text-sm md:text-base leading-relaxed ${
+                themeMode === "light" ? "text-on-surface-variant" : "text-zinc-300"
+              }`}>
                 Forging the backbone of the world&apos;s most ambitious skylines with premium industrial alloys and structural precision.
               </p>
             </div>
@@ -235,7 +245,7 @@ export default function Projects() {
               return (
                 <motion.div
                   key={project.id}
-                  className={`group relative overflow-hidden bg-[#1f2020] border border-[#444748]/40 rounded-lg shadow-xl cursor-pointer ${
+                  className={`group relative overflow-hidden bg-surface-container border border-outline-variant/35 rounded-lg shadow-xl cursor-pointer ${
                     project.span
                   } ${isThird ? "h-[400px]" : "h-[500px]"}`}
                   initial={{ opacity: 0, y: 30 }}
@@ -250,12 +260,12 @@ export default function Projects() {
                   
                   {isThird ? (
                     <>
-                      <div className="absolute inset-0 bg-bg/40 group-hover:bg-[#ffd862]/10 transition-colors duration-500" />
+                      <div className="absolute inset-0 bg-black/60 group-hover:bg-[#ffd862]/20 transition-colors duration-500" />
                       <div className="absolute inset-0 flex flex-col justify-center items-center text-center p-8 opacity-0 group-hover:opacity-100 transition-opacity duration-500 backdrop-blur-sm">
                         <p className="font-label-md text-xs text-[#ffd862] mb-3 uppercase tracking-widest">
                           {project.location}
                         </p>
-                        <h3 className="font-display-lg text-2xl sm:text-3xl md:text-4xl text-[#dcdcdc] mb-4 uppercase">
+                        <h3 className="font-display-lg text-2xl sm:text-3xl md:text-4xl text-zinc-100 mb-4 uppercase">
                           {project.title}
                         </h3>
                         <button className="bg-[#ffd862] text-[#131313] px-6 py-2.5 font-bold uppercase tracking-wider text-xs hover:opacity-90 transition-all cursor-pointer">
@@ -265,10 +275,10 @@ export default function Projects() {
                     </>
                   ) : (
                     <>
-                      <div className="absolute inset-0 bg-gradient-to-t from-bg/90 via-transparent to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
                       {project.material && (
                         <div className="absolute top-4 right-4 z-20">
-                          <span className="font-label-sm text-[10px] bg-bg/80 text-[#ffd862] border border-[#ffd862]/40 px-3 py-1 uppercase rounded-sm">
+                          <span className="font-label-sm text-[10px] bg-black/75 text-[#ffd862] border border-[#ffd862]/40 px-3 py-1 uppercase rounded-sm">
                             {project.material}
                           </span>
                         </div>
@@ -277,11 +287,11 @@ export default function Projects() {
                         <p className="font-label-md text-xs text-[#ffd862] mb-2">
                           {project.id} / {project.location}
                         </p>
-                        <h3 className={`text-[#dcdcdc] mb-2 uppercase ${isCol4 ? "font-headline-md text-lg md:text-xl" : "font-headline-lg text-xl md:text-2xl"}`}>
+                        <h3 className={`text-zinc-100 mb-2 uppercase ${isCol4 ? "font-headline-md text-lg md:text-xl" : "font-headline-lg text-xl md:text-2xl"}`}>
                           {project.title}
                         </h3>
                         <div className="flex items-center justify-between">
-                          <span className="font-label-sm text-[10px] text-[#c4c7c7] uppercase tracking-wider">
+                          <span className="font-label-sm text-[10px] text-zinc-300 uppercase tracking-wider">
                             {project.date}
                           </span>
                           <span className="material-symbols-outlined text-[#ffd862] opacity-0 group-hover:opacity-100 transition-opacity text-lg">
@@ -298,12 +308,12 @@ export default function Projects() {
         </section>
 
         {/* Separator / Brand Text banner */}
-        <section className="bg-[#0e0e0e] border-y border-[#444748]/20 py-8 overflow-hidden select-none">
+        <section className="bg-surface-container-lowest border-y border-outline-variant/30 py-8 overflow-hidden select-none">
           <div className="flex whitespace-nowrap gap-20 items-center justify-center animate-pulse">
-            <span className="font-display-lg text-xl md:text-3xl font-extrabold text-[#ffd862]/30 uppercase tracking-widest">LANDMARK STEEL SOLUTIONS</span>
-            <span className="text-[#ffd862]/30 text-2xl">•</span>
-            <span className="font-display-lg text-xl md:text-3xl font-extrabold text-[#ffd862]/30 uppercase tracking-widest">CERTIFIED QUALITY ASSURED</span>
-            <span className="text-[#ffd862]/30 text-2xl">•</span>
+            <span className="font-display-lg text-xl md:text-3xl font-extrabold text-gold-soft/30 uppercase tracking-widest">LANDMARK STEEL SOLUTIONS</span>
+            <span className="text-gold-soft/30 text-2xl">•</span>
+            <span className="font-display-lg text-xl md:text-3xl font-extrabold text-gold-soft/30 uppercase tracking-widest">CERTIFIED QUALITY ASSURED</span>
+            <span className="text-gold-soft/30 text-2xl">•</span>
             <span className="font-display-lg text-xl md:text-3xl font-extrabold text-[#ffd862]/30 uppercase tracking-widest">GLOBAL SMELTING NETWORK</span>
           </div>
         </section>

@@ -190,13 +190,13 @@ export default function Careers() {
                   <span className="text-[10px] font-bold tracking-widest text-[#ffe088] uppercase block mb-1">
                     Applying for
                   </span>
-                  <h2 className="font-display text-lg font-semibold text-white">
+                  <h2 className="font-display text-lg font-semibold text-primary">
                     {selectedRole.title}
                   </h2>
                 </div>
                 <button 
                   onClick={closeModal}
-                  className="text-[#8e9192] hover:text-white transition-colors"
+                  className="text-[#8e9192] hover:text-primary transition-colors"
                 >
                   <HiOutlineX className="text-2xl" />
                 </button>
@@ -226,7 +226,7 @@ export default function Careers() {
                         onChange={(e) => setFormData({...formData, name: e.target.value})}
                         onKeyDown={(e) => handleKeyDown(e, "EMAIL")}
                         placeholder="John Doe"
-                        className="w-full bg-transparent border-b-2 border-outline-variant/40 py-4 text-xl md:text-2xl text-white focus:outline-none focus:border-[#ffe088] transition-colors placeholder-[#353535]"
+                        className="w-full bg-transparent border-b-2 border-outline-variant/40 py-4 text-xl md:text-2xl text-primary focus:outline-none focus:border-[#ffe088] transition-colors placeholder-steel/50"
                       />
                       <button 
                         onClick={() => formData.name.trim() !== "" && setAppState("EMAIL")}
@@ -258,7 +258,7 @@ export default function Careers() {
                         onChange={(e) => setFormData({...formData, email: e.target.value})}
                         onKeyDown={(e) => handleKeyDown(e, "RESUME")}
                         placeholder="john@example.com"
-                        className="w-full bg-transparent border-b-2 border-outline-variant/40 py-4 text-xl md:text-2xl text-white focus:outline-none focus:border-[#ffe088] transition-colors placeholder-[#353535]"
+                        className="w-full bg-transparent border-b-2 border-outline-variant/40 py-4 text-xl md:text-2xl text-primary focus:outline-none focus:border-[#ffe088] transition-colors placeholder-steel/50"
                       />
                       <div className="mt-8 flex gap-4">
                         <button 
@@ -342,7 +342,7 @@ export default function Careers() {
                         <div className="flex items-center justify-between p-4 border border-outline-variant/30 bg-bg rounded-sm group">
                           <div>
                             <span className="block text-[10px] font-bold tracking-widest text-[#8e9192] uppercase mb-1">Full Name</span>
-                            <span className="text-white font-medium">{formData.name}</span>
+                            <span className="text-primary font-medium">{formData.name}</span>
                           </div>
                           <button onClick={() => setAppState("NAME")} className="text-[#8e9192] hover:text-[#ffe088] transition-colors p-2 flex items-center gap-2 text-xs uppercase font-bold tracking-widest">
                             <HiOutlinePencil /> Edit
@@ -353,7 +353,7 @@ export default function Careers() {
                         <div className="flex items-center justify-between p-4 border border-outline-variant/30 bg-bg rounded-sm group">
                           <div>
                             <span className="block text-[10px] font-bold tracking-widest text-[#8e9192] uppercase mb-1">Email Address</span>
-                            <span className="text-white font-medium">{formData.email}</span>
+                            <span className="text-primary font-medium">{formData.email}</span>
                           </div>
                           <button onClick={() => setAppState("EMAIL")} className="text-[#8e9192] hover:text-[#ffe088] transition-colors p-2 flex items-center gap-2 text-xs uppercase font-bold tracking-widest">
                             <HiOutlinePencil /> Edit
@@ -364,7 +364,7 @@ export default function Careers() {
                         <div className="flex items-center justify-between p-4 border border-outline-variant/30 bg-bg rounded-sm group">
                           <div className="overflow-hidden">
                             <span className="block text-[10px] font-bold tracking-widest text-[#8e9192] uppercase mb-1">Resume File</span>
-                            <span className="text-white font-medium truncate block max-w-[200px] md:max-w-xs">{formData.resume}</span>
+                            <span className="text-primary font-medium truncate block max-w-[200px] md:max-w-xs">{formData.resume}</span>
                           </div>
                           <button onClick={() => setAppState("RESUME")} className="text-[#8e9192] hover:text-[#ffe088] transition-colors p-2 flex items-center gap-2 text-xs uppercase font-bold tracking-widest shrink-0">
                             <HiOutlinePencil /> Edit
@@ -392,7 +392,7 @@ export default function Careers() {
                       <div className="w-16 h-16 border-2 border-[#ffe088] rounded-full flex items-center justify-center mx-auto mb-6">
                         <div className="w-2 h-2 bg-[#ffe088] rounded-full" />
                       </div>
-                      <h3 className="font-display text-3xl font-medium text-white mb-4">
+                      <h3 className="font-display text-3xl font-medium text-primary mb-4">
                         Application Sent
                       </h3>
                       <p className="text-[#8e9192] mb-8">

@@ -78,6 +78,10 @@
   --spacing-container-max: 1440px;
 }
 
+:root {
+  --grid-color: rgba(255, 255, 255, 0.03);
+}
+
 /* Custom styles and overrides */
 body {
   background-color: #131313;
@@ -166,6 +170,8 @@ body {
   --color-gold-soft: #d97706;
   --color-tertiary: #c69300;
   --color-tertiary-fixed: #d97706;
+
+  --grid-color: rgba(0, 0, 0, 0.03);
 }
 
 .light body {
