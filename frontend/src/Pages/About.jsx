@@ -142,9 +142,16 @@ const About = () => {
 
     const [scrollProgress, setScrollProgress] = useState(0)
     const timelineRef = useRef(null)
-    const [themeMode, setThemeMode] = useState(
-        document.documentElement.classList.contains('light') ? 'light' : 'dark'
-    )
+    const [themeMode, setThemeMode] = useState(() => {
+        return localStorage.getItem("theme") || (document.documentElement.classList.contains("light") ? "light" : "dark");
+    });
+
+    useEffect(() => {
+        // Sync theme state on initial mount
+        setThemeMode(
+            document.documentElement.classList.contains("light") ? "light" : "dark"
+        );
+    }, []);
 
     useEffect(() => {
         const handleThemeChange = () => {
@@ -328,7 +335,7 @@ const About = () => {
             {/* Hero Section */}
             <section className="relative h-[80vh] flex items-center overflow-hidden">
                 <div className="absolute inset-0 z-0">
-                    <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/50 to-bg z-10" />
+                    <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/45 to-transparent z-10" />
                     <div
                         className="w-full h-full bg-cover bg-center bg-no-repeat transition-transform duration-[10s] scale-105"
                         style={{
@@ -349,7 +356,6 @@ const About = () => {
                         <div className="w-32 h-[3px] bg-[#ffd862] mb-8 shadow-[0_0_15px_rgba(255,216,98,0.5)]"></div>
                     </div>
                 </div>
-                <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-bg to-transparent z-10"></div>
             </section>
 
             {/* About Metaled Section */}
