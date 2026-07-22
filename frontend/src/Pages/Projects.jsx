@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Navbar from "../Components/Navbar";
-import Footer from "../Components/Footer";
 import { Globe3D } from "../components/ui/3d-globe";
 
 const GLOBE_MARKERS = [
@@ -17,7 +15,7 @@ const GLOBE_MARKERS = [
 
 // Local assets for mock photos grid
 import heroBg from "../assets/projects/hero_projects.jpg";
-import heroBgLight from "../assets/projects/hero_projects_light.jpg";
+import heroBgLight from "../assets/projects/modern_steel_facade_right.png";
 import downtownDubai from "../assets/projects/downtown_dubai.jpg";
 import dubaiSouth from "../assets/projects/dubai_south.jpg";
 import jebelAli from "../assets/projects/jebel_ali.jpg";
@@ -163,12 +161,16 @@ const PARTNERS = [
 
 export default function Projects() {
   const [hoveredIndex, setHoveredIndex] = useState(null);
-  const [themeMode, setThemeMode] = useState(
-    document.documentElement.classList.contains("light") ? "light" : "dark"
-  );
+  const [themeMode, setThemeMode] = useState(() => {
+    return localStorage.getItem("theme") || (document.documentElement.classList.contains("light") ? "light" : "dark");
+  });
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    // Sync theme state on initial mount
+    setThemeMode(
+      document.documentElement.classList.contains("light") ? "light" : "dark"
+    );
   }, []);
 
   useEffect(() => {
@@ -191,37 +193,35 @@ export default function Projects() {
 
   return (
     <div className="min-h-screen bg-bg text-ivory font-body-md overflow-x-hidden flex flex-col justify-between">
-      <Navbar />
+
 
       <main className="flex-grow">
         {/* Hero Section */}
-        <section className="relative h-[65vh] flex flex-col justify-end overflow-hidden">
+        <section className="relative h-[70vh] flex flex-col justify-end overflow-hidden">
           <div className="absolute inset-0 z-0">
             <div 
-              className="w-full h-full bg-cover bg-center opacity-70 transition-all duration-1000"
+              className={`w-full h-full bg-cover bg-center transition-all duration-1000 ${
+                themeMode === "light" ? "opacity-100" : "opacity-70"
+              }`}
               style={{ backgroundImage: `url(${themeMode === "light" ? heroBgLight : heroBg})` }}
             />
             <div 
-              className={`absolute inset-0 bg-gradient-to-t transition-all duration-1000 ${
-                themeMode === "light" 
-                  ? "from-bg/50 via-bg/20 to-transparent" 
-                  : "from-bg via-black/55 to-transparent"
-              }`}
+              className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"
             />
           </div>
           
           <div className="relative z-10 w-full max-w-[1440px] mx-auto px-5 md:px-20 pb-12">
             <div className="max-w-2xl">
-              <p className="font-label-md text-xs md:text-sm text-[#ffd862] mb-3 uppercase tracking-[0.25em]">
+              <p className="font-bold text-xs md:text-sm text-[#ffd862] mb-3 uppercase tracking-[0.25em]">
                 Global Portfolio
               </p>
-              <h1 className={`font-display-lg text-4xl sm:text-5xl md:text-7xl leading-[1.1] mb-4 uppercase ${
+              <h1 className={`font-semibold text-4xl sm:text-5xl md:text-7xl leading-[1.1] mb-4 uppercase ${
                 themeMode === "light" ? "text-primary" : "text-white"
               }`}>
                 Architectural <br />
                 Integrity
               </h1>
-              <p className={`font-body-lg text-sm md:text-base leading-relaxed ${
+              <p className={`font-extrabold text-sm md:text-base leading-relaxed ${
                 themeMode === "light" ? "text-on-surface-variant" : "text-zinc-300"
               }`}>
                 Forging the backbone of the world&apos;s most ambitious skylines with premium industrial alloys and structural precision.
