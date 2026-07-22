@@ -1,31 +1,87 @@
-import React from "react";
-import { motion } from "framer-motion";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { WorldMap } from "../components/ui/world-map";
 
-// Animation Variants
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: {
-      staggerChildren: 0.15,
-      delayChildren: 0.2,
-    },
+    transition: { staggerChildren: 0.15, delayChildren: 0.2 },
   },
 };
 
 const itemVariants = {
   hidden: { opacity: 0, y: 20 },
-  visible: { 
-    opacity: 1, 
-    y: 0, 
-    transition: { duration: 0.6, ease: "easeOut" } 
-  },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
 };
 
+const INITIAL_FORM = { name: "", email: "", company: "", message: "" };
+
 export default function Contact() {
+  const [form, setForm] = useState(INITIAL_FORM);
+  const [errors, setErrors] = useState({});
+  const [status, setStatus] = useState("idle"); // idle | loading | success | error
+  const [serverMessage, setServerMessage] = useState("");
+
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setForm((prev) => ({ ...prev, [id]: value }));
+    if (errors[id]) setErrors((prev) => ({ ...prev, [id]: "" }));
+  };
+
+  const validate = () => {
+    const e = {};
+    if (!form.name.trim() || form.name.trim().length < 2)
+      e.name = "Please enter your full name.";
+    if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
+      e.email = "Please enter a valid email address.";
+    if (!form.message.trim() || form.message.trim().length < 10)
+      e.message = "Message must be at least 10 characters.";
+    return e;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const validationErrors = validate();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
+    setStatus("loading");
+    setErrors({});
+
+    try {
+      const res = await fetch("http://localhost:5000/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        setStatus("success");
+        setForm(INITIAL_FORM);
+      } else {
+        // Server returned validation errors
+        if (data.errors) setErrors(data.errors);
+        setServerMessage(data.message || "Something went wrong. Please try again.");
+        setStatus("error");
+      }
+    } catch {
+      setServerMessage("Could not connect to the server. Please try again later.");
+      setStatus("error");
+    }
+  };
+
+  const inputBase =
+    "w-full bg-transparent border-b border-[#353535] py-3 text-[#e4e2e1] text-sm focus:outline-none transition-colors peer placeholder-transparent";
+  const inputFocus = "focus:border-[#e4e2e1]";
+  const inputError = "border-red-500/70 focus:border-red-400";
+  const labelBase =
+    "absolute left-0 top-3 text-[#8e9192] text-sm transition-all peer-focus:-top-4 peer-focus:text-[10px] peer-valid:-top-4 peer-valid:text-[10px] peer-valid:text-[#8e9192] uppercase tracking-wider";
+
   return (
     <div className="min-h-screen bg-bg text-ivory font-body flex flex-col relative overflow-hidden">
       {/* Background ambient light effect */}
@@ -35,26 +91,27 @@ export default function Contact() {
       <main className="flex-grow pt-32 pb-20 px-6 md:px-12 max-w-[1440px] mx-auto w-full relative z-10 flex items-center">
         
         <div className="flex flex-col lg:flex-row gap-16 lg:gap-24 w-full">
-          
-          {/* Left Side: Typography & Globe */}
-          <motion.div 
+
+          {/* ── Left: heading + map ─────────────────────────────────────── */}
+          <motion.div
             className="w-full lg:w-1/2 flex flex-col justify-start pt-10"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
           >
-            <motion.h1 
+            <motion.h1
               variants={itemVariants}
               className="text-5xl md:text-7xl font-display font-medium tracking-tight mb-6 leading-[1.1] text-primary"
             >
               Contact us
             </motion.h1>
 
-            <motion.p 
+            <motion.p
               variants={itemVariants}
               className="max-w-md text-steel text-sm md:text-base leading-relaxed mb-10"
             >
-              We are always looking for ways to improve our products and services. Contact us and let us know how we can help you.
+              Whether you have a question about our products or need a custom quote,
+              our team in Dubai is ready to help.
             </motion.p>
 
             <motion.div variants={itemVariants} className="flex flex-wrap items-center gap-4 text-on-surface-variant text-sm font-medium mb-12">
@@ -65,16 +122,15 @@ export default function Contact() {
               <a href="mailto:support@metaledtrade.com" className="hover:text-[#ffe088] transition-colors">support@metaledtrade.com</a>
             </motion.div>
 
-            {/* Map Container */}
-            <motion.div variants={itemVariants} className="relative w-full max-w-[600px] -ml-6 lg:-ml-10">
+            {/* World Map */}
+            <motion.div variants={itemVariants} className="w-full">
               <WorldMap />
             </motion.div>
-
           </motion.div>
 
-          {/* Right Side: Form */}
-          <motion.div 
-            className="w-full lg:w-1/2 flex items-center justify-end"
+          {/* ── Right: form ─────────────────────────────────────────────── */}
+          <motion.div
+            className="w-full lg:w-1/2 flex items-start justify-end pt-10"
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
@@ -86,7 +142,7 @@ export default function Contact() {
                   linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
                   linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px)
                 `,
-                backgroundSize: '40px 40px'
+                backgroundSize: "40px 40px",
               }}
             >
               {/* Form Decorative Element */}
@@ -129,6 +185,21 @@ export default function Contact() {
                   </label>
                 </div>
 
+                    {/* Company (optional) */}
+                    <div className="relative">
+                      <input
+                        type="text"
+                        id="company"
+                        value={form.company}
+                        onChange={handleChange}
+                        className={`${inputBase} ${inputFocus}`}
+                        placeholder="Company Name"
+                        autoComplete="organization"
+                      />
+                      <label htmlFor="company" className={`${labelBase} peer-focus:text-[#e4e2e1]`}>
+                        Company <span className="normal-case text-[#444748]">(optional)</span>
+                      </label>
+                    </div>
                 {/* Company */}
                 <div className="relative group">
                   <input 
