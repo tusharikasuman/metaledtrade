@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { HiMenu, HiX, HiChevronDown, HiSun, HiMoon } from "react-icons/hi";
 import { motion, AnimatePresence } from "framer-motion";
-import logo from "../assets/metaled logo.jpeg";
+import logo from "../assets/metaled-logo.jpeg";
 
 const NAV_LINKS = [
   { label: "Home", href: "/" },
