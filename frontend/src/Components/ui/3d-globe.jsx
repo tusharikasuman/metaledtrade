@@ -136,7 +136,7 @@ function Marker({ marker, radius, onClick, onHover, isModalOpen }) {
                     ? "scale-130 ring-4 ring-[#ffd862]/60 z-30 shadow-[#ffd862]/50"
                     : "hover:scale-110 shadow-black/80"
                 )}
-                style={{ width: "34px", height: "34px" }}
+                style={{ width: "28px", height: "28px" }}
               >
                 <img
                   src={marker.src}
@@ -145,30 +145,6 @@ function Marker({ marker, radius, onClick, onHover, isModalOpen }) {
                   draggable={false}
                 />
               </div>
-
-              {/* Hover Tooltip Card with Photo & Full Specs */}
-              {hovered && (
-                <div className="absolute left-1/2 -bottom-36 -translate-x-1/2 w-52 bg-[#12141a]/95 border border-[#ffd862] rounded-lg shadow-2xl backdrop-blur-md p-3 text-left pointer-events-none z-50 animate-in fade-in zoom-in-95 duration-150">
-                  {marker.src && (
-                    <img
-                      src={marker.src}
-                      alt={marker.name}
-                      className="w-full h-20 object-cover rounded mb-2 border border-white/10"
-                    />
-                  )}
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-[9px] font-bold text-[#ffd862] uppercase tracking-wider bg-[#ffd862]/10 px-1.5 py-0.5 rounded border border-[#ffd862]/30">
-                      {marker.subcontractor || marker.country}
-                    </span>
-                    <span className="text-[9px] text-zinc-400 font-semibold">{marker.year}</span>
-                  </div>
-                  <p className="text-[11px] font-extrabold text-white leading-tight">{marker.name}</p>
-                  <p className="text-[9px] text-zinc-300 mt-0.5 font-medium">{marker.location}</p>
-                  {marker.material && (
-                    <p className="text-[8px] text-zinc-400 mt-1 line-clamp-1 italic">{marker.material}</p>
-                  )}
-                </div>
-              )}
             </div>
           </Html>
         )}
