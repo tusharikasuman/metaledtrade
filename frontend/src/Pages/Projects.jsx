@@ -21,14 +21,14 @@ import sudairImg from "../assets/projects/modern_steel_facade_right.png";
 import shuaibahImg from "../assets/projects/business_bay.jpg";
 import animalShedImg from "../assets/projects/jebel_ali.jpg";
 
-// ── Real Projects Data with Pins & Full Details ──────────────────────────────
+// ── Real Projects Data with Globe Pins & Full Details ────────────────────────
 const FEATURED_PROJECTS = [
   {
     id: "01",
     lat: 28.003,
     lng: 35.228,
     name: "Neom Project",
-    country: "Saudi Arabia",
+    country: "SAUDI ARABIA",
     location: "Tabuk / Neom, KSA",
     year: "2024",
     subcontractor: "ARAMCO",
@@ -36,9 +36,9 @@ const FEATURED_PROJECTS = [
     src: neomImg,
     sector: "INFRASTRUCTURE",
     description:
-      "Heavy industrial structural steel and premium Hot Rolled Steel Plates supplied for the groundbreaking Neom mega-city infrastructure development under Aramco contracting standards.",
+      "Heavy industrial structural steel and premium Hot Rolled Steel Plates supplied for the groundbreaking Neom mega-city infrastructure project under Aramco contracting standards.",
     details:
-      "Engineered for high load-bearing capacity and environmental resilience in desert terrain. Supplied under strict Saudi Aramco quality specifications.",
+      "2024 Year • Subcontractor: ARAMCO • Material Supplied: Hot Rolled Steel Plates.",
     span: "md:col-span-8",
   },
   {
@@ -46,7 +46,7 @@ const FEATURED_PROJECTS = [
     lat: 25.4,
     lng: 49.6,
     name: "Jafurah Project",
-    country: "Saudi Arabia",
+    country: "SAUDI ARABIA",
     location: "Eastern Province, KSA",
     year: "2024",
     subcontractor: "ARAMCO",
@@ -56,25 +56,25 @@ const FEATURED_PROJECTS = [
     description:
       "High-grade Hot Rolled Steel Plates supplied for Aramco's flagship Jafurah unconventional gas basin development project.",
     details:
-      "Delivered under Aramco sub-contractor frameworks for high-pressure energy containment structures and industrial processing facilities.",
+      "2024 Year • Subcontractor: ARAMCO • Material Supplied: Hot Rolled Steel Plates.",
     span: "md:col-span-4",
   },
   {
     id: "03",
     lat: 20.15,
     lng: 56.4,
-    name: "Oxy Project",
-    country: "Oman",
+    name: "Oman - Oxy Project",
+    country: "OMAN",
     location: "Mukhaizna Field, Oman",
     year: "2022",
-    subcontractor: "OXY (Occidental Petroleum)",
-    material: "Structural Alloys & Piping Steel",
+    subcontractor: "OXY",
+    material: "Structural Alloys & Steel Piping",
     src: oxyImg,
     sector: "OIL & GAS",
     description:
       "Certified structural steel alloys and specialized heavy steel plates supplied for Occidental Petroleum (OXY) onshore energy facilities in Oman.",
     details:
-      "High-durability structural components tailored for demanding oilfield extraction and refinery environments.",
+      "2022 Year • Subcontractor: OXY • Material Supplied: Structural Alloys & Steel Piping.",
     span: "md:col-span-4",
   },
   {
@@ -82,17 +82,17 @@ const FEATURED_PROJECTS = [
     lat: 24.15,
     lng: 54.5,
     name: "Al Dhafra Solar PV",
-    country: "United Arab Emirates",
+    country: "UNITED ARAB EMIRATES",
     location: "30 km South of Abu Dhabi, UAE",
     year: "2023",
     subcontractor: "EWEC & MASDAR",
-    material: "Zinc Aluminium Magnesium (ZAM) Coated Steel Coils",
+    material: "Zinc Aluminium Magnesium Coated Steel Coils",
     src: dhafraImg,
     sector: "SOLAR ENERGY",
     description:
       "Located 30 km south of Abu Dhabi, this is the largest single-site solar photovoltaic plant in the world, generating over 2 GW of clean energy and powering over 160,000 households.",
     details:
-      "Supplied premium Zinc Aluminium Magnesium Coated Steel Coils engineered for extreme anti-corrosion solar tracking frameworks in coastal desert climates.",
+      "Subcontractor: EWEC and MASDAR • Material Supplied: Zinc Aluminium Magnesium Coated Steel Coils.",
     span: "md:col-span-8",
   },
   {
@@ -100,53 +100,53 @@ const FEATURED_PROJECTS = [
     lat: 25.6,
     lng: 45.6,
     name: "Sudair Solar PV Plant",
-    country: "Saudi Arabia",
+    country: "SAUDI ARABIA",
     location: "Riyadh Province, KSA",
     year: "2023 - 2024",
-    subcontractor: "PIF & ACWA Power",
-    material: "Zinc Aluminium Magnesium (ZAM) Coated Steel Coils",
+    subcontractor: "PIF & ACWA POWER",
+    material: "Zinc Aluminium Magnesium Coated Steel Coils",
     src: sudairImg,
     sector: "RENEWABLE ENERGY",
     description:
       "A 1,500 MW solar facility in Riyadh Province backed by Saudi Public Investment Fund (PIF) and ACWA Power providing power to roughly 185,000 homes.",
     details:
-      "Heavy-volume supply of Zinc Aluminium Magnesium Coated Steel Coils providing superior anti-rust protection for tracker racking.",
+      "Subcontractor: PIF and ACWA Power • Material Supplied: Zinc Aluminium Magnesium Coated Steel Coils.",
     span: "md:col-span-6",
   },
   {
     id: "06",
     lat: 20.67,
     lng: 39.54,
-    name: "Al-Shuaibah Solar Projects",
-    country: "Saudi Arabia",
+    name: "Al-Shuaibah Projects",
+    country: "SAUDI ARABIA",
     location: "South of Jeddah, KSA",
     year: "2024",
-    subcontractor: "ACWA Power & PIF",
-    material: "Zinc Aluminium Magnesium (ZAM) Coated Steel Coils",
+    subcontractor: "ACWA POWER & PIF",
+    material: "Zinc Aluminium Magnesium Coated Steel Coils",
     src: shuaibahImg,
     sector: "RENEWABLE ENERGY",
     description:
-      "A 2.6 GW solar capacity split across two sites south of Jeddah utilizing advanced bifacial modules.",
+      "A 2.6 GW capacity split across two sites south of Jeddah utilizing advanced bifacial modules.",
     details:
-      "Supplied high-performance ZAM Coated Steel Coils designed to withstand high humidity and saline air near the Red Sea coastline.",
+      "Subcontractor: ACWA Power and PIF • Material Supplied: Zinc Aluminium Magnesium Coated Steel Coils.",
     span: "md:col-span-6",
   },
   {
     id: "07",
     lat: 23.588,
     lng: 58.382,
-    name: "Oman Agricultural Project",
-    country: "Oman",
-    location: "Animal Shed Facilities, Oman",
+    name: "Oman Animal Shed Project",
+    country: "OMAN",
+    location: "Sohar / Muscat Region, Oman",
     year: "2023",
-    subcontractor: "Agricultural & Livestock Sector",
-    material: "Pre-Painted Galvanised Coils (PPGI)",
+    subcontractor: "AGRICULTURAL SECTOR",
+    material: "Pre-Painted Galvanised Coils",
     src: animalShedImg,
     sector: "AGRICULTURE",
     description:
-      "Pre-Painted Galvanised Coils (PPGI) supplied for large-scale agricultural animal shed structures and livestock roofing across Oman.",
+      "Pre-Painted Galvanised Coils (PPGI) supplied for animal shed roofing, livestock shelters, and agricultural infrastructure across Oman.",
     details:
-      "Delivered with custom weather-resistant coating formulations designed for thermal insulation and UV durability.",
+      "Supplied for Animal Shed • Material Supplied: Pre-Painted Galvanised Coils (PPGI).",
     span: "md:col-span-12",
     isWide: true,
   },
@@ -278,26 +278,98 @@ export default function Projects() {
           </div>
         </section>
 
-        {/* ── SINGLE CENTRAL 3D GLOBE SECTION (Pinned Projects) ──────────────── */}
-        <section className="bg-surface-container-lowest border-y border-[#444748]/20 py-20 relative overflow-hidden select-none">
-          <div className="max-w-[1440px] mx-auto px-5 md:px-20 text-center relative z-10 mb-8">
+        {/* ── SIDE-BY-SIDE 3D GLOBE & TYPOGRAPHIC REGIONAL FOOTPRINTS ───────────────── */}
+        <section className="px-5 md:px-20 py-20 max-w-[1440px] mx-auto border-b border-[#444748]/20">
+          <div className="text-left mb-12 max-w-2xl">
             <span className="font-label-md text-xs text-[#ffd862] uppercase tracking-[0.25em] block mb-2">
-              Interactive 3D Supply Map
+              Portfolio
             </span>
-            <h2 className="font-headline-lg text-3xl md:text-5xl text-primary uppercase tracking-wide">
-              Global Project Pins
+            <h2 className="font-headline-lg text-2xl md:text-4xl text-primary uppercase tracking-wide">
+              Key Regional Footprints
             </h2>
-            <p className="text-steel text-sm max-w-xl mx-auto mt-3">
-              Hover or click on any 3D pin to inspect project photos, subcontractor partnerships, and material specifications.
+            <div className="w-12 h-[2px] bg-[#ffd862] mt-3 mb-4" />
+            <p className="font-body-md text-sm text-steel leading-relaxed">
+              MetalEd Trade has supplied certified steel and custom metal alloys to major projects across Saudi Arabia, UAE, and Oman. Click or hover any pin/item to view photos and full subcontractor specifications.
             </p>
           </div>
 
-          <div style={{ width: "100%", maxWidth: "800px", margin: "0 auto", position: "relative" }}>
-            <Globe3D
-              markers={FEATURED_PROJECTS}
-              config={{ bumpScale: 3, autoRotateSpeed: 0.35, showAtmosphere: false }}
-              onMarkerClick={(marker) => setSelectedProject(marker)}
-            />
+          <div className="flex flex-col lg:flex-row gap-12 items-center">
+            {/* Left Column: Interactive 3D Globe with Project Pins */}
+            <div style={{ width: "100%", maxWidth: "580px", position: "relative" }} className="w-full lg:w-1/2">
+              <Globe3D
+                markers={FEATURED_PROJECTS}
+                config={{ bumpScale: 3, autoRotateSpeed: 0.35, showAtmosphere: false }}
+                onMarkerClick={(marker) => setSelectedProject(marker)}
+              />
+            </div>
+
+            {/* Right Column: Typographic Project Index List (Matching Screenshot Style) */}
+            <div className="w-full lg:w-1/2">
+              <div
+                className="grid grid-cols-1 sm:grid-cols-2 gap-y-8 gap-x-8"
+                onMouseLeave={() => setHoveredIndex(null)}
+              >
+                {FEATURED_PROJECTS.map((project, idx) => {
+                  const isHovered = hoveredIndex === idx;
+                  const isAnyHovered = hoveredIndex !== null;
+
+                  return (
+                    <div
+                      key={project.id}
+                      onClick={() => setSelectedProject(project)}
+                      className="relative group cursor-pointer py-3 transition-all duration-300"
+                      onMouseEnter={() => setHoveredIndex(idx)}
+                      style={{
+                        opacity: isAnyHovered ? (isHovered ? 1 : 0.3) : 0.85,
+                        transform: isHovered ? "translateX(6px)" : "translateX(0px)",
+                      }}
+                    >
+                      {/* Spotlight glow behind hovered item */}
+                      {isHovered && (
+                        <motion.div
+                          layoutId="spotlightGlow"
+                          className="absolute -inset-x-3 -inset-y-1 bg-[#ffd862]/10 rounded-lg blur-md z-0"
+                          transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                        />
+                      )}
+
+                      <div className="relative z-10 flex flex-col gap-1.5">
+                        {/* Index & Sector */}
+                        <div className="flex items-center gap-2">
+                          <span className="font-label-sm text-[10px] text-[#ffd862] font-semibold tracking-widest">
+                            {project.id}
+                          </span>
+                          <span className="w-4 h-[1px] bg-[#ffd862]/40" />
+                          <span className="font-label-sm text-[9px] text-[#8e9192] uppercase tracking-wider">
+                            {project.sector}
+                          </span>
+                        </div>
+
+                        {/* Project Title */}
+                        <h3 className="font-display-lg text-xl md:text-2xl font-extrabold uppercase tracking-wide text-ivory group-hover:text-[#ffd862] transition-colors duration-300">
+                          {project.name}
+                        </h3>
+
+                        {/* Subcontractor & Material info */}
+                        <div className="flex items-center gap-2 mt-0.5">
+                          <span className="text-[9px] font-bold text-[#ffd862] bg-[#ffd862]/10 px-2 py-0.5 rounded border border-[#ffd862]/30">
+                            {project.subcontractor}
+                          </span>
+                          <span className="text-[9px] text-steel uppercase font-semibold">
+                            {project.country}
+                          </span>
+                        </div>
+
+                        {/* Bottom Line Indicator */}
+                        <div className="w-full h-[1px] bg-[#444748]/20 mt-2 relative overflow-hidden">
+                          <div className="absolute inset-0 bg-[#ffd862] -translate-x-full group-hover:translate-x-0 transition-transform duration-500" />
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </section>
 
@@ -331,7 +403,7 @@ export default function Projects() {
               <div className="w-12 h-[2px] bg-[#ffd862] mt-3" />
             </div>
             <p className="text-steel text-xs md:text-sm max-w-md">
-              Click any project card to view full subcontractor details, material grades, and supply scope.
+              Click any project card to view full subcontractor details, material grades, photos, and supply scope.
             </p>
           </div>
 
@@ -405,79 +477,6 @@ export default function Projects() {
                 </motion.div>
               );
             })}
-          </div>
-        </section>
-
-        {/* ── REGIONAL FOOTPRINTS TYPOGRAPHIC INDEX ──────────────────────────── */}
-        <section className="px-5 md:px-20 py-20 max-w-[1440px] mx-auto border-t border-[#444748]/15">
-          <div className="text-left mb-14 max-w-2xl">
-            <span className="font-label-md text-xs text-[#ffd862] uppercase tracking-[0.25em] block mb-2">
-              Regional Index
-            </span>
-            <h2 className="font-headline-lg text-2xl md:text-4xl text-primary uppercase tracking-wide">
-              Landmark Project Summary
-            </h2>
-            <div className="w-12 h-[2px] bg-[#ffd862] mt-3 mb-4" />
-            <p className="font-body-md text-sm text-steel leading-relaxed">
-              Metaled Trade has supplied certified steel and specialized metal alloys to premier global subcontractors including Aramco, EWEC, Masdar, and OXY.
-            </p>
-          </div>
-
-          {/* List Column */}
-          <div className="w-full">
-            <div
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-8 gap-x-12"
-              onMouseLeave={() => setHoveredIndex(null)}
-            >
-              {FEATURED_PROJECTS.map((project, idx) => {
-                const isHovered = hoveredIndex === idx;
-                const isAnyHovered = hoveredIndex !== null;
-
-                return (
-                  <div
-                    key={project.id}
-                    onClick={() => setSelectedProject(project)}
-                    className="relative group cursor-pointer py-4 px-2 transition-all duration-500 border-b border-[#444748]/20"
-                    onMouseEnter={() => setHoveredIndex(idx)}
-                    style={{
-                      opacity: isAnyHovered ? (isHovered ? 1 : 0.4) : 0.85,
-                      transform: isHovered ? "translateX(6px)" : "translateX(0px)",
-                    }}
-                  >
-                    {isHovered && (
-                      <motion.div
-                        layoutId="spotlightGlow"
-                        className="absolute -inset-x-2 -inset-y-1 bg-[#ffd862]/5 rounded-lg blur-sm z-0"
-                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                      />
-                    )}
-
-                    <div className="relative z-10 flex flex-col gap-2">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <span className="font-label-sm text-[10px] text-[#ffd862] font-semibold tracking-widest">
-                            {project.id}
-                          </span>
-                          <span className="w-3 h-[1px] bg-[#ffd862]/40" />
-                          <span className="font-label-sm text-[9px] text-[#8e9192] uppercase tracking-wider">
-                            {project.country}
-                          </span>
-                        </div>
-                        <span className="text-[10px] font-bold text-[#ffd862] bg-[#ffd862]/10 border border-[#ffd862]/30 px-2 py-0.5 rounded">
-                          {project.subcontractor}
-                        </span>
-                      </div>
-
-                      <h3 className="font-display-lg text-xl font-extrabold uppercase tracking-wide text-ivory group-hover:text-[#ffd862] transition-colors duration-300">
-                        {project.name}
-                      </h3>
-
-                      <p className="text-xs text-steel line-clamp-1">{project.material}</p>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
           </div>
         </section>
 
