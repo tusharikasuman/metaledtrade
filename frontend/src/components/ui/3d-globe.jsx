@@ -34,7 +34,7 @@ function latLngToVector3(lat, lng, radius) {
 // ============================================================================
 // Marker
 // ============================================================================
-function Marker({ marker, radius, onClick, onHover }) {
+function Marker({ marker, radius, onClick, onHover, isModalOpen }) {
   const [hovered, setHovered] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const imageGroupRef = useRef(null);
@@ -82,8 +82,10 @@ function Marker({ marker, radius, onClick, onHover }) {
     return { lineCenter: center, lineQuaternion: quaternion };
   }, [surfacePosition, topPosition]);
 
+  const showHtml = isVisible && !isModalOpen;
+
   return (
-    <group visible={isVisible}>
+    <group visible={showHtml}>
       {/* Pin line */}
       <mesh position={lineCenter} quaternion={lineQuaternion}>
         <cylinderGeometry args={[0.003, 0.003, lineHeight, 8]} />
@@ -100,41 +102,61 @@ function Marker({ marker, radius, onClick, onHover }) {
         <meshBasicMaterial color={hovered ? "#ffe088" : "#ffe088"} />
       </mesh>
 
-      {/* Avatar at top */}
+      {/* Avatar / Pin Label at top */}
       <group ref={imageGroupRef} position={topPosition}>
         <Html
           transform
           center
           sprite
           distanceFactor={10}
+          zIndexRange={[1, 10]}
           style={{
-            pointerEvents: isVisible ? "auto" : "none",
-            opacity: isVisible ? 1 : 0,
+            pointerEvents: showHtml ? "auto" : "none",
+            opacity: showHtml ? 1 : 0,
             transition: "opacity 0.15s ease-out",
           }}
         >
           <div
-            className={cn(
-              "relative cursor-pointer overflow-visible rounded-full bg-neutral-950 shadow-xl transition-all duration-300 border-2 border-[#ffe088] flex items-center justify-center",
-              hovered ? "scale-125 ring-4 ring-[#ffe088]/50 z-50" : "hover:scale-110"
-            )}
-            style={{ width: "32px", height: "32px" }}
+            className="relative cursor-pointer group"
             onMouseEnter={handleEnter}
             onMouseLeave={handleLeave}
             onClick={handleClick}
           >
-            <img
-              src={marker.src}
-              alt={marker.name || marker.label || "Project Pin"}
-              className="h-full w-full object-cover rounded-full"
-              draggable={false}
-            />
+            {/* Sleek Pin Badge */}
+            <div
+              className={cn(
+                "flex items-center gap-1.5 bg-[#12141a]/95 text-white px-2.5 py-1 rounded-full border border-[#ffd862]/50 shadow-xl backdrop-blur-md transition-all duration-300 whitespace-nowrap",
+                hovered ? "scale-115 border-[#ffd862] bg-[#1a1e29] ring-2 ring-[#ffd862]/40 shadow-[#ffd862]/20" : "hover:scale-105"
+              )}
+            >
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ffd862] opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#ffd862]" />
+              </span>
+              <span className="text-[10px] font-bold tracking-wide text-[#ffd862] uppercase">
+                {marker.name || marker.label}
+              </span>
+            </div>
+
+            {/* Hover Tooltip Card */}
             {hovered && (
-              <div className="absolute left-1/2 -bottom-14 -translate-x-1/2 whitespace-nowrap bg-[#12141a]/95 border border-[#ffe088]/60 px-3 py-1.5 rounded-md shadow-2xl backdrop-blur-md text-left pointer-events-none z-50 animate-in fade-in duration-150">
-                <p className="text-[11px] font-bold text-[#ffe088] leading-none">{marker.name || marker.label}</p>
-                <p className="text-[9px] text-zinc-300 mt-1 leading-none font-medium">{marker.location || marker.country}</p>
+              <div className="absolute left-1/2 -bottom-24 -translate-x-1/2 w-48 bg-[#12141a]/95 border border-[#ffd862]/70 rounded-lg shadow-2xl backdrop-blur-md p-2.5 text-left pointer-events-none z-30 animate-in fade-in zoom-in-95 duration-150">
+                {marker.src && (
+                  <img
+                    src={marker.src}
+                    alt={marker.name}
+                    className="w-full h-16 object-cover rounded mb-2 border border-white/10"
+                  />
+                )}
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-[9px] font-bold text-[#ffd862] uppercase tracking-wider bg-[#ffd862]/10 px-1.5 py-0.5 rounded border border-[#ffd862]/30">
+                    {marker.subcontractor || marker.country}
+                  </span>
+                  <span className="text-[9px] text-zinc-400 font-semibold">{marker.year}</span>
+                </div>
+                <p className="text-[11px] font-bold text-white leading-tight">{marker.name}</p>
                 {marker.material && (
-                  <p className="text-[8px] text-zinc-400 mt-1 leading-none italic">{marker.material}</p>
+                  <p className="text-[9px] text-zinc-300 mt-1 line-clamp-1 italic">{marker.material}</p>
                 )}
               </div>
             )}

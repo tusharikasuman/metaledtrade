@@ -246,9 +246,8 @@ export default function Projects() {
         <section className="relative h-[65vh] min-h-[480px] flex flex-col justify-end overflow-hidden">
           <div className="absolute inset-0 z-0">
             <div
-              className={`w-full h-full bg-cover bg-center transition-all duration-1000 ${
-                themeMode === "light" ? "opacity-100" : "opacity-70"
-              }`}
+              className={`w-full h-full bg-cover bg-center transition-all duration-1000 ${themeMode === "light" ? "opacity-100" : "opacity-70"
+                }`}
               style={{ backgroundImage: `url(${themeMode === "light" ? heroBgLight : heroBg})` }}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-bg via-bg/40 to-transparent" />
@@ -260,17 +259,15 @@ export default function Projects() {
                 Global Supply Footprint
               </p>
               <h1
-                className={`font-semibold text-4xl sm:text-5xl md:text-7xl leading-[1.1] mb-4 uppercase ${
-                  themeMode === "light" ? "text-primary" : "text-white"
-                }`}
+                className={`font-semibold text-4xl sm:text-5xl md:text-7xl leading-[1.1] mb-4 uppercase ${themeMode === "light" ? "text-primary" : "text-white"
+                  }`}
               >
                 Architectural <br />
                 Integrity
               </h1>
               <p
-                className={`font-extrabold text-sm md:text-base leading-relaxed ${
-                  themeMode === "light" ? "text-on-surface-variant" : "text-zinc-300"
-                }`}
+                className={`font-extrabold text-sm md:text-base leading-relaxed ${themeMode === "light" ? "text-on-surface-variant" : "text-zinc-300"
+                  }`}
               >
                 Forging the backbone of the world&apos;s most ambitious infrastructure projects with certified industrial steel, specialized solar coatings, and heavy structural plates.
               </p>
@@ -278,98 +275,27 @@ export default function Projects() {
           </div>
         </section>
 
-        {/* ── SIDE-BY-SIDE 3D GLOBE & TYPOGRAPHIC REGIONAL FOOTPRINTS ───────────────── */}
-        <section className="px-5 md:px-20 py-20 max-w-[1440px] mx-auto border-b border-[#444748]/20">
-          <div className="text-left mb-12 max-w-2xl">
+        {/* ── STANDALONE 3D GLOBE SECTION (Centered, No Right-Side Text List) ──────── */}
+        <section className="bg-surface-container-lowest border-y border-[#444748]/20 py-20 relative overflow-hidden select-none">
+          <div className="max-w-[1440px] mx-auto px-5 md:px-20 text-center relative z-10 mb-8">
             <span className="font-label-md text-xs text-[#ffd862] uppercase tracking-[0.25em] block mb-2">
-              Portfolio
+              Global Operations Map
             </span>
-            <h2 className="font-headline-lg text-2xl md:text-4xl text-primary uppercase tracking-wide">
-              Key Regional Footprints
+            <h2 className="font-headline-lg text-3xl md:text-5xl text-primary uppercase tracking-wide">
+              Worldwide Supply Chain
             </h2>
-            <div className="w-12 h-[2px] bg-[#ffd862] mt-3 mb-4" />
-            <p className="font-body-md text-sm text-steel leading-relaxed">
-              MetalEd Trade has supplied certified steel and custom metal alloys to major projects across Saudi Arabia, UAE, and Oman. Click or hover any pin/item to view photos and full subcontractor specifications.
+            <p className="text-steel text-sm max-w-xl mx-auto mt-3">
+              Click or hover on any glowing project pin to inspect project photos, subcontractor details, and supply specifications across Saudi Arabia, UAE, and Oman.
             </p>
           </div>
 
-          <div className="flex flex-col lg:flex-row gap-12 items-center">
-            {/* Left Column: Interactive 3D Globe with Project Pins */}
-            <div style={{ width: "100%", maxWidth: "580px", position: "relative" }} className="w-full lg:w-1/2">
-              <Globe3D
-                markers={FEATURED_PROJECTS}
-                config={{ bumpScale: 3, autoRotateSpeed: 0.35, showAtmosphere: false }}
-                onMarkerClick={(marker) => setSelectedProject(marker)}
-              />
-            </div>
-
-            {/* Right Column: Typographic Project Index List (Matching Screenshot Style) */}
-            <div className="w-full lg:w-1/2">
-              <div
-                className="grid grid-cols-1 sm:grid-cols-2 gap-y-8 gap-x-8"
-                onMouseLeave={() => setHoveredIndex(null)}
-              >
-                {FEATURED_PROJECTS.map((project, idx) => {
-                  const isHovered = hoveredIndex === idx;
-                  const isAnyHovered = hoveredIndex !== null;
-
-                  return (
-                    <div
-                      key={project.id}
-                      onClick={() => setSelectedProject(project)}
-                      className="relative group cursor-pointer py-3 transition-all duration-300"
-                      onMouseEnter={() => setHoveredIndex(idx)}
-                      style={{
-                        opacity: isAnyHovered ? (isHovered ? 1 : 0.3) : 0.85,
-                        transform: isHovered ? "translateX(6px)" : "translateX(0px)",
-                      }}
-                    >
-                      {/* Spotlight glow behind hovered item */}
-                      {isHovered && (
-                        <motion.div
-                          layoutId="spotlightGlow"
-                          className="absolute -inset-x-3 -inset-y-1 bg-[#ffd862]/10 rounded-lg blur-md z-0"
-                          transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                        />
-                      )}
-
-                      <div className="relative z-10 flex flex-col gap-1.5">
-                        {/* Index & Sector */}
-                        <div className="flex items-center gap-2">
-                          <span className="font-label-sm text-[10px] text-[#ffd862] font-semibold tracking-widest">
-                            {project.id}
-                          </span>
-                          <span className="w-4 h-[1px] bg-[#ffd862]/40" />
-                          <span className="font-label-sm text-[9px] text-[#8e9192] uppercase tracking-wider">
-                            {project.sector}
-                          </span>
-                        </div>
-
-                        {/* Project Title */}
-                        <h3 className="font-display-lg text-xl md:text-2xl font-extrabold uppercase tracking-wide text-ivory group-hover:text-[#ffd862] transition-colors duration-300">
-                          {project.name}
-                        </h3>
-
-                        {/* Subcontractor & Material info */}
-                        <div className="flex items-center gap-2 mt-0.5">
-                          <span className="text-[9px] font-bold text-[#ffd862] bg-[#ffd862]/10 px-2 py-0.5 rounded border border-[#ffd862]/30">
-                            {project.subcontractor}
-                          </span>
-                          <span className="text-[9px] text-steel uppercase font-semibold">
-                            {project.country}
-                          </span>
-                        </div>
-
-                        {/* Bottom Line Indicator */}
-                        <div className="w-full h-[1px] bg-[#444748]/20 mt-2 relative overflow-hidden">
-                          <div className="absolute inset-0 bg-[#ffd862] -translate-x-full group-hover:translate-x-0 transition-transform duration-500" />
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
+          <div style={{ width: "100%", maxWidth: "800px", margin: "0 auto", position: "relative" }}>
+            <Globe3D
+              markers={FEATURED_PROJECTS}
+              config={{ bumpScale: 3, autoRotateSpeed: 0.35, showAtmosphere: false }}
+              onMarkerClick={(marker) => setSelectedProject(marker)}
+              isModalOpen={!!selectedProject}
+            />
           </div>
         </section>
 
@@ -415,9 +341,8 @@ export default function Projects() {
                 <motion.div
                   key={project.id}
                   onClick={() => setSelectedProject(project)}
-                  className={`group relative overflow-hidden bg-surface-container border border-outline-variant/35 rounded-lg shadow-xl cursor-pointer ${
-                    project.span
-                  } ${isThird ? "h-[400px]" : "h-[480px]"}`}
+                  className={`group relative overflow-hidden bg-surface-container border border-outline-variant/35 rounded-lg shadow-xl cursor-pointer ${project.span
+                    } ${isThird ? "h-[400px]" : "h-[480px]"}`}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, amount: 0.15 }}
@@ -453,9 +378,8 @@ export default function Projects() {
                     </div>
 
                     <h3
-                      className={`text-white mb-2 uppercase font-display-lg ${
-                        isCol4 ? "text-xl md:text-2xl" : "text-2xl md:text-3xl"
-                      }`}
+                      className={`text-white mb-2 uppercase font-display-lg ${isCol4 ? "text-xl md:text-2xl" : "text-2xl md:text-3xl"
+                        }`}
                     >
                       {project.name}
                     </h3>
