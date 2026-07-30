@@ -40,14 +40,17 @@ function Marker({ marker, radius, onClick, onHover, isModalOpen }) {
   const imageGroupRef = useRef(null);
   const { camera } = useThree();
 
+  // Stagger height level if provided, otherwise default 1.18
+  const altitudeMultiplier = marker.altitude || 1.18;
+
   const surfacePosition = useMemo(
     () => latLngToVector3(marker.lat, marker.lng, radius * 1.001),
     [marker.lat, marker.lng, radius]
   );
 
   const topPosition = useMemo(
-    () => latLngToVector3(marker.lat, marker.lng, radius * 1.18),
-    [marker.lat, marker.lng, radius]
+    () => latLngToVector3(marker.lat, marker.lng, radius * altitudeMultiplier),
+    [marker.lat, marker.lng, radius, altitudeMultiplier]
   );
 
   const lineHeight = topPosition.distanceTo(surfacePosition);
@@ -86,82 +89,86 @@ function Marker({ marker, radius, onClick, onHover, isModalOpen }) {
 
   return (
     <group visible={showHtml}>
-      {/* Pin line */}
+      {/* Pin stem line */}
       <mesh position={lineCenter} quaternion={lineQuaternion}>
         <cylinderGeometry args={[0.003, 0.003, lineHeight, 8]} />
         <meshBasicMaterial
-          color={hovered ? "#ffe088" : "#8e9192"}
+          color={hovered ? "#ffd862" : "#8e9192"}
           transparent
-          opacity={hovered ? 0.9 : 0.5}
+          opacity={hovered ? 0.95 : 0.55}
         />
       </mesh>
 
-      {/* Pin point at surface */}
+      {/* Surface dot anchor */}
       <mesh position={surfacePosition} quaternion={lineQuaternion}>
         <coneGeometry args={[0.015, 0.04, 8]} />
-        <meshBasicMaterial color={hovered ? "#ffe088" : "#ffe088"} />
+        <meshBasicMaterial color="#ffd862" />
       </mesh>
 
-      {/* Avatar / Pin Label at top */}
+      {/* Floating Circular Photo Pin Badge at top */}
       <group ref={imageGroupRef} position={topPosition}>
-        <Html
-          transform
-          center
-          sprite
-          distanceFactor={10}
-          zIndexRange={[1, 10]}
-          style={{
-            pointerEvents: showHtml ? "auto" : "none",
-            opacity: showHtml ? 1 : 0,
-            transition: "opacity 0.15s ease-out",
-          }}
-        >
-          <div
-            className="relative cursor-pointer group"
-            onMouseEnter={handleEnter}
-            onMouseLeave={handleLeave}
-            onClick={handleClick}
+        {showHtml && (
+          <Html
+            transform
+            center
+            sprite
+            distanceFactor={10}
+            zIndexRange={[1, 10]}
+            style={{
+              display: isModalOpen ? "none" : "block",
+              pointerEvents: showHtml ? "auto" : "none",
+              opacity: showHtml ? 1 : 0,
+              transition: "opacity 0.2s ease-out, transform 0.2s ease-out",
+            }}
           >
-            {/* Sleek Pin Badge */}
             <div
-              className={cn(
-                "flex items-center gap-1.5 bg-[#12141a]/95 text-white px-2.5 py-1 rounded-full border border-[#ffd862]/50 shadow-xl backdrop-blur-md transition-all duration-300 whitespace-nowrap",
-                hovered ? "scale-115 border-[#ffd862] bg-[#1a1e29] ring-2 ring-[#ffd862]/40 shadow-[#ffd862]/20" : "hover:scale-105"
-              )}
+              className="relative cursor-pointer group select-none"
+              onMouseEnter={handleEnter}
+              onMouseLeave={handleLeave}
+              onClick={handleClick}
             >
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ffd862] opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#ffd862]" />
-              </span>
-              <span className="text-[10px] font-bold tracking-wide text-[#ffd862] uppercase">
-                {marker.name || marker.label}
-              </span>
-            </div>
-
-            {/* Hover Tooltip Card */}
-            {hovered && (
-              <div className="absolute left-1/2 -bottom-24 -translate-x-1/2 w-48 bg-[#12141a]/95 border border-[#ffd862]/70 rounded-lg shadow-2xl backdrop-blur-md p-2.5 text-left pointer-events-none z-30 animate-in fade-in zoom-in-95 duration-150">
-                {marker.src && (
-                  <img
-                    src={marker.src}
-                    alt={marker.name}
-                    className="w-full h-16 object-cover rounded mb-2 border border-white/10"
-                  />
+              {/* Circular Photo Pin Badge */}
+              <div
+                className={cn(
+                  "relative rounded-full border-2 border-[#ffd862] bg-[#12141a] shadow-2xl transition-all duration-300 flex items-center justify-center overflow-hidden",
+                  hovered
+                    ? "scale-130 ring-4 ring-[#ffd862]/60 z-30 shadow-[#ffd862]/40"
+                    : "hover:scale-110 shadow-black/80"
                 )}
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-[9px] font-bold text-[#ffd862] uppercase tracking-wider bg-[#ffd862]/10 px-1.5 py-0.5 rounded border border-[#ffd862]/30">
-                    {marker.subcontractor || marker.country}
-                  </span>
-                  <span className="text-[9px] text-zinc-400 font-semibold">{marker.year}</span>
-                </div>
-                <p className="text-[11px] font-bold text-white leading-tight">{marker.name}</p>
-                {marker.material && (
-                  <p className="text-[9px] text-zinc-300 mt-1 line-clamp-1 italic">{marker.material}</p>
-                )}
+                style={{ width: "34px", height: "34px" }}
+              >
+                <img
+                  src={marker.src}
+                  alt={marker.name || "Project Pin"}
+                  className="w-full h-full object-cover rounded-full"
+                  draggable={false}
+                />
               </div>
-            )}
-          </div>
-        </Html>
+
+              {/* Subcontractor / Project Tag attached to Pin */}
+              <div className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 bg-[#12141a]/95 text-[#ffd862] border border-[#ffd862]/60 font-extrabold text-[8px] px-2 py-0.5 rounded-full uppercase whitespace-nowrap shadow-xl pointer-events-none z-10">
+                {marker.subcontractor || marker.name}
+              </div>
+
+              {/* Rich Tooltip Card on Hover */}
+              {hovered && (
+                <div className="absolute left-1/2 -bottom-28 -translate-x-1/2 w-48 bg-[#12141a]/95 border border-[#ffd862] rounded-lg shadow-2xl backdrop-blur-md p-2.5 text-left pointer-events-none z-40 animate-in fade-in zoom-in-95 duration-150">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-[9px] font-bold text-[#ffd862] uppercase tracking-wider bg-[#ffd862]/10 px-1.5 py-0.5 rounded border border-[#ffd862]/30">
+                      {marker.subcontractor}
+                    </span>
+                    <span className="text-[9px] text-zinc-400 font-semibold">{marker.year}</span>
+                  </div>
+                  <p className="text-[11px] font-bold text-white leading-tight">{marker.name}</p>
+                  <p className="text-[9px] text-zinc-300 mt-1">{marker.location}</p>
+                  {marker.material && (
+                    <p className="text-[8px] text-zinc-400 mt-1 line-clamp-1 italic">{marker.material}</p>
+                  )}
+                </div>
+              )}
+            </div>
+          </Html>
+        )}
       </group>
     </group>
   );
