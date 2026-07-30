@@ -115,20 +115,29 @@ function Marker({ marker, radius, onClick, onHover }) {
         >
           <div
             className={cn(
-              "cursor-pointer overflow-hidden rounded-full bg-neutral-900 shadow-lg transition-transform duration-200",
-              hovered && "scale-125 shadow-xl"
+              "relative cursor-pointer overflow-visible rounded-full bg-neutral-950 shadow-xl transition-all duration-300 border-2 border-[#ffe088] flex items-center justify-center",
+              hovered ? "scale-125 ring-4 ring-[#ffe088]/50 z-50" : "hover:scale-110"
             )}
-            style={{ width: "28px", height: "28px" }}
+            style={{ width: "32px", height: "32px" }}
             onMouseEnter={handleEnter}
             onMouseLeave={handleLeave}
             onClick={handleClick}
           >
             <img
               src={marker.src}
-              alt={marker.label || "Marker"}
-              className="h-full w-full object-cover"
+              alt={marker.name || marker.label || "Project Pin"}
+              className="h-full w-full object-cover rounded-full"
               draggable={false}
             />
+            {hovered && (
+              <div className="absolute left-1/2 -bottom-14 -translate-x-1/2 whitespace-nowrap bg-[#12141a]/95 border border-[#ffe088]/60 px-3 py-1.5 rounded-md shadow-2xl backdrop-blur-md text-left pointer-events-none z-50 animate-in fade-in duration-150">
+                <p className="text-[11px] font-bold text-[#ffe088] leading-none">{marker.name || marker.label}</p>
+                <p className="text-[9px] text-zinc-300 mt-1 leading-none font-medium">{marker.location || marker.country}</p>
+                {marker.material && (
+                  <p className="text-[8px] text-zinc-400 mt-1 leading-none italic">{marker.material}</p>
+                )}
+              </div>
+            )}
           </div>
         </Html>
       </group>
