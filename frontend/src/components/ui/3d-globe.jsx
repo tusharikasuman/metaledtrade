@@ -105,7 +105,7 @@ function Marker({ marker, radius, onClick, onHover, isModalOpen }) {
         <meshBasicMaterial color="#ffd862" />
       </mesh>
 
-      {/* Floating Circular Photo Pin Badge at top */}
+      {/* Sleek Pin Anchor & Hover Card at top */}
       <group ref={imageGroupRef} position={topPosition}>
         {showHtml && (
           <Html
@@ -118,49 +118,48 @@ function Marker({ marker, radius, onClick, onHover, isModalOpen }) {
               display: isModalOpen ? "none" : "block",
               pointerEvents: showHtml ? "auto" : "none",
               opacity: showHtml ? 1 : 0,
-              transition: "opacity 0.2s ease-out, transform 0.2s ease-out",
+              transition: "opacity 0.2s ease-out",
             }}
           >
             <div
-              className="relative cursor-pointer group select-none"
+              className="relative cursor-pointer group select-none flex flex-col items-center"
               onMouseEnter={handleEnter}
               onMouseLeave={handleLeave}
               onClick={handleClick}
             >
-              {/* Circular Photo Pin Badge */}
+              {/* Clean Glowing Gold Pin Marker */}
               <div
                 className={cn(
-                  "relative rounded-full border-2 border-[#ffd862] bg-[#12141a] shadow-2xl transition-all duration-300 flex items-center justify-center overflow-hidden",
+                  "relative rounded-full border-2 border-[#ffd862] bg-[#12141a] shadow-xl transition-all duration-300 flex items-center justify-center p-1",
                   hovered
-                    ? "scale-130 ring-4 ring-[#ffd862]/60 z-30 shadow-[#ffd862]/40"
+                    ? "scale-130 ring-4 ring-[#ffd862]/60 z-30 shadow-[#ffd862]/50 bg-[#1a1e29]"
                     : "hover:scale-110 shadow-black/80"
                 )}
-                style={{ width: "34px", height: "34px" }}
               >
-                <img
-                  src={marker.src}
-                  alt={marker.name || "Project Pin"}
-                  className="w-full h-full object-cover rounded-full"
-                  draggable={false}
-                />
+                <span className="relative flex h-3 w-3 items-center justify-center">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ffd862] opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#ffd862]" />
+                </span>
               </div>
 
-              {/* Subcontractor / Project Tag attached to Pin */}
-              <div className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 bg-[#12141a]/95 text-[#ffd862] border border-[#ffd862]/60 font-extrabold text-[8px] px-2 py-0.5 rounded-full uppercase whitespace-nowrap shadow-xl pointer-events-none z-10">
-                {marker.subcontractor || marker.name}
-              </div>
-
-              {/* Rich Tooltip Card on Hover */}
+              {/* Hover Tooltip Card with Photo & Full Specs */}
               {hovered && (
-                <div className="absolute left-1/2 -bottom-28 -translate-x-1/2 w-48 bg-[#12141a]/95 border border-[#ffd862] rounded-lg shadow-2xl backdrop-blur-md p-2.5 text-left pointer-events-none z-40 animate-in fade-in zoom-in-95 duration-150">
+                <div className="absolute left-1/2 -bottom-36 -translate-x-1/2 w-52 bg-[#12141a]/95 border border-[#ffd862] rounded-lg shadow-2xl backdrop-blur-md p-3 text-left pointer-events-none z-50 animate-in fade-in zoom-in-95 duration-150">
+                  {marker.src && (
+                    <img
+                      src={marker.src}
+                      alt={marker.name}
+                      className="w-full h-20 object-cover rounded mb-2 border border-white/10"
+                    />
+                  )}
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-[9px] font-bold text-[#ffd862] uppercase tracking-wider bg-[#ffd862]/10 px-1.5 py-0.5 rounded border border-[#ffd862]/30">
-                      {marker.subcontractor}
+                      {marker.subcontractor || marker.country}
                     </span>
                     <span className="text-[9px] text-zinc-400 font-semibold">{marker.year}</span>
                   </div>
-                  <p className="text-[11px] font-bold text-white leading-tight">{marker.name}</p>
-                  <p className="text-[9px] text-zinc-300 mt-1">{marker.location}</p>
+                  <p className="text-[11px] font-extrabold text-white leading-tight">{marker.name}</p>
+                  <p className="text-[9px] text-zinc-300 mt-0.5 font-medium">{marker.location}</p>
                   {marker.material && (
                     <p className="text-[8px] text-zinc-400 mt-1 line-clamp-1 italic">{marker.material}</p>
                   )}
