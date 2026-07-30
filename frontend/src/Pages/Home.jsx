@@ -5,6 +5,7 @@ import { HiPlay } from "react-icons/hi2";
 import Navbar from "../Components/Navbar";
 import bgImg from "../assets/homebg.png";
 import bgImgLight from "../assets/homebg_light.png";
+import ceoPhoto from "../assets/ceo_photo.jpg";
 
 
 
@@ -141,8 +142,8 @@ export default function Home() {
 
         {/* CEO Message */}
         <section id="ceo-message" className="grid grid-cols-1 md:grid-cols-[0.8fr_1.2fr] gap-10 md:gap-14 items-center max-w-6xl mx-auto px-6 md:px-12 pb-24">
-          <div className="rounded-lg overflow-hidden h-[300px] md:h-full">
-            <img src={bgImg} alt="Metaled Trade port operations" className="w-full h-full object-cover grayscale-[0.35]" />
+          <div className="rounded-lg overflow-hidden h-[300px] md:h-[500px]">
+            <img src={ceoPhoto} alt="CEO Mr Indronil Mukherjee" className="w-full h-full object-cover" />
           </div>
 
           <motion.div
