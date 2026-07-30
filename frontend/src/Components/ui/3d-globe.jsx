@@ -40,8 +40,9 @@ function Marker({ marker, radius, onClick, onHover, isModalOpen }) {
   const imageGroupRef = useRef(null);
   const { camera } = useThree();
 
-  // Stagger height level if provided, otherwise default 1.18
-  const altitudeMultiplier = marker.altitude || 1.18;
+  const topLat = marker.lat + (marker.latOffset || 0);
+  const topLng = marker.lng + (marker.lngOffset || 0);
+  const altitudeMultiplier = marker.altitude || 1.25;
 
   const surfacePosition = useMemo(
     () => latLngToVector3(marker.lat, marker.lng, radius * 1.001),
@@ -49,8 +50,8 @@ function Marker({ marker, radius, onClick, onHover, isModalOpen }) {
   );
 
   const topPosition = useMemo(
-    () => latLngToVector3(marker.lat, marker.lng, radius * altitudeMultiplier),
-    [marker.lat, marker.lng, radius, altitudeMultiplier]
+    () => latLngToVector3(topLat, topLng, radius * altitudeMultiplier),
+    [topLat, topLng, radius, altitudeMultiplier]
   );
 
   const lineHeight = topPosition.distanceTo(surfacePosition);
@@ -89,23 +90,23 @@ function Marker({ marker, radius, onClick, onHover, isModalOpen }) {
 
   return (
     <group visible={showHtml}>
-      {/* Pin stem line */}
+      {/* Pin leader line connecting surface dot to floating avatar */}
       <mesh position={lineCenter} quaternion={lineQuaternion}>
         <cylinderGeometry args={[0.003, 0.003, lineHeight, 8]} />
         <meshBasicMaterial
-          color={hovered ? "#ffd862" : "#8e9192"}
+          color={hovered ? "#ffd862" : "#a1a1aa"}
           transparent
-          opacity={hovered ? 0.95 : 0.55}
+          opacity={hovered ? 0.95 : 0.6}
         />
       </mesh>
 
-      {/* Surface dot anchor */}
+      {/* Red/Gold Surface Anchor Dot on exact map location */}
       <mesh position={surfacePosition} quaternion={lineQuaternion}>
-        <coneGeometry args={[0.015, 0.04, 8]} />
-        <meshBasicMaterial color="#ffd862" />
+        <sphereGeometry args={[0.018, 16, 16]} />
+        <meshBasicMaterial color="#ef4444" />
       </mesh>
 
-      {/* Sleek Pin Anchor & Hover Card at top */}
+      {/* Floating Circular Photo Avatar Badge (Matching Reference Image) */}
       <group ref={imageGroupRef} position={topPosition}>
         {showHtml && (
           <Html
@@ -127,19 +128,22 @@ function Marker({ marker, radius, onClick, onHover, isModalOpen }) {
               onMouseLeave={handleLeave}
               onClick={handleClick}
             >
-              {/* Clean Glowing Gold Pin Marker */}
+              {/* Circular Avatar Photo Badge */}
               <div
                 className={cn(
-                  "relative rounded-full border-2 border-[#ffd862] bg-[#12141a] shadow-xl transition-all duration-300 flex items-center justify-center p-1",
+                  "relative rounded-full border-2 border-[#ffd862] bg-[#12141a] shadow-2xl transition-all duration-300 flex items-center justify-center overflow-hidden",
                   hovered
-                    ? "scale-130 ring-4 ring-[#ffd862]/60 z-30 shadow-[#ffd862]/50 bg-[#1a1e29]"
+                    ? "scale-130 ring-4 ring-[#ffd862]/60 z-30 shadow-[#ffd862]/50"
                     : "hover:scale-110 shadow-black/80"
                 )}
+                style={{ width: "34px", height: "34px" }}
               >
-                <span className="relative flex h-3 w-3 items-center justify-center">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ffd862] opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#ffd862]" />
-                </span>
+                <img
+                  src={marker.src}
+                  alt={marker.name || "Project Pin"}
+                  className="w-full h-full object-cover rounded-full"
+                  draggable={false}
+                />
               </div>
 
               {/* Hover Tooltip Card with Photo & Full Specs */}
@@ -366,15 +370,15 @@ const defaultConfig = {
 // ============================================================================
 // Main export
 // ============================================================================
-export function Globe3D({ markers = [], config = {}, className, onMarkerClick, onMarkerHover }) {
+export function Globe3D({ markers = [], config = {}, className, onMarkerClick, onMarkerHover, isModalOpen }) {
   const mergedConfig = useMemo(() => ({ ...defaultConfig, ...config }), [config]);
 
   return (
-    <div className={cn("relative w-full", className)} style={{ height: "550px" }}>
+    <div className={cn("relative w-full", className)} style={{ height: "680px" }}>
       <Canvas
         gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
         dpr={[1, 2]}
-        camera={{ fov: 45, near: 0.1, far: 1000, position: [0, 0, mergedConfig.radius * 3.5] }}
+        camera={{ fov: 42, near: 0.1, far: 1000, position: [0, 0, mergedConfig.radius * 3.4] }}
         style={{ background: mergedConfig.backgroundColor || "transparent" }}
       >
         <Suspense fallback={<LoadingFallback />}>
@@ -383,6 +387,7 @@ export function Globe3D({ markers = [], config = {}, className, onMarkerClick, o
             config={mergedConfig}
             onMarkerClick={onMarkerClick}
             onMarkerHover={onMarkerHover}
+            isModalOpen={isModalOpen}
           />
         </Suspense>
       </Canvas>
