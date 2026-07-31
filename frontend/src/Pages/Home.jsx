@@ -10,9 +10,9 @@ import ceoPhoto from "../assets/ceo_photo.jpg";
 
 
 const PARAGRAPHS = [
-  "Metaled Trade FZCO is a Steel Trading Company based in Dubai, UAE. We are specialists in steel trading, right from production to delivery of material. Our main focus is the Middle East, South East Asia & Africa markets.",
-  "We supply from all major steel producing hubs such as India, Vietnam, A1 Chinese Mills and reputed local mills in GCC to cater to our esteemed customers. We provide customized financial and distribution options to our customers.",
-  "Metaled Trade FZCO has a strong network of experienced partners and expert employees who enable us to nurture and develop solutions for supplying steel from world class mills.",
+  "Based in the heart of Dubai, Metaled Trade FZCO is more than just a steel trading company — we are your dedicated partners in building the future. We oversee every step of the process, from production at the mill right down to final delivery, with a strong focus on markets across the Middle East, South East Asia, and Africa.",
+  "To ensure our customers get exactly what they need, we source from major global steel hubs, including India, Vietnam, top-tier Chinese mills, and highly respected local GCC producers. Beyond just supply, we work closely with you to create tailored distribution and financing solutions that fit your specific project.",
+  "What truly drives us is our people. Our strong network of seasoned industry partners and our own expert team work tirelessly to find and develop the best possible solutions, bringing you world-class steel precisely when and where you need it.",
 ];
 
 const VIDEO_ID = "DSWfdyWgg_A";
@@ -158,20 +158,10 @@ export default function Home() {
 
             <div className="space-y-4">
               <p className="text-steel text-sm md:text-base leading-relaxed">
-                We have continuously looked to innovate, understand market needs
-                &amp; provide freedom to our employees to demonstrate their ability
-                since inception. Steel with its range of products, technical
-                requirements &amp; varied origins mixed with mill capabilities can
-                be a very complex raw material to source.
+                From the day we started, our goal has always been simple: to understand exactly what the market needs, to keep innovating, and to empower our people to do their very best work. We know that sourcing steel isn't just about buying a commodity. With its wide range of technical specifications, varied origins, and unique mill capabilities, it can be an incredibly complex process.
               </p>
               <p className="text-steel text-sm md:text-base leading-relaxed">
-                In addition to it are various risks of transport, payments &amp;
-                socio-political issues that may come up specially when importing
-                large volumes via sea or land. We at Metaled Trade FZCO have been
-                successfully and efficiently providing solutions to our esteemed
-                customers for importing steel products for their project &amp;
-                stock requirements, whether it is in strategic sourcing, financing,
-                or via supply chain.
+                Add to that the logistical challenges of land and sea transport, complex payment structures, and shifting global dynamics—especially when dealing with large volumes. That's exactly where we come in. At Metaled Trade, we take pride in cutting through that complexity. Whether you need strategic sourcing, flexible financing, or a seamless supply chain, we are here to provide our customers with reliable, efficient solutions for every project.
               </p>
             </div>
 

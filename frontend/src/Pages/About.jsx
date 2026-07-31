@@ -179,16 +179,16 @@ const About = () => {
     }, [])
 
     const whyUsPillars = [
-        { title: 'Integrity & Honesty', desc: 'The key pillars of our success are the values that guide us to be upfront and honest in all our transactions that helps us build trust and relationships.', icon: 'gavel' },
-        { title: 'Consistent & Timely Delivery', desc: 'We understand the cost of delays sometimes can be immeasurable. That is why on time delivery is our single most focus once we sign the dotted line.', icon: 'schedule' },
-        { title: 'Financial Strength & Resources', desc: 'Backed by financially strong credentials, we are fully equipped to take order sizes from small to large, from across the world.', icon: 'account_balance' },
-        { title: 'Product Knowledge & Expertise', desc: 'With a passionate team of experts on board who bring in a vast experience of product know-how and the domain expertise to better understand your requirement.', icon: 'workspace_premium' }
+        { title: 'Integrity & Honesty', desc: 'We believe that trust is earned through transparency. We are always upfront and honest in every transaction, which is why our relationships with partners stand the test of time.', icon: 'gavel' },
+        { title: 'Consistent & Timely Delivery', desc: 'We know that in this industry, delays can cost you dearly. Once we commit to a timeline, delivering on schedule becomes our absolute top priority.', icon: 'schedule' },
+        { title: 'Financial Strength & Resources', desc: 'Our solid financial foundation means we have the resources to handle orders of any size, from clients anywhere in the world, without ever missing a beat.', icon: 'account_balance' },
+        { title: 'Product Knowledge & Expertise', desc: 'Our team isn\'t just experienced—they\'re passionate about what they do. We bring deep, practical product knowledge to the table, helping us truly understand exactly what you need.', icon: 'workspace_premium' }
     ]
 
     const competencies = [
-        { title: 'For Steel Producers', desc: 'Metaled Trade provides low cost marketing and financial services to secure customers in export markets.' },
-        { title: 'For Steel Buyers', desc: 'Metaled Trade provides a reliable and flexible sourcing channel with financial support.' },
-        { title: 'Value Additions', desc: 'We provide safe handling of products, inspection, securing delivery, insurance, and a single platform for sourcing multiple products.' }
+        { title: 'For Steel Producers', desc: 'We act as your dedicated bridge to global markets, offering cost-effective marketing and financial services that reliably secure new customers overseas.' },
+        { title: 'For Steel Buyers', desc: 'We are more than a supplier—we are a flexible, dependable sourcing partner ready to back you with the financial support your projects require.' },
+        { title: 'Value Additions', desc: 'From careful product handling and rigorous inspections to securing delivery and insurance, we provide a seamless, all-in-one platform for your sourcing needs.' }
     ]
 
     const journeyMilestones = [
@@ -215,20 +215,14 @@ const About = () => {
                 </div>
             ),
             visual: (
-                <div className="relative w-full h-full bg-bg-alt flex flex-col items-center justify-center p-10 gap-6">
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#ffd862]/5 to-transparent" />
-                    <div className="absolute top-4 left-4 w-8 h-8 border-t-2 border-l-2 border-[#ffd862]/40" />
-                    <div className="absolute bottom-4 right-4 w-8 h-8 border-b-2 border-r-2 border-[#ffd862]/40" />
-                    <span className="text-8xl text-[#ffd862]/20 font-display font-black select-none leading-none">"</span>
-                    <blockquote className="text-center text-lg md:text-xl font-medium text-primary leading-relaxed">
-                        Industry standards. Competitive pricing. Consistent delivery.
-                    </blockquote>
-                    <div className="flex gap-3 mt-4">
-                        {['📦', '⏱️', '🌍'].map((icon, i) => (
-                            <div key={i} className="w-14 h-14 rounded-full bg-[#ffd862]/10 border border-[#ffd862]/20 flex items-center justify-center text-2xl">
-                                {icon}
-                            </div>
-                        ))}
+                <div className="relative w-full h-full overflow-hidden rounded-xl">
+                    <div className="absolute inset-0 bg-black/40 z-10" />
+                    <img src={buildingDetail} alt="Commitment to Consistency" className="w-full h-full object-cover" />
+                    <div className="absolute inset-0 z-20 flex flex-col justify-center items-center p-10 text-center">
+                        <div className="w-16 h-[2px] bg-[#ffd862] mb-6" />
+                        <h4 className="text-2xl md:text-3xl font-display font-medium text-white leading-snug">
+                            Built on Trust.<br />Delivered with Precision.
+                        </h4>
                     </div>
                 </div>
             )
@@ -305,10 +299,10 @@ const About = () => {
                     <p className="text-xs uppercase tracking-widest text-[#ffd862] font-bold">Chief Executive Officer</p>
                     <h4 className="text-xl font-bold text-primary font-display-lg uppercase">Mr Indronil Mukherjee</h4>
                     <p className="text-sm text-on-surface leading-relaxed font-light">
-                        We have continuously looked to innovate, understand market needs & provide freedom to our employees to demonstrate their ability since inception. Steel with its range of products, technical requirements & varied origins can be a very complex raw material to source.
+                        From the day we started, our goal has always been simple: to understand exactly what the market needs, to keep innovating, and to empower our people to do their very best work. Sourcing steel isn't just about buying a commodity; with its wide range of technical specifications, varied origins, and unique mill capabilities, it can be an incredibly complex process.
                     </p>
                     <p className="text-xs text-on-surface-variant/80 leading-relaxed">
-                        We at Metaled Trade FZCO have been successfully and efficiently providing solutions to our esteemed customers for importing steel products for their project & stock requirements, whether it is in strategic sourcing, financing, or via supply chain.
+                        That's where we come in. At Metaled Trade FZCO, we take pride in cutting through that complexity. Whether you need strategic sourcing, flexible financing, or a seamless supply chain, we are here to provide our customers with reliable, efficient solutions for every project.
                     </p>
                 </div>
             ),
@@ -370,10 +364,10 @@ const About = () => {
                     </div>
                     <div className="lg:col-span-7 reveal">
                         <p className="font-body-lg text-lg text-on-surface-variant leading-relaxed font-light mb-6">
-                            Metaled Trade is a Steel Trading Company based in Dubai, UAE. We are specialists in steel trading, right from production to delivery of material. Our main focus is the Middle East, South East Asia & Africa markets.
+                            Based in the bustling heart of Dubai, UAE, Metaled Trade is much more than a traditional steel trading company. We are dedicated specialists who oversee the entire lifecycle of steel trading—from the moment it leaves the production mill all the way to final delivery. While we have a global footprint, our primary focus is on empowering the rapidly growing markets across the Middle East, South East Asia, and Africa.
                         </p>
                         <p className="font-body-md text-base text-on-surface-variant/80 leading-relaxed font-light">
-                            We supply from all major steel producing Hubs such as India, Vietnam, A1 Chinese Mills and reputed Local mills in GCC to cater to our esteemed customers. We provide customized financial and distribution options to our customers. Metaled Trade have a strong network of experienced partners and expert employees who enable us to nurture and develop solutions for supplying steel from world class mills.
+                            To ensure we consistently meet our customers' exact needs, we source materials from some of the world's most reputable steel-producing hubs, including India, Vietnam, top-tier Chinese mills, and respected local producers right here in the GCC. But we do more than just supply metal. We leverage our strong network of experienced partners and our deeply knowledgeable team to create tailored financial and distribution solutions that actually work for your projects.
                         </p>
                     </div>
                 </div>
