@@ -453,8 +453,8 @@ function QuoteModal({ product, onClose }) {
 
 // ── Main Products Page ───────────────────────────────────────────────────────
 export default function Products() {
-  const [activeCategory, setActiveCategory] = useState("long");
-  const [activeProduct, setActiveProduct] = useState(longProducts[0]);
+  const [activeCategory, setActiveCategory] = useState("flat");
+  const [activeProduct, setActiveProduct] = useState(flatProducts[0]);
   const [showQuoteModal, setShowQuoteModal] = useState(false);
 
   const currentProducts = activeCategory === "long" ? longProducts : flatProducts;
@@ -506,21 +506,6 @@ export default function Products() {
         {/* Category Toggles */}
         <div className="flex gap-4 mb-12 border-b border-outline-variant/30 pb-px relative">
           <button
-            onClick={() => setActiveCategory("long")}
-            className={`pb-4 px-2 font-display text-sm md:text-lg font-medium tracking-wide transition-colors relative flex items-center gap-2 ${
-              activeCategory === "long" ? "text-[#ffe088]" : "text-steel hover:text-ivory"
-            }`}
-          >
-            <HiOutlineCube className="text-xl" />
-            Long Products
-            {activeCategory === "long" && (
-              <motion.div
-                layoutId="activeTab"
-                className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#ffe088]"
-              />
-            )}
-          </button>
-          <button
             onClick={() => setActiveCategory("flat")}
             className={`pb-4 px-2 font-display text-sm md:text-lg font-medium tracking-wide transition-colors relative flex items-center gap-2 ${
               activeCategory === "flat" ? "text-[#ffe088]" : "text-steel hover:text-ivory"
@@ -529,6 +514,21 @@ export default function Products() {
             <HiOutlineViewBoards className="text-xl" />
             Flat Products
             {activeCategory === "flat" && (
+              <motion.div
+                layoutId="activeTab"
+                className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#ffe088]"
+              />
+            )}
+          </button>
+          <button
+            onClick={() => setActiveCategory("long")}
+            className={`pb-4 px-2 font-display text-sm md:text-lg font-medium tracking-wide transition-colors relative flex items-center gap-2 ${
+              activeCategory === "long" ? "text-[#ffe088]" : "text-steel hover:text-ivory"
+            }`}
+          >
+            <HiOutlineCube className="text-xl" />
+            Long Products
+            {activeCategory === "long" && (
               <motion.div
                 layoutId="activeTab"
                 className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#ffe088]"
