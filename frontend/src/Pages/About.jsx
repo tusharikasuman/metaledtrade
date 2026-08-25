@@ -5,10 +5,7 @@ import buildingDetail from '../assets/about/building_detail.jpg'
 import ahmedCeo from '../assets/about/ahmed_ceo.jpg'
 import { motion, AnimatePresence } from 'framer-motion'
 
-// ── Aceternity-style Sticky Scroll Reveal ────────────────────────────────────
-// The outer div is n×100vh. The inner is sticky top-0 h-screen.
-// useScroll on the outer div drives which item is active.
-// Each AnimatePresence child captures its own snapshot of content (no stale refs).
+
 function StickyScrollReveal({ content }) {
     const containerRef = useRef(null)
     const [activeItem, setActiveItem] = useState(0)
