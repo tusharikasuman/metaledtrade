@@ -235,21 +235,11 @@ const PARTNERS = [
 export default function Projects() {
   const [selectedProject, setSelectedProject] = useState(null);
   const [hoveredIndex, setHoveredIndex] = useState(null);
-  const [themeMode, setThemeMode] = useState(() => {
-    return localStorage.getItem("theme") || (document.documentElement.classList.contains("light") ? "light" : "dark");
-  });
+  const [themeMode, setThemeMode] = useState("light");
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    setThemeMode(document.documentElement.classList.contains("light") ? "light" : "dark");
-  }, []);
-
-  useEffect(() => {
-    const handleThemeChange = () => {
-      setThemeMode(document.documentElement.classList.contains("light") ? "light" : "dark");
-    };
-    window.addEventListener("theme-change", handleThemeChange);
-    return () => window.removeEventListener("theme-change", handleThemeChange);
+    document.documentElement.classList.add("light");
   }, []);
 
   const handleReachUsClick = (e) => {
@@ -264,14 +254,13 @@ export default function Projects() {
     <div className="min-h-screen bg-bg text-ivory font-body-md overflow-x-hidden flex flex-col justify-between">
       <main className="flex-grow">
         {/* Hero Section */}
-        <section className="relative h-[65vh] min-h-[480px] flex flex-col justify-end overflow-hidden">
+        <section className="relative h-[75vh] min-h-[480px] flex flex-col justify-end overflow-hidden">
           <div className="absolute inset-0 z-0">
             <div
-              className={`w-full h-full bg-cover bg-center transition-all duration-1000 ${themeMode === "light" ? "opacity-100" : "opacity-70"
-                }`}
+              className={`w-full h-full bg-cover bg-center transition-all duration-1000 ${themeMode === "light" ? "opacity-100" : ""}`}
               style={{ backgroundImage: `url(${themeMode === "light" ? heroBgLight : heroBg})` }}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-bg via-bg/40 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t " />
           </div>
 
           <div className="relative z-10 w-full max-w-[1440px] mx-auto px-5 md:px-20 pb-12">

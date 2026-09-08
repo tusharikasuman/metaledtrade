@@ -20,25 +20,11 @@ const THUMBNAIL = `https://img.youtube.com/vi/${VIDEO_ID}/maxresdefault.jpg`;
 
 export default function Home() {
   const [playing, setPlaying] = useState(false);
-  const [themeMode, setThemeMode] = useState(() => {
-    return localStorage.getItem("theme") || (document.documentElement.classList.contains("light") ? "light" : "dark");
-  });
+  const [themeMode, setThemeMode] = useState("light");
 
   useEffect(() => {
-    // Sync theme state on initial mount
-    setThemeMode(
-      document.documentElement.classList.contains("light") ? "light" : "dark"
-    );
-  }, []);
-
-  useEffect(() => {
-    const handleThemeChange = () => {
-      setThemeMode(
-        document.documentElement.classList.contains("light") ? "light" : "dark"
-      );
-    };
-    window.addEventListener("theme-change", handleThemeChange);
-    return () => window.removeEventListener("theme-change", handleThemeChange);
+    document.documentElement.classList.add("light");
+    localStorage.setItem("theme", "light");
   }, []);
 
   return (
