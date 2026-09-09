@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { HiMenu, HiX, HiChevronDown, HiSun, HiMoon } from "react-icons/hi";
+import { HiMenu, HiX, HiChevronDown } from "react-icons/hi";
 import { motion, AnimatePresence } from "framer-motion";
 import logo from "../assets/metaled-logo.jpeg";
 
@@ -15,21 +15,12 @@ const NAV_LINKS = [
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
-  const [isLight, setIsLight] = useState(
-    document.documentElement.classList.contains("light")
-  );
   const [isScrolled, setIsScrolled] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "light") {
-      document.documentElement.classList.add("light");
-      setIsLight(true);
-    } else {
-      document.documentElement.classList.remove("light");
-      setIsLight(false);
-    }
+    document.documentElement.classList.add("light");
+    localStorage.setItem("theme", "light");
 
     const handleScroll = () => {
       if (window.scrollY > 80) {
@@ -43,19 +34,6 @@ export default function Navbar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  const toggleTheme = () => {
-    if (document.documentElement.classList.contains("light")) {
-      document.documentElement.classList.remove("light");
-      localStorage.setItem("theme", "dark");
-      setIsLight(false);
-    } else {
-      document.documentElement.classList.add("light");
-      localStorage.setItem("theme", "light");
-      setIsLight(true);
-    }
-    window.dispatchEvent(new Event("theme-change"));
-  };
 
   const handleLinkClick = (e, to) => {
     setOpen(false);
@@ -179,15 +157,6 @@ export default function Navbar() {
 
             {/* Right-side controls */}
             <div className="flex items-center gap-2">
-              {/* Theme toggle */}
-              <button
-                onClick={toggleTheme}
-                className="p-1.5 text-ivory hover:text-gold transition-colors cursor-pointer"
-                aria-label="Toggle light and dark mode theme"
-              >
-                {isLight ? <HiMoon className="text-lg" /> : <HiSun className="text-lg" />}
-              </button>
-
               {/* Collapse button (shown when manually expanded while scrolled) */}
               {isScrolled && (
                 <button

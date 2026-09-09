@@ -8,21 +8,19 @@ import Projects from './Pages/Projects.jsx'
 import { Routes, Route } from 'react-router-dom';
 import Navbar from './Components/Navbar.jsx'
 import Footer from './Components/Footer.jsx'
+import Preloader from './Components/Preloader.jsx'
 
 
 
 function App() {
   React.useEffect(() => {
-    const savedTheme = localStorage.getItem("theme") || "dark";
-    if (savedTheme === "light") {
-      document.documentElement.classList.add("light");
-    } else {
-      document.documentElement.classList.remove("light");
-    }
+    document.documentElement.classList.add("light");
+    localStorage.setItem("theme", "light");
   }, []);
 
   return (
     <div className="relative min-h-screen bg-bg text-on-surface font-body-md antialiased overflow-x-clip flex flex-col justify-between">
+      <Preloader />
       <Navbar/>
       <main className="flex-grow">
         <Routes>

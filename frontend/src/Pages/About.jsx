@@ -139,26 +139,11 @@ const About = () => {
 
     const [scrollProgress, setScrollProgress] = useState(0)
     const timelineRef = useRef(null)
-    const [themeMode, setThemeMode] = useState(() => {
-        return localStorage.getItem("theme") || (document.documentElement.classList.contains("light") ? "light" : "dark");
-    });
+    const [themeMode, setThemeMode] = useState("light");
 
     useEffect(() => {
-        // Sync theme state on initial mount
-        setThemeMode(
-            document.documentElement.classList.contains("light") ? "light" : "dark"
-        );
+        document.documentElement.classList.add("light");
     }, []);
-
-    useEffect(() => {
-        const handleThemeChange = () => {
-            setThemeMode(
-                document.documentElement.classList.contains('light') ? 'light' : 'dark'
-            )
-        }
-        window.addEventListener('theme-change', handleThemeChange)
-        return () => window.removeEventListener('theme-change', handleThemeChange)
-    }, [])
 
     useEffect(() => {
         const handleScroll = () => {
