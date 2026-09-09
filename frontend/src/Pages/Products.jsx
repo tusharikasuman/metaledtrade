@@ -1,7 +1,53 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import bgImg from "../assets/homebg.png";
+import productImages from "../data/productImages.json";
 import { longProducts, flatProducts } from "../data/productsData";
+
+// Load all product images from the Flat/Long asset folders.
+const flatImageModules = import.meta.glob("../assets/Flat/*", {
+  eager: true,
+  query: "?url",
+  import: "default",
+});
+
+const longImageModules = import.meta.glob("../assets/Long/*", {
+  eager: true,
+  query: "?url",
+  import: "default",
+});
+
+const normalizeProductName = (value = "") =>
+  value
+    .toLowerCase()
+    .replace(/\.[^.]+$/, "")
+    .replace(/[_-]+/g, " ")
+    .replace(/[^a-z0-9 ]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+
+const getProductImage = (productName, category) => {
+  const imageList = productImages[category] || [];
+  const target = normalizeProductName(productName);
+
+  const matchedFile = imageList.find((fileName) => {
+    const fileBase = normalizeProductName(fileName);
+
+    return (
+      fileBase === target ||
+      fileBase.includes(target) ||
+      target.includes(fileBase)
+    );
+  });
+
+  if (!matchedFile) return bgImg;
+
+  const folder = category === "flat" ? "Flat" : "Long";
+  const modules = category === "flat" ? flatImageModules : longImageModules;
+  const imageKey = `../assets/${folder}/${matchedFile}`;
+
+  return modules[imageKey] || bgImg;
+};
 import {
   HiOutlineArrowRight,
   HiOutlineCube,
@@ -550,23 +596,32 @@ export default function Products() {
             <div className="overflow-y-auto flex-grow custom-scrollbar">
               {currentProducts.map((product, idx) => {
                 const isActive = activeProduct.product === product.product;
+                const productImage = getProductImage(product.product, activeCategory);
+
                 return (
                   <button
                     key={idx}
                     onClick={() => setActiveProduct(product)}
-                    className={`w-full text-left p-5 border-b border-outline-variant/30 transition-all duration-300 flex justify-between items-center group ${
+                    className={`w-full text-left p-4 border-b border-outline-variant/30 transition-all duration-300 flex justify-between items-center gap-3 group ${
                       isActive
                         ? "bg-bg-alt/80 border-l-4 border-l-[#ffe088]"
                         : "hover:bg-bg-alt/40 border-l-4 border-l-transparent"
                     }`}
                   >
-                    <span
-                      className={`font-display font-medium text-sm md:text-base ${
-                        isActive ? "text-[#ffe088]" : "text-on-surface-variant group-hover:text-ivory"
-                      }`}
-                    >
-                      {product.product}
-                    </span>
+                    <div className="flex items-center gap-3 min-w-0">
+                      <img
+                        src={productImage}
+                        alt=""
+                        className="w-12 h-12 md:w-14 md:h-14 object-cover rounded-sm border border-outline-variant/30 grayscale group-hover:grayscale-0 transition-all duration-300 shrink-0"
+                      />
+                      <span
+                        className={`font-display font-medium text-sm md:text-base ${
+                          isActive ? "text-[#ffe088]" : "text-on-surface-variant group-hover:text-ivory"
+                        }`}
+                      >
+                        {product.product}
+                      </span>
+                    </div>
                     <HiOutlineArrowRight
                       className={`text-lg transition-transform duration-300 ${
                         isActive
@@ -593,7 +648,7 @@ export default function Products() {
                 {/* Visual Header */}
                 <div className="relative h-48 md:h-64 w-full overflow-hidden rounded-sm border border-outline-variant/30 mb-8 group">
                   <img
-                    src={bgImg}
+                    src={getProductImage(activeProduct.product, activeCategory)}
                     alt={activeProduct.product}
                     className="w-full h-full object-cover grayscale brightness-50 group-hover:brightness-75 group-hover:scale-105 transition-all duration-700"
                   />
