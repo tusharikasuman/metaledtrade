@@ -119,15 +119,6 @@ export default function Navbar() {
             className="fixed top-6 z-50 bg-bg-alt/85 backdrop-blur-md border border-outline-variant/30 rounded-full py-1.5 px-4 shadow-xl flex items-center gap-3 w-auto"
             style={{ left: "50%" }}
           >
-            {/* Logo */}
-            <Link to="/" className="shrink-0" onClick={() => setIsExpanded(false)}>
-              <img
-                src={logo}
-                alt="Metaled Trade FZCO"
-                className="h-8 w-auto rounded border border-outline-variant/30"
-              />
-            </Link>
-
             {/* Desktop nav links */}
             <nav className="hidden md:flex items-center gap-4">
               {NAV_LINKS.map(({ label, href, dropdown }) =>
@@ -181,18 +172,29 @@ export default function Navbar() {
             </div>
           </motion.header>
         ) : (
-          <motion.button
-            key="collapsed-circle"
-            initial={{ scale: 0.5, opacity: 0, y: -20 }}
-            animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.5, opacity: 0, y: -20 }}
+          <motion.div
+            key="slim-bar"
+            initial={{ y: -48, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -48, opacity: 0 }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            onClick={() => setIsExpanded(true)}
-            className="fixed top-6 right-6 md:right-12 w-12 h-12 rounded-full bg-bg-alt/90 backdrop-blur-md border border-outline-variant/40 shadow-lg flex items-center justify-center cursor-pointer hover:border-gold hover:scale-105 transition-all duration-300 text-ivory hover:text-gold z-50"
-            aria-label="Open navigation menu"
+            className="fixed top-0 left-0 right-0 h-12 z-50 bg-bg-alt/90 backdrop-blur-md border-b border-outline-variant/30 shadow-lg flex items-center justify-between px-4 md:px-8"
           >
-            <HiMenu className="text-xl" />
-          </motion.button>
+            <Link to="/" className="shrink-0 flex items-center">
+              <img
+                src={logo}
+                alt="Metaled Trade FZCO"
+                className="h-6 w-auto rounded border border-outline-variant/30"
+              />
+            </Link>
+            <button
+              onClick={() => setIsExpanded(true)}
+              className="p-1.5 text-ivory hover:text-gold transition-colors cursor-pointer"
+              aria-label="Open navigation menu"
+            >
+              <HiMenu className="text-xl" />
+            </button>
+          </motion.div>
         )}
       </AnimatePresence>
     </>
