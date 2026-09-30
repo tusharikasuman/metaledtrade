@@ -1,69 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
+import { FaLinkedin, FaYoutube, FaWeixin, FaFacebook } from "react-icons/fa";
 import { PinContainer } from "./ui/3d-pin";
 
-// Subcomponent to display real-time clock and active desk status for global trade desks
-const TradeDesk = ({ city, timezone }) => {
-  const [time, setTime] = useState("");
-  const [isOpen, setIsOpen] = useState(false);
-
-  useEffect(() => {
-    const updateTimeAndStatus = () => {
-      // Get formatted time string
-      const formatter = new Intl.DateTimeFormat("en-US", {
-        timeZone: timezone,
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: false,
-      });
-      setTime(formatter.format(new Date()));
-
-      // Calculate if the desk is currently within working hours (Mon-Fri, 08:00 - 18:00)
-      const now = new Date();
-      const localString = now.toLocaleString("en-US", { timeZone: timezone });
-      const localDate = new Date(localString);
-      const hours = localDate.getHours();
-      const day = localDate.getDay(); // 0 is Sunday, 6 is Saturday
-
-      const workingDays = day >= 1 && day <= 5;
-      const workingHours = hours >= 8 && hours < 18;
-      setIsOpen(workingDays && workingHours);
-    };
-
-    updateTimeAndStatus();
-    const interval = setInterval(updateTimeAndStatus, 1000);
-    return () => clearInterval(interval);
-  }, [timezone]);
-
-  return (
-    <div className="flex items-center gap-4 bg-[#141517]/80 border border-[#2a2c35]/40 rounded-full px-5 py-2.5 shadow-lg backdrop-blur-sm transition-all duration-300 hover:border-[#ffd862]/30 hover:shadow-[#ffd862]/2">
-      <span className={`w-2 h-2 rounded-full ${isOpen ? "bg-emerald-500 animate-pulse" : "bg-rose-500"}`} />
-      <div className="flex flex-col text-left">
-        <span className="font-label-md text-[10px] text-[#8e9192] uppercase tracking-wider">{city} Desk</span>
-        <span className="font-mono text-xs md:text-sm text-white font-semibold">
-          {time} <span className="text-[10px] text-[#8e9192] font-normal ml-1">{isOpen ? "ACTIVE" : "OFFLINE"}</span>
-        </span>
-      </div>
-    </div>
-  );
-};
-
 export default function Footer() {
-  const [email, setEmail] = useState("");
-  const [isSubscribed, setIsSubscribed] = useState(false);
-
-  const handleSubscribe = (e) => {
-    e.preventDefault();
-    if (email.trim()) {
-      setIsSubscribed(true);
-      setTimeout(() => {
-        setIsSubscribed(false);
-        setEmail("");
-      }, 3000);
-    }
-  };
-
   const handleScrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -77,32 +17,6 @@ export default function Footer() {
       {/* Main Container */}
       <div className="px-5 md:px-20 max-w-[1440px] mx-auto relative z-10">
 
-        {/* Top Section: Live Global Trading Desk Statuses */}
-        <div className="mb-20 pb-12 border-b border-[#444748]/20">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
-            <div>
-              <span className="font-label-md text-xs text-[#ffd862] uppercase tracking-[0.25em] block mb-1">
-                Global Operations
-              </span>
-              <h3 className="font-headline-lg text-lg md:text-2xl text-white uppercase">
-                Trade Desks Status Monitor
-              </h3>
-            </div>
-            <div className="hidden md:block w-32 h-[1px] bg-[#444748]/30 flex-grow mx-8" />
-            <span className="font-mono text-[10px] text-[#8e9192] uppercase tracking-wider">
-              Realtime Synced UTC/Local
-            </span>
-          </div>
-
-          {/* Grid of Global Clock Widgets */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <TradeDesk city="Dubai" timezone="Asia/Dubai" />
-            <TradeDesk city="Mumbai" timezone="Asia/Kolkata" />
-            <TradeDesk city="Shanghai" timezone="Asia/Shanghai" />
-            <TradeDesk city="Houston" timezone="America/Chicago" />
-          </div>
-        </div>
-
         {/* Middle Section: Links Grid & Newsletter Sign-up */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 pb-20 items-start">
 
@@ -110,55 +24,42 @@ export default function Footer() {
           <div className="lg:col-span-5 flex flex-col justify-between h-full gap-8">
             <div className="max-w-md">
               <h2 className="font-display-lg text-3xl font-black text-white uppercase tracking-wider mb-4">
-                METALED <span className="text-[#ffd862]">TRADE</span>
+                METALED <span className="text-[#ffd862]">TRADE FZCO</span>
               </h2>
               <p className="font-body-md text-sm text-[#c4c7c7] leading-relaxed mb-6 font-light">
-                Delivering certified structural steel, heavy plates, and high-performance alloys to landmark infrastructure developments worldwide.
+                Delivering structural steel, heavy plates, and high-performance alloys — certified to ASTM, EN and BS standards with full mill test certificates — to landmark infrastructure developments across the Middle East, Southeast Asia and Africa.
               </p>
-
-              {/* Newsletter form */}
-              <form onSubmit={handleSubscribe} className="relative mt-8 group">
-                <label className="font-label-sm text-[10px] uppercase text-[#8e9192] tracking-wider block mb-2">
-                  Subscribe to Metallurgy Insights
-                </label>
-                <div className="flex border-b border-[#444748]/60 focus-within:border-[#ffd862] transition-colors duration-300 pb-2">
-                  <input
-                    type="email"
-                    required
-                    placeholder="Enter your corporate email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="bg-transparent border-none outline-none w-full text-sm placeholder-[#64748b] text-white pr-4 font-body-md"
-                  />
-                  <button
-                    type="submit"
-                    className="text-[#ffd862] font-label-md text-xs font-bold uppercase tracking-wider hover:text-white transition-colors cursor-pointer"
-                  >
-                    {isSubscribed ? "SUBBED" : "JOIN"}
-                  </button>
-                </div>
-              </form>
             </div>
 
             {/* Social Icons Stack */}
             <div className="flex gap-4 items-center">
               <a
                 href="#linkedin"
+                aria-label="Metaled Trade FZCO on LinkedIn"
                 className="w-10 h-10 rounded-full bg-[#141517] border border-[#2a2c35]/40 flex items-center justify-center text-[#8e9192] hover:text-[#ffd862] hover:border-[#ffd862]/30 hover:scale-110 transition-all duration-300"
               >
-                <span className="font-mono text-xs font-bold">In</span>
+                <FaLinkedin className="text-base" />
+              </a>
+              <a
+                href="#facebook"
+                aria-label="Metaled Trade FZCO on Facebook"
+                className="w-10 h-10 rounded-full bg-[#141517] border border-[#2a2c35]/40 flex items-center justify-center text-[#8e9192] hover:text-[#ffd862] hover:border-[#ffd862]/30 hover:scale-110 transition-all duration-300"
+              >
+                <FaFacebook className="text-base" />
               </a>
               <a
                 href="#youtube"
+                aria-label="Metaled Trade FZCO on YouTube"
                 className="w-10 h-10 rounded-full bg-[#141517] border border-[#2a2c35]/40 flex items-center justify-center text-[#8e9192] hover:text-[#ffd862] hover:border-[#ffd862]/30 hover:scale-110 transition-all duration-300"
               >
-                <span className="font-mono text-xs font-bold">Yt</span>
+                <FaYoutube className="text-base" />
               </a>
               <a
                 href="#wechat"
+                aria-label="Metaled Trade FZCO on WeChat"
                 className="w-10 h-10 rounded-full bg-[#141517] border border-[#2a2c35]/40 flex items-center justify-center text-[#8e9192] hover:text-[#ffd862] hover:border-[#ffd862]/30 hover:scale-110 transition-all duration-300"
               >
-                <span className="font-mono text-xs font-bold">Wc</span>
+                <FaWeixin className="text-base" />
               </a>
             </div>
           </div>

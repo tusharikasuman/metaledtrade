@@ -106,7 +106,7 @@ export default function Careers() {
             <span className="text-[#ffe088] font-bold tracking-[0.2em] uppercase text-xs mb-4 block">
               Careers
             </span>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-medium mb-6">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-medium uppercase mb-6">
               Build the Future with Us
             </h1>
             <p className="text-[#8e9192] text-sm md:text-base leading-relaxed">

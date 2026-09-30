@@ -101,7 +101,7 @@ export default function Contact() {
           >
             <motion.h1
               variants={itemVariants}
-              className="text-5xl md:text-7xl font-display font-medium tracking-tight mb-6 leading-[1.1] text-primary"
+              className="text-5xl md:text-7xl font-display font-medium uppercase tracking-tight mb-6 leading-[1.1] text-primary"
             >
               Contact us
             </motion.h1>
