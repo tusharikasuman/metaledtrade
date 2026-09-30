@@ -2,38 +2,45 @@ import React, { useEffect, useRef, useState } from "react";
 
 const CLIP_SECONDS = 6.5; // each clip plays for ~5-7s before cycling to the next
 
-// Cycles between two looping background clips, each capped to a short
-// duration, crossfading between them. Falls back to a static image until
-// the first clip is ready to play.
+// Cycles between looping background clips using a SINGLE <video> element —
+// only one clip is ever downloading/decoding at a time, which matters a lot
+// for large hero video files. Crossfades via a brief opacity dip on switch.
 export default function HeroVideoBackground({ sources, fallbackSrc, fallbackAlt = "" }) {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [videoReady, setVideoReady] = useState(false);
-  const videoRefs = useRef([]);
+  const [hasPlayedOnce, setHasPlayedOnce] = useState(false);
+  const [switching, setSwitching] = useState(false);
+  const videoRef = useRef(null);
 
   useEffect(() => {
-    const active = videoRefs.current[activeIndex];
-    if (!active) return;
-    active.currentTime = 0;
-    const playPromise = active.play();
-    if (playPromise && typeof playPromise.catch === "function") {
-      playPromise.catch(() => {});
-    }
+    const video = videoRef.current;
+    if (!video) return;
+
+    setSwitching(true);
+    video.src = sources[activeIndex];
+    video.load();
+
+    const onCanPlay = () => {
+      setHasPlayedOnce(true);
+      const playPromise = video.play();
+      if (playPromise && typeof playPromise.catch === "function") {
+        playPromise.catch(() => {});
+      }
+      requestAnimationFrame(() => setSwitching(false));
+    };
+
+    video.addEventListener("canplay", onCanPlay, { once: true });
+    return () => video.removeEventListener("canplay", onCanPlay);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeIndex]);
 
   const advance = () => {
     setActiveIndex((prev) => (prev + 1) % sources.length);
   };
 
-  const handleTimeUpdate = (index) => (e) => {
-    if (index !== activeIndex) return;
+  const handleTimeUpdate = (e) => {
     if (e.currentTarget.currentTime >= CLIP_SECONDS) {
       advance();
     }
-  };
-
-  const handleEnded = (index) => () => {
-    if (index !== activeIndex) return;
-    advance();
   };
 
   return (
@@ -42,24 +49,19 @@ export default function HeroVideoBackground({ sources, fallbackSrc, fallbackAlt 
         src={fallbackSrc}
         alt={fallbackAlt}
         className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700"
-        style={{ opacity: videoReady ? 0 : 1 }}
+        style={{ opacity: hasPlayedOnce ? 0 : 1 }}
       />
-      {sources.map((src, i) => (
-        <video
-          key={src}
-          ref={(el) => (videoRefs.current[i] = el)}
-          src={src}
-          muted
-          playsInline
-          preload="auto"
-          aria-hidden="true"
-          className="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out"
-          style={{ opacity: activeIndex === i ? 1 : 0 }}
-          onTimeUpdate={handleTimeUpdate(i)}
-          onEnded={handleEnded(i)}
-          onCanPlay={() => setVideoReady(true)}
-        />
-      ))}
+      <video
+        ref={videoRef}
+        muted
+        playsInline
+        preload="auto"
+        aria-hidden="true"
+        className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ease-in-out"
+        style={{ opacity: hasPlayedOnce && !switching ? 1 : 0 }}
+        onTimeUpdate={handleTimeUpdate}
+        onEnded={advance}
+      />
     </div>
   );
 }
