@@ -36,15 +36,15 @@ export default function Navbar() {
 
   return (
     <>
-      {/* Fixed, full-width bar — always present, solidifies on scroll */}
+      {/* Fixed, full-width bar — transparent, no box/blur/shadow, just a soft scrim for legibility */}
       <motion.header
         initial={{ y: -40, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 py-5 ${
           isScrolled
-            ? "bg-bg-alt/95 backdrop-blur-xl border-b border-[#ffd862]/15 shadow-[0_4px_30px_-6px_rgba(0,0,0,0.25)] py-2.5"
-            : "bg-black/30 backdrop-blur-md border-b border-white/5 py-4"
+            ? "bg-bg-alt"
+            : "bg-gradient-to-b from-black/45 via-black/15 to-transparent"
         }`}
       >
         <div className="max-w-[1400px] mx-auto px-5 md:px-10 flex items-center justify-between gap-6">
@@ -56,15 +56,13 @@ export default function Navbar() {
             />
           </Link>
 
-          <nav className="hidden md:flex items-center gap-8">
+          <nav className="hidden md:flex items-center gap-9">
             {NAV_LINKS.map(({ label, href, dropdown, submenu }) =>
               submenu ? (
                 <div key={label} className="relative group">
                   <Link
                     to={href}
-                    className={`relative flex items-center gap-1 text-[0.72rem] font-semibold uppercase tracking-[0.14em] transition-colors duration-300 whitespace-nowrap py-3 after:content-[''] after:absolute after:left-0 after:right-0 after:-bottom-1.5 after:h-px after:bg-gold after:origin-left after:scale-x-0 group-hover:after:scale-x-100 after:transition-transform after:duration-300 ${
-                      isScrolled ? "text-ivory/80 hover:text-ivory" : "text-white/90 hover:text-white"
-                    }`}
+                    className="flex items-center gap-1 text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-gold/90 hover:text-gold-soft transition-colors duration-300 whitespace-nowrap py-3"
                   >
                     {label}
                     {dropdown && (
@@ -74,7 +72,7 @@ export default function Navbar() {
 
                   {/* Dropdown panel */}
                   <div className="absolute left-1/2 -translate-x-1/2 top-full pt-2 opacity-0 invisible translate-y-1 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-200">
-                    <div className="min-w-[190px] bg-bg-alt/98 backdrop-blur-xl border border-[#ffd862]/15 rounded-lg shadow-[0_16px_40px_-8px_rgba(0,0,0,0.4)] py-2 overflow-hidden">
+                    <div className="min-w-[190px] bg-bg-alt border border-gold/20 py-2">
                       {submenu.map((item) => (
                         <Link
                           key={item.label}
@@ -91,9 +89,7 @@ export default function Navbar() {
                 <Link
                   key={label}
                   to={href}
-                  className={`relative flex items-center gap-1 text-[0.72rem] font-semibold uppercase tracking-[0.14em] transition-colors duration-300 whitespace-nowrap after:content-[''] after:absolute after:left-0 after:right-0 after:-bottom-1.5 after:h-px after:bg-gold after:origin-left after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 ${
-                    isScrolled ? "text-ivory/80 hover:text-ivory" : "text-white/90 hover:text-white"
-                  }`}
+                  className="text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-gold/90 hover:text-gold-soft transition-colors duration-300 whitespace-nowrap"
                 >
                   {label}
                 </Link>
@@ -104,15 +100,13 @@ export default function Navbar() {
           <div className="flex items-center gap-3">
             <Link
               to="/contact"
-              className="hidden md:inline-flex items-center gap-1 rounded-full bg-gold text-[#131313] text-[0.68rem] font-bold uppercase tracking-[0.12em] px-5 py-2.5 hover:bg-white transition-colors duration-300 whitespace-nowrap"
+              className="hidden md:inline-flex items-center gap-1 border border-gold text-gold text-[0.68rem] font-bold uppercase tracking-[0.14em] px-6 py-2.5 hover:bg-gold hover:text-[#131313] transition-colors duration-300 whitespace-nowrap"
             >
               Contact Us
             </Link>
 
             <button
-              className={`md:hidden text-2xl transition-colors cursor-pointer ${
-                isScrolled ? "text-ivory" : "text-white"
-              }`}
+              className="md:hidden text-2xl text-gold transition-colors cursor-pointer"
               onClick={() => setOpen(true)}
               aria-label="Open menu"
             >
