@@ -4,11 +4,17 @@ import { HiOutlineGlobeAlt } from "react-icons/hi";
 import { HiPlay } from "react-icons/hi2";
 import { Link } from "react-router-dom";
 import Navbar from "../Components/Navbar";
+import KineticText from "../Components/KineticText";
+import HeroVideoBackground from "../Components/HeroVideoBackground";
+import { isPreloaderDone, onPreloaderDone } from "../lib/preloaderStatus";
 import bgImg from "../assets/homebg.png";
 import bgImgLight from "../assets/homebg_light.png";
 import ceoPhoto from "../assets/ceo_photo.jpeg";
 
-
+const HERO_VIDEOS = [
+  "/videos/metaled-hero-reel-1.mp4",
+  "/videos/metaled-hero-reel-2.mp4",
+];
 
 const ABOUT_SUMMARY =
   "Based in the heart of Dubai, Metaled Trade FZCO oversees every step of the steel supply chain, from production at the mill right down to final delivery, with a strong focus on markets across the Middle East, South East Asia, and Africa. Our strong network of seasoned industry partners and our own expert team work tirelessly to bring you world-class steel precisely when and where you need it.";
@@ -25,11 +31,14 @@ const THUMBNAIL = `https://img.youtube.com/vi/${VIDEO_ID}/maxresdefault.jpg`;
 export default function Home() {
   const [playing, setPlaying] = useState(false);
   const [themeMode, setThemeMode] = useState("light");
+  const [revealed, setRevealed] = useState(isPreloaderDone());
 
   useEffect(() => {
     document.documentElement.classList.add("light");
     localStorage.setItem("theme", "light");
   }, []);
+
+  useEffect(() => onPreloaderDone(() => setRevealed(true)), []);
 
   return (
     <div className="min-h-screen bg-bg text-ivory font-body overflow-x-hidden">
@@ -37,30 +46,45 @@ export default function Home() {
 
       <main>
         {/* Hero */}
-        <section
-          id="home"
-          className="relative min-h-screen flex items-center bg-cover bg-center"
-          style={{ 
-            backgroundImage: `linear-gradient(180deg, rgba(9, 10, 12, 0.35) 0%, rgba(9, 10, 12, 0.92) 100%), url(${themeMode === "light" ? bgImgLight : bgImg})`
-          }}
-        >
-          <motion.div
-            className="w-full max-w-[620px] px-6 md:px-12"
-            initial={{ opacity: 0, y: 28 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-          >
-            <span className="inline-block text-[0.72rem] font-semibold tracking-[0.22em] uppercase text-[#ffd862] mb-3">Established Excellence</span>
-            <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-semibold uppercase leading-[1.12] mb-6 text-white">
-              A Legacy of Strength in
-              <br /> the Heart of Dubai
-            </h1>
-            <div className="w-16 h-0.5 bg-[#ffd862] my-6" />
-            <p className="text-zinc-300 leading-relaxed max-w-[480px]">
-              Structural steel, plates and alloys, sourced from trusted mills
-              and delivered on time across the Middle East, Asia and Africa.
-            </p>
-          </motion.div>
+        <section id="home" className="relative min-h-screen flex items-center overflow-hidden">
+          <HeroVideoBackground
+            sources={HERO_VIDEOS}
+            fallbackSrc={themeMode === "light" ? bgImgLight : bgImg}
+            fallbackAlt="Metaled Trade FZCO steel operations"
+          />
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background:
+                "linear-gradient(180deg, rgba(9, 10, 12, 0.45) 0%, rgba(9, 10, 12, 0.92) 100%)",
+            }}
+          />
+
+          <div className="relative w-full max-w-[620px] px-6 md:px-12">
+            <KineticText
+              text="METALED TRADE"
+              revealed={revealed}
+              offset={30}
+              className="block font-display text-lg md:text-xl font-bold tracking-[0.3em] text-[#ffd862] mb-4"
+            />
+
+            <motion.div
+              initial={{ opacity: 0, y: 28 }}
+              animate={revealed ? { opacity: 1, y: 0 } : undefined}
+              transition={{ duration: 0.8, delay: 0.75, ease: "easeOut" }}
+            >
+              <span className="inline-block text-[0.72rem] font-semibold tracking-[0.22em] uppercase text-[#ffd862] mb-3">Established Excellence</span>
+              <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-semibold uppercase leading-[1.12] mb-6 text-white">
+                A Legacy of Strength in
+                <br /> the Heart of Dubai
+              </h1>
+              <div className="w-16 h-0.5 bg-[#ffd862] my-6" />
+              <p className="text-zinc-300 leading-relaxed max-w-[480px]">
+                Structural steel, plates and alloys, sourced from trusted mills
+                and delivered on time across the Middle East, Asia and Africa.
+              </p>
+            </motion.div>
+          </div>
         </section>
 
         {/* About */}

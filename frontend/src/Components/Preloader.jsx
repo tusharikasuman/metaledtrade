@@ -1,23 +1,69 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import logo from "../assets/metaled-logo.jpeg";
+import { markPreloaderDone } from "../lib/preloaderStatus";
+
+const HERO_VIDEO = "/videos/metaled-hero-reel-1.mp4";
+const MIN_DISPLAY_MS = 1200;
 
 export default function Preloader() {
   const [loading, setLoading] = useState(true);
+  const location = useLocation();
+  const isHome = location.pathname === "/";
+  const videoRef = useRef(null);
 
   useEffect(() => {
-    // Lock background scroll during loading
     document.body.style.overflow = "hidden";
 
-    const timer = setTimeout(() => {
+    let minTimeElapsed = false;
+    let videoReady = !isHome;
+    let finished = false;
+
+    const tryFinish = () => {
+      if (finished || !minTimeElapsed || !videoReady) return;
+      finished = true;
       setLoading(false);
       document.body.style.overflow = "";
-    }, 1500);
+      markPreloaderDone();
+    };
+
+    const minTimer = setTimeout(() => {
+      minTimeElapsed = true;
+      tryFinish();
+    }, MIN_DISPLAY_MS);
+
+    // Safety net: never block the site on a slow/failed video fetch.
+    const maxTimer = setTimeout(() => {
+      videoReady = true;
+      tryFinish();
+    }, 5000);
+
+    if (isHome) {
+      const video = document.createElement("video");
+      video.src = HERO_VIDEO;
+      video.muted = true;
+      video.preload = "auto";
+      videoRef.current = video;
+
+      const onReady = () => {
+        videoReady = true;
+        tryFinish();
+      };
+      video.addEventListener("canplaythrough", onReady, { once: true });
+      video.addEventListener("error", onReady, { once: true });
+      video.load();
+    }
 
     return () => {
-      clearTimeout(timer);
+      clearTimeout(minTimer);
+      clearTimeout(maxTimer);
       document.body.style.overflow = "";
+      if (videoRef.current) {
+        videoRef.current.src = "";
+      }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -26,9 +72,9 @@ export default function Preloader() {
         <motion.div
           key="preloader"
           initial={{ opacity: 1 }}
-          exit={{ 
+          exit={{
             opacity: 0,
-            transition: { duration: 0.5, ease: "easeInOut" } 
+            transition: { duration: 0.5, ease: "easeInOut" },
           }}
           className="fixed inset-0 z-[99999] flex items-center justify-center bg-white select-none"
         >
