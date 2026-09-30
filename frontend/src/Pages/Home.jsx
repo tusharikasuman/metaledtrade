@@ -3,9 +3,9 @@ import { motion } from "framer-motion";
 import { HiOutlineGlobeAlt } from "react-icons/hi";
 import { HiPlay } from "react-icons/hi2";
 import { Link } from "react-router-dom";
-import Navbar from "../Components/Navbar";
 import KineticText from "../Components/KineticText";
 import HeroVideoBackground from "../Components/HeroVideoBackground";
+import CountUpStat from "../Components/CountUpStat";
 import { isPreloaderDone, onPreloaderDone } from "../lib/preloaderStatus";
 import bgImg from "../assets/homebg.png";
 import bgImgLight from "../assets/homebg_light.png";
@@ -42,8 +42,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-bg text-ivory font-body overflow-x-hidden">
-      <Navbar />
-
       <main>
         {/* Hero */}
         <section id="home" className="relative min-h-screen flex items-center overflow-hidden">
@@ -102,7 +100,10 @@ export default function Home() {
             <div className="grid grid-cols-3 gap-6 mb-6">
               {STATS.map((stat) => (
                 <div key={stat.label} className="border-l-2 border-gold pl-4">
-                  <span className="block font-display text-2xl md:text-3xl font-bold text-gold">{stat.value}</span>
+                  <CountUpStat
+                    value={stat.value}
+                    className="block font-display text-2xl md:text-3xl font-bold text-gold"
+                  />
                   <span className="block text-xs uppercase tracking-wider text-steel mt-1">{stat.label}</span>
                 </div>
               ))}
