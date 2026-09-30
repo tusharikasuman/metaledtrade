@@ -59,12 +59,12 @@
   /* Font Families */
   --font-display: 'Fraunces', serif;
   --font-body: 'Inter', sans-serif;
-  --font-headline-lg: 'Montserrat', sans-serif;
+  --font-headline-lg: 'Fraunces', serif;
   --font-body-lg: 'Inter', sans-serif;
-  --font-display-lg: 'Montserrat', sans-serif;
+  --font-display-lg: 'Fraunces', serif;
   --font-body-md: 'Inter', sans-serif;
-  --font-headline-md: 'Montserrat', sans-serif;
-  --font-headline-lg-mobile: 'Montserrat', sans-serif;
+  --font-headline-md: 'Fraunces', serif;
+  --font-headline-lg-mobile: 'Fraunces', serif;
   --font-label-sm: 'JetBrains Mono', monospace;
   --font-label-md: 'JetBrains Mono', monospace;
 

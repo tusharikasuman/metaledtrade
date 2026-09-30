@@ -340,13 +340,13 @@ const About = () => {
                     <div className="lg:col-span-5 reveal">
                         <span className="font-label-sm text-label-sm text-tertiary uppercase tracking-widest block mb-2">Corporate Profile</span>
                         <h2 className="font-display-lg text-3xl md:text-4xl font-extrabold text-primary uppercase leading-tight">
-                            About <br />Metaled Trade
+                            About <br />Metaled Trade FZCO
                         </h2>
                         <div className="w-16 h-[2px] bg-tertiary mt-4"></div>
                     </div>
                     <div className="lg:col-span-7 reveal">
                         <p className="font-body-lg text-lg text-on-surface-variant leading-relaxed font-light mb-6">
-                            Based in the bustling heart of Dubai, UAE, Metaled Trade is much more than a traditional steel trading company. We are dedicated specialists who oversee the entire lifecycle of steel trading—from the moment it leaves the production mill all the way to final delivery. While we have a global footprint, our primary focus is on empowering the rapidly growing markets across the Middle East, South East Asia, and Africa.
+                            Based in the bustling heart of Dubai, UAE, Metaled Trade FZCO is much more than a traditional steel trading company. We are dedicated specialists who oversee the entire lifecycle of steel trading—from the moment it leaves the production mill all the way to final delivery. While we have a global footprint, our primary focus is on empowering the rapidly growing markets across the Middle East, South East Asia, and Africa.
                         </p>
                         <p className="font-body-md text-base text-on-surface-variant/80 leading-relaxed font-light">
                             To ensure we consistently meet our customers' exact needs, we source materials from some of the world's most reputable steel-producing hubs, including India, Vietnam, top-tier Chinese mills, and respected local producers right here in the GCC. But we do more than just supply metal. We leverage our strong network of experienced partners and our deeply knowledgeable team to create tailored financial and distribution solutions that actually work for your projects.

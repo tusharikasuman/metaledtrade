@@ -77,7 +77,7 @@ const REVIEWS = [
     rating: 5,
     product: "TMT Bars",
     quote:
-      "Exceptional quality and on-time delivery. Metaled Trade has been our go-to supplier for structural steel for over three years. The documentation and compliance standards are world-class.",
+      "Exceptional quality and on-time delivery. Metaled Trade FZCO has been our go-to supplier for structural steel for over three years. The documentation and compliance standards are world-class.",
     avatar: "AM",
     color: "#ffe088",
   },
@@ -89,7 +89,7 @@ const REVIEWS = [
     rating: 5,
     product: "Hot Rolled Coils",
     quote:
-      "We've sourced HR coils from dozens of suppliers, but none match the consistency Metaled Trade delivers. Competitive pricing with zero compromise on specifications.",
+      "We've sourced HR coils from dozens of suppliers, but none match the consistency Metaled Trade FZCO delivers. Competitive pricing with zero compromise on specifications.",
     avatar: "RK",
     color: "#6ee7b7",
   },
@@ -101,7 +101,7 @@ const REVIEWS = [
     rating: 5,
     product: "Structural Sections",
     quote:
-      "Their H-beams and angles meet BS and ASTM standards consistently. The team is highly professional and responsive. I strongly recommend Metaled Trade to any serious buyer.",
+      "Their H-beams and angles meet BS and ASTM standards consistently. The team is highly professional and responsive. I strongly recommend Metaled Trade FZCO to any serious buyer.",
     avatar: "KR",
     color: "#93c5fd",
   },
@@ -125,7 +125,7 @@ const REVIEWS = [
     rating: 5,
     product: "Wire Rod",
     quote:
-      "Outstanding service. Metaled Trade sourced a specific grade wire rod that no other supplier in the region could provide. They go the extra mile every single time.",
+      "Outstanding service. Metaled Trade FZCO sourced a specific grade wire rod that no other supplier in the region could provide. They go the extra mile every single time.",
     avatar: "TS",
     color: "#fbbf24",
   },
@@ -163,7 +163,7 @@ function CustomerReviews() {
         <span className="text-[#ffe088] font-bold tracking-[0.2em] uppercase text-xs mb-2">
           Client Testimonials
         </span>
-        <h2 className="text-3xl md:text-5xl font-display font-medium tracking-tight text-primary">
+        <h2 className="text-3xl md:text-5xl font-display font-medium uppercase tracking-tight text-primary">
           What Our Partners Say
         </h2>
       </motion.div>
@@ -534,7 +534,7 @@ export default function Products() {
             <span className="text-[#ffe088] font-bold tracking-[0.2em] uppercase text-xs mb-2">
               Inventory Hub
             </span>
-            <h1 className="text-4xl md:text-6xl font-display font-medium tracking-tight text-primary">
+            <h1 className="text-4xl md:text-6xl font-display font-medium uppercase tracking-tight text-primary">
               Product Catalog
             </h1>
           </motion.div>
@@ -654,7 +654,7 @@ export default function Products() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                   <div className="absolute bottom-6 left-6 right-6">
-                    <h2 className="font-display text-3xl md:text-5xl lg:text-6xl font-semibold text-white tracking-tight drop-shadow-lg">
+                    <h2 className="font-display text-3xl md:text-5xl lg:text-6xl font-semibold text-white uppercase tracking-tight drop-shadow-lg">
                       {activeProduct.product}
                     </h2>
                   </div>

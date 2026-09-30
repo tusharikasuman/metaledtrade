@@ -60,10 +60,10 @@ export default function Home() {
 
           <div className="relative w-full max-w-[620px] px-6 md:px-12">
             <KineticText
-              text="METALED TRADE"
+              text="METALED TRADE FZCO"
               revealed={revealed}
               offset={30}
-              className="block font-display text-lg md:text-xl font-bold tracking-[0.3em] text-[#ffd862] mb-4"
+              className="block font-display text-lg md:text-xl font-bold tracking-[0.2em] text-[#ffd862] mb-4"
             />
 
             <motion.div
@@ -128,7 +128,7 @@ export default function Home() {
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
           >
-            <img src={bgImg} alt="Metaled Trade steel production facility" className="w-full h-full object-cover grayscale-[0.2] contrast-[1.05]" />
+            <img src={bgImg} alt="Metaled Trade FZCO steel production facility" className="w-full h-full object-cover grayscale-[0.2] contrast-[1.05]" />
             <span className="absolute right-4 bottom-4 inline-flex items-center gap-2 bg-gold text-bg text-xs font-bold tracking-wider px-4 py-2 rounded">
               <HiOutlineGlobeAlt className="text-lg" />
               Global Supply Network
@@ -199,7 +199,7 @@ export default function Home() {
                 From the day we started, our goal has always been simple: to understand exactly what the market needs, to keep innovating, and to empower our people to do their very best work. We know that sourcing steel isn't just about buying a commodity. With its wide range of technical specifications, varied origins, and unique mill capabilities, it can be an incredibly complex process.
               </p>
               <p className="text-steel text-sm md:text-base leading-relaxed">
-                Add to that the logistical challenges of land and sea transport, complex payment structures, and shifting global dynamics—especially when dealing with large volumes. That's exactly where we come in. At Metaled Trade, we take pride in cutting through that complexity. Whether you need strategic sourcing, flexible financing, or a seamless supply chain, we are here to provide our customers with reliable, efficient solutions for every project.
+                Add to that the logistical challenges of land and sea transport, complex payment structures, and shifting global dynamics—especially when dealing with large volumes. That's exactly where we come in. At Metaled Trade FZCO, we take pride in cutting through that complexity. Whether you need strategic sourcing, flexible financing, or a seamless supply chain, we are here to provide our customers with reliable, efficient solutions for every project.
               </p>
             </div>
 
