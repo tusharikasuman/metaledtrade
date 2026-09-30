@@ -1,9 +1,13 @@
 import React, { useEffect, useState, useRef } from 'react'
-import heroBg from '../assets/about/hero_bg.jpg'
-import heroBgLight from '../assets/about/hero_bg_light.jpg'
-import buildingDetail from '../assets/about/building_detail.jpg'
+import heroBgLight from '../assets/about/steel_beams.jpg'
 import ceoPhoto from '../assets/ceo_photo.jpeg'
 import { motion, AnimatePresence } from 'framer-motion'
+import HeroVideoBackground from '../Components/HeroVideoBackground'
+
+const HERO_VIDEOS = [
+    '/videos/metaled-hero-reel-1.mp4',
+    '/videos/metaled-hero-reel-2.mp4',
+]
 
 
 function StickyScrollReveal({ content }) {
@@ -76,36 +80,39 @@ function StickyScrollReveal({ content }) {
                                 ))}
                             </div>
 
-                            {/* Content — each key change triggers enter/exit */}
-                            <AnimatePresence mode="wait">
-                                <motion.div
-                                    key={activeItem}
-                                    initial={{ opacity: 0, y: 24 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -24 }}
-                                    transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                                >
-                                    <span className="text-gold font-label-sm uppercase tracking-widest text-xs mb-3 block">
-                                        {item.label}
-                                    </span>
-                                    <h3 className="font-display-lg text-3xl md:text-5xl font-bold text-primary uppercase leading-tight mb-4">
-                                        {item.title}
-                                    </h3>
-                                    <div className="h-[2px] w-16 bg-[#ffd862] mb-6" />
-                                    {item.body}
-                                </motion.div>
-                            </AnimatePresence>
+                            {/* Content — each key change crossfades, no blank gap while scrolling */}
+                            <div className="relative min-h-[360px] md:min-h-[320px]">
+                                <AnimatePresence>
+                                    <motion.div
+                                        key={activeItem}
+                                        initial={{ opacity: 0, y: 24 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: -24 }}
+                                        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                                        className="absolute inset-0"
+                                    >
+                                        <span className="text-gold font-label-sm uppercase tracking-widest text-xs mb-3 block">
+                                            {item.label}
+                                        </span>
+                                        <h3 className="font-display-lg text-3xl md:text-5xl font-bold text-primary uppercase leading-tight mb-4">
+                                            {item.title}
+                                        </h3>
+                                        <div className="h-[2px] w-16 bg-[#ffd862] mb-6" />
+                                        {item.body}
+                                    </motion.div>
+                                </AnimatePresence>
+                            </div>
                         </div>
 
                         {/* ── Right ── */}
                         <div className="hidden lg:block relative h-[65vh]">
-                            <AnimatePresence mode="wait">
+                            <AnimatePresence>
                                 <motion.div
                                     key={activeItem}
                                     initial={{ opacity: 0, scale: 0.96, filter: 'blur(4px)' }}
                                     animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
                                     exit={{ opacity: 0, scale: 1.02, filter: 'blur(4px)' }}
-                                    transition={{ duration: 0.45, ease: 'easeOut' }}
+                                    transition={{ duration: 0.4, ease: 'easeOut' }}
                                     className="absolute inset-0 rounded-2xl overflow-hidden border border-outline-variant/30 shadow-2xl"
                                 >
                                     {item.visual}
@@ -139,7 +146,6 @@ const About = () => {
 
     const [scrollProgress, setScrollProgress] = useState(0)
     const timelineRef = useRef(null)
-    const [themeMode, setThemeMode] = useState("light");
 
     useEffect(() => {
         document.documentElement.classList.add("light");
@@ -159,6 +165,12 @@ const About = () => {
         handleScroll()
         return () => window.removeEventListener('scroll', handleScroll)
     }, [])
+
+    const missionPillars = [
+        { title: 'Industry Standards', desc: 'Every shipment verified against recognized international specifications before it ships.', icon: 'verified' },
+        { title: 'Competitive Pricing', desc: 'Transparent, market-driven rates with no hidden costs or markups.', icon: 'payments' },
+        { title: 'On-Time Delivery', desc: 'Reliable logistics planning that keeps every project on schedule.', icon: 'local_shipping' }
+    ]
 
     const whyUsPillars = [
         { title: 'Integrity & Honesty', desc: 'We believe that trust is earned through transparency. We are always upfront and honest in every transaction, which is why our relationships with partners stand the test of time.', icon: 'gavel' },
@@ -197,15 +209,18 @@ const About = () => {
                 </div>
             ),
             visual: (
-                <div className="relative w-full h-full overflow-hidden rounded-xl">
-                    <div className="absolute inset-0 bg-black/40 z-10" />
-                    <img src={buildingDetail} alt="Commitment to Consistency" className="w-full h-full object-cover" />
-                    <div className="absolute inset-0 z-20 flex flex-col justify-center items-center p-10 text-center">
-                        <div className="w-16 h-[2px] bg-[#ffd862] mb-6" />
-                        <h4 className="text-2xl md:text-3xl font-display font-medium text-white leading-snug">
-                            Built on Trust.<br />Delivered with Precision.
-                        </h4>
-                    </div>
+                <div className="w-full h-full bg-bg-alt flex flex-col">
+                    {missionPillars.map((pillar, i) => (
+                        <div key={i} className="flex-1 flex items-center gap-6 p-8 border-b border-outline-variant/20 last:border-0 hover:bg-surface-container/50 transition-colors">
+                            <div className="w-12 h-12 shrink-0 rounded-full bg-[#ffd862]/10 border border-[#ffd862]/20 flex items-center justify-center text-[#ffd862]">
+                                <span className="material-symbols-outlined text-xl">{pillar.icon}</span>
+                            </div>
+                            <div>
+                                <p className="font-display-lg font-bold text-primary text-sm uppercase tracking-wide mb-1">{pillar.title}</p>
+                                <p className="text-xs text-on-surface-variant/70 leading-relaxed">{pillar.desc}</p>
+                            </div>
+                        </div>
+                    ))}
                 </div>
             )
         },
@@ -310,16 +325,12 @@ const About = () => {
 
             {/* Hero Section */}
             <section className="relative h-[80vh] flex items-center overflow-hidden">
-                <div className="absolute inset-0 z-0">
-                    <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/45 to-transparent z-10" />
-                    <div
-                        className="w-full h-full bg-cover bg-center bg-no-repeat transition-transform duration-[10s] scale-105"
-                        style={{
-                            backgroundImage: `url(${themeMode === 'light' ? heroBgLight : heroBg})`,
-                            backgroundAttachment: 'fixed'
-                        }}
-                    ></div>
-                </div>
+                <HeroVideoBackground
+                    sources={HERO_VIDEOS}
+                    fallbackSrc={heroBgLight}
+                    fallbackAlt="Metaled Trade FZCO steel operations"
+                />
+                <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/45 to-transparent z-10" />
                 <div className="relative z-20 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto w-full">
                     <div className="max-w-4xl reveal">
                         <span className="inline-block font-label-md text-label-md text-[#ffd862] mb-3 uppercase tracking-[0.25em] bg-[#ffd862]/10 px-3 py-1 border border-[#ffd862]/20">
