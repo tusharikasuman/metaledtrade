@@ -85,7 +85,7 @@ function StickyScrollReveal({ content }) {
                                     exit={{ opacity: 0, y: -24 }}
                                     transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
                                 >
-                                    <span className="text-[#ffd862] font-label-sm uppercase tracking-widest text-xs mb-3 block">
+                                    <span className="text-gold font-label-sm uppercase tracking-widest text-xs mb-3 block">
                                         {item.label}
                                     </span>
                                     <h3 className="font-display-lg text-3xl md:text-5xl font-bold text-primary uppercase leading-tight mb-4">
@@ -174,11 +174,11 @@ const About = () => {
     ]
 
     const journeyMilestones = [
-        { year: '2012', title: 'Company Inception', desc: 'MetalEd Trade was founded in Dubai, UAE, starting with regional steel deliveries and key local distribution.' },
+        { year: '2012', title: 'Company Inception', desc: 'Metaled Trade FZCO was founded in Dubai, UAE, starting with regional steel deliveries and key local distribution.' },
         { year: '2015', title: 'First Overseas Office', desc: 'Opened our first international desk in India, establishing direct mill-sourcing operations and trade integrations.' },
         { year: '2018', title: 'African Operations Desk', desc: 'Launched dedicated logistics and sales operations desks targeting massive public infrastructure works across East and West Africa.' },
-        { year: '2021', title: 'DMCC Hub Consolidation', desc: 'Consolidated all global trade desks under the DMCC Free Zone in Dubai, optimizing trade finance and logistics capabilities.' },
-        { year: '2024', title: 'Smelting Mill Integrations', desc: 'Integrated logistics channels with A1 Chinese mills and local GCC smelting plants to cater to high-tonnage supply contracts.' }
+        { year: '2021', title: 'Global Hub Consolidation', desc: 'Consolidated all global trade desks under Metaled Trade FZCO in Dubai, optimizing trade finance and logistics capabilities.' },
+        { year: '2024', title: 'Strategic Mill Partnerships', desc: 'Signed supply agreements with leading Chinese and GCC steel mills for large-volume contracts.' }
     ]
 
     // ── Sticky Scroll Content ────────────────────────────────────────────────
@@ -189,7 +189,7 @@ const About = () => {
             body: (
                 <div className="flex flex-col gap-4">
                     <p className="font-body-lg text-lg text-on-surface-variant leading-relaxed font-light italic border-l-2 border-[#ffd862]/50 pl-5">
-                        "To provide our steel customers, products that are as per industry standards, competitively priced and delivered consistently on time."
+                        "To supply our customers with steel that meets industry standards, at competitive prices, delivered on time, every time."
                     </p>
                     <p className="text-sm text-on-surface-variant/70 leading-relaxed">
                         Every decision we make is guided by this mission — from the mills we source from to the logistics partners we choose.

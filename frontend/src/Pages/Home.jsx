@@ -2,17 +2,21 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { HiOutlineGlobeAlt } from "react-icons/hi";
 import { HiPlay } from "react-icons/hi2";
+import { Link } from "react-router-dom";
 import Navbar from "../Components/Navbar";
 import bgImg from "../assets/homebg.png";
 import bgImgLight from "../assets/homebg_light.png";
-import ceoPhoto from "../assets/ceo_photo.jpg";
+import ceoPhoto from "../assets/ceo_photo.jpeg";
 
 
 
-const PARAGRAPHS = [
-  "Based in the heart of Dubai, Metaled Trade FZCO is more than just a steel trading company — we are your dedicated partners in building the future. We oversee every step of the process, from production at the mill right down to final delivery, with a strong focus on markets across the Middle East, South East Asia, and Africa.",
-  "To ensure our customers get exactly what they need, we source from major global steel hubs, including India, Vietnam, top-tier Chinese mills, and highly respected local GCC producers. Beyond just supply, we work closely with you to create tailored distribution and financing solutions that fit your specific project.",
-  "What truly drives us is our people. Our strong network of seasoned industry partners and our own expert team work tirelessly to find and develop the best possible solutions, bringing you world-class steel precisely when and where you need it.",
+const ABOUT_SUMMARY =
+  "Based in the heart of Dubai, Metaled Trade FZCO oversees every step of the steel supply chain, from production at the mill right down to final delivery, with a strong focus on markets across the Middle East, South East Asia, and Africa. Our strong network of seasoned industry partners and our own expert team work tirelessly to bring you world-class steel precisely when and where you need it.";
+
+const STATS = [
+  { value: "10M+", label: "Tons Shipped" },
+  { value: "30+", label: "Countries Served" },
+  { value: "15+", label: "Years of Excellence" },
 ];
 
 const VIDEO_ID = "DSWfdyWgg_A";
@@ -47,15 +51,14 @@ export default function Home() {
             transition={{ duration: 0.8, ease: "easeOut" }}
           >
             <span className="inline-block text-[0.72rem] font-semibold tracking-[0.22em] uppercase text-[#ffd862] mb-3">Established Excellence</span>
-            <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-semibold leading-[1.12] mb-6 text-white">
+            <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-semibold uppercase leading-[1.12] mb-6 text-white">
               A Legacy of Strength in
               <br /> the Heart of Dubai
             </h1>
             <div className="w-16 h-0.5 bg-[#ffd862] my-6" />
             <p className="text-zinc-300 leading-relaxed max-w-[480px]">
-              At Metaled Trade FZCO, we bridge the gap between heavy industry and
-              luxury architectural commodities, delivering resilient metal
-              solutions to the world&apos;s most ambitious skylines.
+              Structural steel, plates and alloys, sourced from trusted mills
+              and delivered on time across the Middle East, Asia and Africa.
             </p>
           </motion.div>
         </section>
@@ -69,12 +72,28 @@ export default function Home() {
             transition={{ duration: 0.6, ease: "easeOut" }}
           >
             <span className="inline-block text-[0.72rem] font-semibold tracking-[0.22em] uppercase text-gold mb-3">About Metaled Trade FZCO</span>
-            <h2 className="font-display text-3xl md:text-4xl font-semibold mb-6 text-ivory">A Leader in Global Steel Trading</h2>
-            <div className="space-y-4">
-              {PARAGRAPHS.map((text, i) => (
-                <p key={i} className="text-steel leading-relaxed">{text}</p>
+            <h2 className="font-display text-3xl md:text-4xl font-semibold uppercase mb-6 text-ivory">A Leader in Global Steel Trading</h2>
+            <p className="text-steel leading-relaxed mb-8">{ABOUT_SUMMARY}</p>
+
+            <div className="grid grid-cols-3 gap-6 mb-6">
+              {STATS.map((stat) => (
+                <div key={stat.label} className="border-l-2 border-gold pl-4">
+                  <span className="block font-display text-2xl md:text-3xl font-bold text-gold">{stat.value}</span>
+                  <span className="block text-xs uppercase tracking-wider text-steel mt-1">{stat.label}</span>
+                </div>
               ))}
             </div>
+            <p className="text-xs uppercase tracking-wider text-steel mb-8">
+              Key projects delivered across the Middle East, India and Africa
+            </p>
+
+            <Link
+              to="/about"
+              className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-gold hover:text-white transition-colors"
+            >
+              Learn more about us
+              <span aria-hidden="true">&rarr;</span>
+            </Link>
           </motion.div>
 
           <motion.div
@@ -97,32 +116,40 @@ export default function Home() {
           <h2 className="font-display text-2xl md:text-3xl font-semibold uppercase tracking-wider mb-2 text-ivory">Metaled in the News</h2>
           <div className="w-16 h-0.5 bg-gold mx-auto mb-12" />
 
-          <div className="relative aspect-video rounded-lg overflow-hidden bg-surface max-w-4xl mx-auto shadow-2xl">
-            {playing ? (
-              <iframe
-                className="w-full h-full border-none"
-                src={`https://www.youtube.com/embed/${VIDEO_ID}?autoplay=1&rel=0`}
-                title="Metaled Trade FZCO"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            ) : (
-              <button
-                className="group relative w-full h-full border-none p-0 cursor-pointer block"
-                onClick={() => setPlaying(true)}
-                aria-label="Play video: Experience Excellence in Steel Trading"
-              >
-                <img src={THUMBNAIL} alt="" className="w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-bg/90 to-transparent pointer-events-none" />
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 rounded-full bg-gold text-bg flex items-center justify-center text-2xl transition-transform group-hover:scale-110">
-                  <HiPlay />
-                </div>
-                <div className="absolute left-8 bottom-6 text-left pointer-events-none">
-                  <span className="inline-block text-[0.72rem] font-semibold tracking-[0.22em] uppercase text-gold mb-1">Commodities This Quarter</span>
-                  <strong className="block font-display text-xl text-ivory">Experience Excellence in Steel Trading</strong>
-                </div>
-              </button>
-            )}
+          <div className="max-w-4xl mx-auto">
+            <div className="relative aspect-video rounded-lg overflow-hidden bg-surface shadow-2xl">
+              {playing ? (
+                <iframe
+                  className="w-full h-full border-none"
+                  src={`https://www.youtube.com/embed/${VIDEO_ID}?autoplay=1&rel=0`}
+                  title="Metaled Trade FZCO"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              ) : (
+                <button
+                  className="group relative w-full h-full border-none p-0 cursor-pointer block"
+                  onClick={() => setPlaying(true)}
+                  aria-label="Play video: Experience Excellence in Steel Trading"
+                >
+                  <img src={THUMBNAIL} alt="" className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent pointer-events-none" />
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 rounded-full bg-gold text-bg flex items-center justify-center text-2xl transition-transform group-hover:scale-110">
+                    <HiPlay />
+                  </div>
+                </button>
+              )}
+            </div>
+
+            {/* Caption — kept outside the video frame so it never overlaps the play control */}
+            <div className="text-left mt-4">
+              <span className="inline-block text-[0.72rem] font-semibold tracking-[0.22em] uppercase text-gold mb-1">Commodities This Quarter</span>
+              <strong className="block font-display text-xl text-ivory mb-1">Experience Excellence in Steel Trading</strong>
+              <span className="block text-xs text-steel uppercase tracking-wider">
+                {/* TODO: confirm the real outlet name and publish date for this feature */}
+                Source &amp; date to be confirmed
+              </span>
+            </div>
           </div>
         </section>
 
