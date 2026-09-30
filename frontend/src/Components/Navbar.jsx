@@ -7,7 +7,15 @@ import logo from "../assets/metaled-logo.png";
 const NAV_LINKS = [
   { label: "Home", href: "/" },
   { label: "About Us", href: "/about" },
-  { label: "Products", href: "/products", dropdown: true },
+  {
+    label: "Products",
+    href: "/products",
+    dropdown: true,
+    submenu: [
+      { label: "Flat Products", href: "/products?category=flat" },
+      { label: "Long Products", href: "/products?category=long" },
+    ],
+  },
   { label: "Projects", href: "/projects" },
   { label: "Careers", href: "/careers" },
 ];
@@ -49,18 +57,48 @@ export default function Navbar() {
           </Link>
 
           <nav className="hidden md:flex items-center gap-8">
-            {NAV_LINKS.map(({ label, href, dropdown }) => (
-              <Link
-                key={label}
-                to={href}
-                className={`relative flex items-center gap-1 text-[0.72rem] font-semibold uppercase tracking-[0.14em] transition-colors duration-300 whitespace-nowrap after:content-[''] after:absolute after:left-0 after:right-0 after:-bottom-1.5 after:h-px after:bg-gold after:origin-left after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 ${
-                  isScrolled ? "text-ivory/80 hover:text-ivory" : "text-white/90 hover:text-white"
-                }`}
-              >
-                {label}
-                {dropdown && <HiChevronDown className="text-[10px]" />}
-              </Link>
-            ))}
+            {NAV_LINKS.map(({ label, href, dropdown, submenu }) =>
+              submenu ? (
+                <div key={label} className="relative group">
+                  <Link
+                    to={href}
+                    className={`relative flex items-center gap-1 text-[0.72rem] font-semibold uppercase tracking-[0.14em] transition-colors duration-300 whitespace-nowrap py-3 after:content-[''] after:absolute after:left-0 after:right-0 after:-bottom-1.5 after:h-px after:bg-gold after:origin-left after:scale-x-0 group-hover:after:scale-x-100 after:transition-transform after:duration-300 ${
+                      isScrolled ? "text-ivory/80 hover:text-ivory" : "text-white/90 hover:text-white"
+                    }`}
+                  >
+                    {label}
+                    {dropdown && (
+                      <HiChevronDown className="text-[10px] transition-transform duration-300 group-hover:rotate-180" />
+                    )}
+                  </Link>
+
+                  {/* Dropdown panel */}
+                  <div className="absolute left-1/2 -translate-x-1/2 top-full pt-2 opacity-0 invisible translate-y-1 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-200">
+                    <div className="min-w-[190px] bg-bg-alt/98 backdrop-blur-xl border border-[#ffd862]/15 rounded-lg shadow-[0_16px_40px_-8px_rgba(0,0,0,0.4)] py-2 overflow-hidden">
+                      {submenu.map((item) => (
+                        <Link
+                          key={item.label}
+                          to={item.href}
+                          className="block px-4 py-2.5 text-[0.7rem] font-semibold uppercase tracking-wider text-ivory/80 hover:text-gold hover:bg-gold/5 transition-colors whitespace-nowrap"
+                        >
+                          {item.label}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <Link
+                  key={label}
+                  to={href}
+                  className={`relative flex items-center gap-1 text-[0.72rem] font-semibold uppercase tracking-[0.14em] transition-colors duration-300 whitespace-nowrap after:content-[''] after:absolute after:left-0 after:right-0 after:-bottom-1.5 after:h-px after:bg-gold after:origin-left after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 ${
+                    isScrolled ? "text-ivory/80 hover:text-ivory" : "text-white/90 hover:text-white"
+                  }`}
+                >
+                  {label}
+                </Link>
+              )
+            )}
           </nav>
 
           <div className="flex items-center gap-3">
@@ -106,7 +144,7 @@ export default function Navbar() {
               Navigate
             </span>
 
-            {[...NAV_LINKS, { label: "Contact Us", href: "/contact" }].map(({ label, href, dropdown }, i) => (
+            {[...NAV_LINKS, { label: "Contact Us", href: "/contact" }].map(({ label, href, dropdown, submenu }, i) => (
               <motion.div
                 key={label}
                 initial={{ opacity: 0, x: -16 }}
@@ -121,6 +159,20 @@ export default function Navbar() {
                   {label}
                   {dropdown && <HiChevronDown className="text-sm" />}
                 </Link>
+                {submenu && (
+                  <div className="flex flex-col gap-1 pl-4 mb-2 border-l border-gold/30">
+                    {submenu.map((item) => (
+                      <Link
+                        key={item.label}
+                        to={item.href}
+                        onClick={() => setOpen(false)}
+                        className="py-1 text-sm uppercase tracking-wide text-steel hover:text-gold transition-colors"
+                      >
+                        {item.label}
+                      </Link>
+                    ))}
+                  </div>
+                )}
               </motion.div>
             ))}
 

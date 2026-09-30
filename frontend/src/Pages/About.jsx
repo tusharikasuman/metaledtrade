@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react'
 import heroBg from '../assets/about/hero_bg.jpg'
 import heroBgLight from '../assets/about/hero_bg_light.jpg'
 import buildingDetail from '../assets/about/building_detail.jpg'
-import ahmedCeo from '../assets/about/ahmed_ceo.jpg'
+import ceoPhoto from '../assets/ceo_photo.jpeg'
 import { motion, AnimatePresence } from 'framer-motion'
 
 
@@ -294,7 +294,7 @@ const About = () => {
                     <img
                         className="w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105 grayscale brightness-90 group-hover:grayscale-0 group-hover:brightness-100"
                         alt="Mr Indronil Mukherjee"
-                        src={ahmedCeo}
+                        src={ceoPhoto}
                     />
                     <div className="absolute bottom-0 left-0 right-0 p-6 z-20 bg-gradient-to-t from-black/80 to-transparent">
                         <p className="text-[#ffd862] text-xs font-bold uppercase tracking-widest">Chief Executive Officer</p>

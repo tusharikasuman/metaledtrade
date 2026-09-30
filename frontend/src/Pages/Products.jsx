@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import bgImg from "../assets/homebg.png";
 import productImages from "../data/productImages.json";
@@ -21,6 +22,7 @@ const normalizeProductName = (value = "") =>
   value
     .toLowerCase()
     .replace(/\.[^.]+$/, "")
+    .replace(/&/g, " and ")
     .replace(/[_-]+/g, " ")
     .replace(/[^a-z0-9 ]/g, "")
     .replace(/\s+/g, " ")
@@ -499,8 +501,13 @@ function QuoteModal({ product, onClose }) {
 
 // ── Main Products Page ───────────────────────────────────────────────────────
 export default function Products() {
-  const [activeCategory, setActiveCategory] = useState("flat");
-  const [activeProduct, setActiveProduct] = useState(flatProducts[0]);
+  const [searchParams] = useSearchParams();
+  const initialCategory = searchParams.get("category") === "long" ? "long" : "flat";
+
+  const [activeCategory, setActiveCategory] = useState(initialCategory);
+  const [activeProduct, setActiveProduct] = useState(
+    initialCategory === "long" ? longProducts[0] : flatProducts[0]
+  );
   const [showQuoteModal, setShowQuoteModal] = useState(false);
 
   const currentProducts = activeCategory === "long" ? longProducts : flatProducts;
@@ -508,6 +515,13 @@ export default function Products() {
   useEffect(() => {
     setActiveProduct(activeCategory === "long" ? longProducts[0] : flatProducts[0]);
   }, [activeCategory]);
+
+  // Respond to the nav dropdown / footer links changing ?category= after mount
+  useEffect(() => {
+    const param = searchParams.get("category") === "long" ? "long" : "flat";
+    setActiveCategory(param);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
 
   // Prevent body scroll when modal is open
   useEffect(() => {

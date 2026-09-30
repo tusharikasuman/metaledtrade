@@ -165,16 +165,6 @@ export default function Home() {
                 </button>
               )}
             </div>
-
-            {/* Caption — kept outside the video frame so it never overlaps the play control */}
-            <div className="text-left mt-4">
-              <span className="inline-block text-[0.72rem] font-semibold tracking-[0.22em] uppercase text-gold mb-1">Commodities This Quarter</span>
-              <strong className="block font-display text-xl text-ivory mb-1">Experience Excellence in Steel Trading</strong>
-              <span className="block text-xs text-steel uppercase tracking-wider">
-                {/* TODO: confirm the real outlet name and publish date for this feature */}
-                Source &amp; date to be confirmed
-              </span>
-            </div>
           </div>
         </section>
 
