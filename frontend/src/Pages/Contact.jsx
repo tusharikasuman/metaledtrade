@@ -115,11 +115,11 @@ export default function Contact() {
             </motion.p>
 
             <motion.div variants={itemVariants} className="flex flex-wrap items-center gap-4 text-on-surface-variant text-sm font-medium mb-12">
-              <a href="mailto:info@metaledtrade.com" className="hover:text-[#ffe088] transition-colors">info@metaledtrade.com</a>
+              <a href="mailto:indronil@metaledtrade.com" className="hover:text-[#ffe088] transition-colors">indronil@metaledtrade.com</a>
               <span className="text-surface-variant">•</span>
-              <a href="tel:+9710000000" className="hover:text-[#ffe088] transition-colors">+971 (0) 00 000 0000</a>
+              <a href="tel:+97144412782" className="hover:text-[#ffe088] transition-colors">+971 4 441 2782</a>
               <span className="text-surface-variant">•</span>
-              <a href="mailto:support@metaledtrade.com" className="hover:text-[#ffe088] transition-colors">support@metaledtrade.com</a>
+              <a href="tel:+971542178600" className="hover:text-[#ffe088] transition-colors">+971 54 217 8600</a>
             </motion.div>
 
             {/* World Map */}

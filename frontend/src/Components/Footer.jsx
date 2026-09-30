@@ -133,8 +133,15 @@ export default function Footer() {
 
               <div className="mt-8">
                 <p className="font-body-md text-xs text-[#8e9192] uppercase tracking-wider mb-2">EMAIL ENQUIRIES</p>
-                <a href="mailto:trade@metaledtrade.com" className="font-mono text-sm text-[#ffd862] hover:text-white transition-colors block">
-                  trade@metaledtrade.com
+                <a href="mailto:indronil@metaledtrade.com" className="font-mono text-sm text-[#ffd862] hover:text-white transition-colors block mb-4">
+                  indronil@metaledtrade.com
+                </a>
+                <p className="font-body-md text-xs text-[#8e9192] uppercase tracking-wider mb-2">PHONE</p>
+                <a href="tel:+97144412782" className="font-mono text-sm text-[#ffd862] hover:text-white transition-colors block">
+                  +971 4 441 2782
+                </a>
+                <a href="tel:+971542178600" className="font-mono text-sm text-[#ffd862] hover:text-white transition-colors block">
+                  +971 54 217 8600
                 </a>
               </div>
             </div>
