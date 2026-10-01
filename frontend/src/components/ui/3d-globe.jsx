@@ -113,7 +113,7 @@ function Marker({ marker, radius, onClick, onHover, isModalOpen }) {
             transform
             center
             sprite
-            distanceFactor={10}
+            distanceFactor={2}
             zIndexRange={[1, 10]}
             style={{
               display: isModalOpen ? "none" : "block",
@@ -131,17 +131,18 @@ function Marker({ marker, radius, onClick, onHover, isModalOpen }) {
               {/* Circular Avatar Photo Badge */}
               <div
                 className={cn(
-                  "relative rounded-full border-2 border-[#ffd862] bg-[#12141a] shadow-2xl transition-all duration-300 flex items-center justify-center overflow-hidden",
+                  "relative rounded-full border-[10px] border-[#ffd862] bg-[#12141a] shadow-2xl transition-all duration-300 flex items-center justify-center overflow-hidden",
                   hovered
-                    ? "scale-130 ring-4 ring-[#ffd862]/60 z-30 shadow-[#ffd862]/50"
+                    ? "scale-130 ring-[20px] ring-[#ffd862]/60 z-30 shadow-[#ffd862]/50"
                     : "hover:scale-110 shadow-black/80"
                 )}
-                style={{ width: "28px", height: "28px" }}
+                style={{ width: "140px", height: "140px" }}
               >
                 <img
                   src={marker.src}
                   alt={marker.name || "Project Pin"}
                   className="w-full h-full object-cover rounded-full"
+                  decoding="async"
                   draggable={false}
                 />
               </div>

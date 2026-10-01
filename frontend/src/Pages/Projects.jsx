@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { Globe3D } from "../components/ui/3d-globe";
+import HeroVideoBackground from "../Components/HeroVideoBackground";
 import { HiX } from "react-icons/hi";
 import {
   HiOutlineCalendar,
@@ -14,12 +15,14 @@ import {
 
 // Local assets for project photos
 import heroImg from "../assets/projects/oman_animal_shed.jpeg";
-import neomImg from "../assets/Flat/Hot Rolled Steel.jpg";
-import oxyImg from "../assets/Flat/Steel Plates.jpg";
-import dhafraImg from "../assets/Flat/Galvanized Coils.jpg";
+import neomImg from "../assets/projects/neom_hr_plates.jpg";
+import oxyImg from "../assets/projects/oman_oxy_pipes.jpg";
+import dhafraImg from "../assets/projects/al_dhafra_zam_coils.jpg";
 import sudairImg from "../assets/projects/solar_pv_site.jpeg";
-import shuaibahImg from "../assets/Flat/Hot Rolled Steel Coil.jpg";
+import shuaibahImg from "../assets/projects/al_shuaibah_trackers.jpg";
+import oxyPipeRacks from "../assets/projects/oman_pipe_racks.jpg";
 import animalShedImg from "../assets/projects/oman_animal_shed.jpeg";
+import heroPoster from "../assets/projects/oman_animal_shed_poster.jpg";
 import inspectFlatBars from "../assets/projects/inspection_flat_bars.jpeg";
 import inspectMillVisit from "../assets/projects/inspection_mill_visit.jpeg";
 import inspectBundleCheck from "../assets/projects/inspection_bundle_check.jpeg";
@@ -63,7 +66,8 @@ const FEATURED_PROJECTS = [
     year: "2022",
     subcontractor: "OXY",
     material: "Structural Alloys & Steel Piping",
-    src: oxyImg,
+    src: oxyPipeRacks,
+    gallery: [oxyPipeRacks, oxyImg],
     sector: "OIL & GAS",
     description:
       "Certified structural steel alloys and specialized heavy steel plates supplied for Occidental Petroleum (OXY) onshore energy facilities in Oman.",
@@ -382,8 +386,24 @@ function ProjectModal({ project, onClose }) {
   );
 }
 
-// The project whose photo leads the hero (Oman Animal Shed).
-const HERO_PROJECT = FEATURED_PROJECTS.find((p) => p.src === heroImg);
+// Hero clips, each with the label shown in the bottom bar while it plays.
+const HERO_CLIPS = [
+  {
+    video: "/videos/oman-animal-shed.mp4",
+    label: "Featured project",
+    title: "Oman Animal Shed Project",
+    detail: "Pre-Painted Galvanised Coils",
+    project: FEATURED_PROJECTS.find((p) => p.src === heroImg),
+  },
+  {
+    video: "/videos/solar-pv-flyover.mp4",
+    label: "Solar PV",
+    title: "Utility-scale solar projects",
+    detail: "Zinc Aluminium Magnesium Coated Steel Coils",
+    project: FEATURED_PROJECTS.find((p) => p.name === "Sudair Solar PV Plant"),
+  },
+];
+const HERO_VIDEOS = HERO_CLIPS.map((c) => c.video);
 const HERO_LINES = [
   { text: "Steel for landmark", gold: false },
   { text: "projects", gold: true },
@@ -391,7 +411,9 @@ const HERO_LINES = [
 
 export default function Projects() {
   const [selectedProject, setSelectedProject] = useState(null);
+  const [heroClip, setHeroClip] = useState(0);
   const heroRef = useRef(null);
+  const clip = HERO_CLIPS[heroClip];
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
   const heroImgY = useTransform(scrollYProgress, [0, 1], ["0%", "16%"]);
   const heroCopyY = useTransform(scrollYProgress, [0, 1], ["0%", "35%"]);
@@ -408,14 +430,22 @@ export default function Projects() {
         {/* ── Hero: real project photo (Oman Animal Shed), cinematic treatment ── */}
         <section ref={heroRef} className="relative h-screen min-h-[620px] flex flex-col overflow-hidden bg-[#0b0b0c]">
           <motion.div className="absolute inset-0" style={{ y: heroImgY }}>
-            <motion.img
-              src={heroImg}
-              alt="PPGI roofing on the Oman Animal Shed Project"
-              className="absolute inset-0 w-full h-full object-cover object-[center_65%]"
-              initial={{ scale: 1.15, opacity: 0 }}
-              animate={{ scale: 1.03, opacity: 1 }}
-              transition={{ duration: 2.6, ease: EASE }}
-            />
+            {/* Hero footage: Oman Animal Shed (PPGI roofing) → solar PV flyover, cycling */}
+            <motion.div
+              className="absolute inset-0"
+              initial={{ scale: 1.12, opacity: 0 }}
+              animate={{ scale: 1.02, opacity: 1 }}
+              transition={{ duration: 2.4, ease: EASE }}
+            >
+              <HeroVideoBackground
+                sources={HERO_VIDEOS}
+                fallbackSrc={heroPoster}
+                fallbackAlt="Aerial view of PPGI roofing on the Oman Animal Shed Project"
+                clipSeconds={8}
+                backdropClassName="bg-[#0b0b0c]"
+                onClipChange={setHeroClip}
+              />
+            </motion.div>
           </motion.div>
           <div
             className="absolute inset-0 pointer-events-none"
@@ -460,7 +490,7 @@ export default function Projects() {
             </div>
           </motion.div>
 
-          {/* Bottom bar: the featured project in the photo + scroll cue */}
+          {/* Bottom bar: what the current clip shows (follows the video) + scroll cue */}
           <motion.div
             className="relative z-10 border-t border-white/15"
             initial={{ opacity: 0 }}
@@ -468,20 +498,25 @@ export default function Projects() {
             transition={{ duration: 0.8, delay: 1.5 }}
           >
             <div className="max-w-[1440px] mx-auto px-6 md:px-20 py-5 flex items-center justify-between gap-6">
-              {HERO_PROJECT && (
-                <button
+              <AnimatePresence mode="wait">
+                <motion.button
+                  key={heroClip}
                   type="button"
-                  onClick={() => setSelectedProject(HERO_PROJECT)}
+                  onClick={() => clip.project && setSelectedProject(clip.project)}
                   className="group flex items-center gap-4 text-left"
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -6 }}
+                  transition={{ duration: 0.4, ease: EASE }}
                 >
-                  <span className="text-[11px] font-semibold uppercase tracking-[0.22em]" style={{ color: DARK_GOLD }}>In the photo</span>
+                  <span className="text-[11px] font-semibold uppercase tracking-[0.22em]" style={{ color: DARK_GOLD }}>{clip.label}</span>
                   <span className="hidden sm:block w-8 h-px bg-white/30" />
                   <span className="text-sm text-white/85 group-hover:text-white transition-colors">
-                    {HERO_PROJECT.name} <span className="text-white/50">· {HERO_PROJECT.material}</span>
+                    {clip.title} <span className="text-white/50">· {clip.detail}</span>
                   </span>
                   <HiOutlineArrowRight className="text-white/70 transition-transform group-hover:translate-x-1" />
-                </button>
-              )}
+                </motion.button>
+              </AnimatePresence>
               <span className="hidden md:flex items-center gap-3 text-[10px] uppercase tracking-[0.35em] text-white/55" aria-hidden="true">
                 Scroll
                 <span className="relative block w-10 h-px bg-white/20 overflow-hidden">

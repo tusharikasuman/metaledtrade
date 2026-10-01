@@ -5,7 +5,16 @@ const CLIP_SECONDS = 6.5; // each clip plays for ~5-7s before cycling to the nex
 // Cycles between looping background clips using a SINGLE <video> element —
 // only one clip is ever downloading/decoding at a time, which matters a lot
 // for large hero video files. Crossfades via a brief opacity dip on switch.
-export default function HeroVideoBackground({ sources, fallbackSrc, fallbackAlt = "" }) {
+// `backdropClassName` is what shows during the brief fade between clips — use a
+// dark colour on dark heroes so the switch doesn't flash light.
+export default function HeroVideoBackground({
+  sources,
+  fallbackSrc,
+  fallbackAlt = "",
+  clipSeconds = CLIP_SECONDS,
+  backdropClassName = "bg-bg",
+  onClipChange,
+}) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [hasPlayedOnce, setHasPlayedOnce] = useState(false);
   const [switching, setSwitching] = useState(false);
@@ -16,6 +25,7 @@ export default function HeroVideoBackground({ sources, fallbackSrc, fallbackAlt 
     if (!video) return;
 
     setSwitching(true);
+    if (onClipChange) onClipChange(activeIndex);
     video.src = sources[activeIndex];
     video.load();
 
@@ -38,13 +48,13 @@ export default function HeroVideoBackground({ sources, fallbackSrc, fallbackAlt 
   };
 
   const handleTimeUpdate = (e) => {
-    if (e.currentTarget.currentTime >= CLIP_SECONDS) {
+    if (e.currentTarget.currentTime >= clipSeconds) {
       advance();
     }
   };
 
   return (
-    <div className="absolute inset-0 overflow-hidden bg-bg">
+    <div className={`absolute inset-0 overflow-hidden ${backdropClassName}`}>
       <img
         src={fallbackSrc}
         alt={fallbackAlt}
