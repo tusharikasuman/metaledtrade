@@ -42,7 +42,7 @@ export const longProducts = [
     grade: "EN 10025 S275JR/ASTM A36/A572 Gr.50/A992/SS400/Q235B"
   },
   {
-    product: "Japanese I beams (JIS)",
+    product: "Japanese I Beams (JIS)",
     size: "150x75 till 900x300",
     grade: "EN 10025 S275JR/ASTM A36/A572 Gr.50/A992/SS400/Q235B"
   },
@@ -82,7 +82,7 @@ export const longProducts = [
     grade: "ASTM A36/ A572 Gr.50/ABS Grade A/S275JR/S355JR / SS400/ As per enquiry"
   },
   {
-    product: "Unequal angles",
+    product: "Unequal Angles",
     size: "75x50 to 200x100 Thickness 5 mm to 15mm",
     grade: "ASTM A36/ A572 Gr.50/ABS Grade A/S275JR/S355JR / SS400/ As per enquiry"
   },
@@ -92,17 +92,17 @@ export const longProducts = [
     grade: "ASTM A36/SS400/S275JR/As per enquiry"
   },
   {
-    product: "Square bars",
+    product: "Square Bars",
     size: "8mm to 60mm",
     grade: "ASTM A36/SS400/S275JR"
   },
   {
-    product: "Shafting / Round bars",
+    product: "Shafting / Round Bars",
     size: "6mm to 200mm",
     grade: "ASTM A36/SS400/S275JR"
   },
   {
-    product: "Deformed / reinforcement Bars",
+    product: "Deformed / Reinforcement Bars",
     size: "8mm to 40mm",
     grade: "BS4449 Gr.460B / ASTM A615 Gr.40 / A615 Grade 60"
   },
@@ -112,7 +112,7 @@ export const longProducts = [
     grade: "ASTM A36/S275JR"
   },
   {
-    product: "BILLETS & BLOOMS",
+    product: "Billets & Blooms",
     size: "100mm x 100mm, 85mm x 85mm,120mm x 120mm,130mm x 130mm,140mm x 140mm,150mm x 150mm, 200mm x 200mm",
     grade: "3SP / 4SP / 5SP // ASTM Grade 40 & Grade 60"
   }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import bgImg from "../assets/homebg.png";
@@ -58,6 +58,7 @@ import {
   HiStar,
   HiOutlineStar,
   HiCheckCircle,
+  HiOutlineArrowLeft,
 } from "react-icons/hi";
 
 // Helper to parse complex grade strings into array of tags
@@ -139,9 +140,9 @@ function StarRating({ rating }) {
     <div className="flex items-center gap-0.5">
       {[1, 2, 3, 4, 5].map((star) =>
         star <= rating ? (
-          <HiStar key={star} className="text-[#ffe088] text-sm" />
+          <HiStar key={star} className="text-gold text-sm" />
         ) : (
-          <HiOutlineStar key={star} className="text-[#ffe088]/40 text-sm" />
+          <HiOutlineStar key={star} className="text-gold/40 text-sm" />
         )
       )}
     </div>
@@ -160,9 +161,9 @@ function CustomerReviews() {
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
-        className="flex flex-col border-l-2 border-[#ffe088] pl-6 mb-12"
+        className="flex flex-col border-l-2 border-gold pl-6 mb-12"
       >
-        <span className="text-[#ffe088] font-bold tracking-[0.2em] uppercase text-xs mb-2">
+        <span className="text-gold font-bold tracking-[0.2em] uppercase text-xs mb-2">
           Client Testimonials
         </span>
         <h2 className="text-3xl md:text-5xl font-display font-medium uppercase tracking-tight text-primary">
@@ -183,13 +184,13 @@ function CustomerReviews() {
               transition={{ duration: 0.2 }}
               className={`w-full text-left flex items-center gap-4 p-4 rounded-lg border transition-all duration-300 ${
                 activeIdx === idx
-                  ? "border-[#ffe088]/60 bg-surface-container shadow-lg shadow-gold/5"
+                  ? "border-gold/60 bg-surface-container shadow-lg shadow-gold/5"
                   : "border-outline-variant/20 bg-bg-alt/40 hover:border-outline-variant/50 hover:bg-bg-alt/70"
               }`}
             >
               {/* Avatar */}
               <div
-                className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-bg shrink-0"
+                className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-[#131313] shrink-0"
                 style={{ backgroundColor: r.color }}
               >
                 {r.avatar}
@@ -203,7 +204,7 @@ function CustomerReviews() {
               {activeIdx === idx && (
                 <motion.div
                   layoutId="activeReviewer"
-                  className="ml-auto w-1.5 h-8 rounded-full bg-[#ffe088] shrink-0"
+                  className="ml-auto w-1.5 h-8 rounded-full bg-gold shrink-0"
                 />
               )}
             </motion.button>
@@ -234,7 +235,7 @@ function CustomerReviews() {
             {/* Rating + Product badge */}
             <div className="flex items-center justify-between mb-6 mt-4">
               <StarRating rating={REVIEWS[activeIdx].rating} />
-              <span className="text-[10px] font-bold tracking-widest uppercase border border-[#ffe088]/40 text-[#ffe088] px-3 py-1 rounded-full">
+              <span className="text-[10px] font-bold tracking-widest uppercase border border-gold/40 text-gold px-3 py-1 rounded-full">
                 {REVIEWS[activeIdx].product}
               </span>
             </div>
@@ -247,7 +248,7 @@ function CustomerReviews() {
             {/* Reviewer info */}
             <div className="flex items-center gap-4 border-t border-outline-variant/20 pt-6">
               <div
-                className="w-12 h-12 rounded-full flex items-center justify-center text-sm font-bold text-bg shrink-0"
+                className="w-12 h-12 rounded-full flex items-center justify-center text-sm font-bold text-[#131313] shrink-0"
                 style={{ backgroundColor: REVIEWS[activeIdx].color }}
               >
                 {REVIEWS[activeIdx].avatar}
@@ -322,7 +323,7 @@ function QuoteModal({ product, onClose }) {
             <div className="p-8">
               {/* Modal Header */}
               <div className="mb-8">
-                <span className="text-[#ffe088] font-bold tracking-[0.2em] uppercase text-[10px]">
+                <span className="text-gold font-bold tracking-[0.2em] uppercase text-[10px]">
                   Request a Quote
                 </span>
                 <h3 className="text-2xl font-display font-semibold text-primary mt-1">
@@ -337,7 +338,7 @@ function QuoteModal({ product, onClose }) {
                 {/* Name + Company */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] font-bold tracking-widest uppercase text-steel">
+                    <label className="text-[11px] font-semibold tracking-[0.14em] uppercase text-steel">
                       Full Name *
                     </label>
                     <input
@@ -346,11 +347,11 @@ function QuoteModal({ product, onClose }) {
                       value={form.name}
                       onChange={handleChange}
                       placeholder="John Doe"
-                      className="bg-bg-alt border border-outline-variant/40 text-primary placeholder:text-steel/50 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#ffe088]/60 transition-colors"
+                      className="bg-bg-alt border border-outline-variant/40 text-primary placeholder:text-steel/50 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-gold transition-colors"
                     />
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] font-bold tracking-widest uppercase text-steel">
+                    <label className="text-[11px] font-semibold tracking-[0.14em] uppercase text-steel">
                       Company
                     </label>
                     <input
@@ -358,7 +359,7 @@ function QuoteModal({ product, onClose }) {
                       value={form.company}
                       onChange={handleChange}
                       placeholder="Your Company"
-                      className="bg-bg-alt border border-outline-variant/40 text-primary placeholder:text-steel/50 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#ffe088]/60 transition-colors"
+                      className="bg-bg-alt border border-outline-variant/40 text-primary placeholder:text-steel/50 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-gold transition-colors"
                     />
                   </div>
                 </div>
@@ -366,7 +367,7 @@ function QuoteModal({ product, onClose }) {
                 {/* Email + Phone */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] font-bold tracking-widest uppercase text-steel">
+                    <label className="text-[11px] font-semibold tracking-[0.14em] uppercase text-steel">
                       Email *
                     </label>
                     <input
@@ -376,11 +377,11 @@ function QuoteModal({ product, onClose }) {
                       value={form.email}
                       onChange={handleChange}
                       placeholder="you@company.com"
-                      className="bg-bg-alt border border-outline-variant/40 text-primary placeholder:text-steel/50 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#ffe088]/60 transition-colors"
+                      className="bg-bg-alt border border-outline-variant/40 text-primary placeholder:text-steel/50 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-gold transition-colors"
                     />
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] font-bold tracking-widest uppercase text-steel">
+                    <label className="text-[11px] font-semibold tracking-[0.14em] uppercase text-steel">
                       Phone
                     </label>
                     <input
@@ -389,14 +390,14 @@ function QuoteModal({ product, onClose }) {
                       value={form.phone}
                       onChange={handleChange}
                       placeholder="+971 50 000 0000"
-                      className="bg-bg-alt border border-outline-variant/40 text-primary placeholder:text-steel/50 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#ffe088]/60 transition-colors"
+                      className="bg-bg-alt border border-outline-variant/40 text-primary placeholder:text-steel/50 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-gold transition-colors"
                     />
                   </div>
                 </div>
 
                 {/* Quantity + Unit */}
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-[10px] font-bold tracking-widest uppercase text-steel">
+                  <label className="text-[11px] font-semibold tracking-[0.14em] uppercase text-steel">
                     Quantity Required *
                   </label>
                   <div className="flex gap-2">
@@ -407,13 +408,13 @@ function QuoteModal({ product, onClose }) {
                       value={form.quantity}
                       onChange={handleChange}
                       placeholder="e.g. 500"
-                      className="flex-1 bg-bg-alt border border-outline-variant/40 text-primary placeholder:text-steel/50 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#ffe088]/60 transition-colors"
+                      className="flex-1 bg-bg-alt border border-outline-variant/40 text-primary placeholder:text-steel/50 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-gold transition-colors"
                     />
                     <select
                       name="unit"
                       value={form.unit}
                       onChange={handleChange}
-                      className="bg-bg-alt border border-outline-variant/40 text-primary rounded-lg px-3 py-3 text-sm focus:outline-none focus:border-[#ffe088]/60 transition-colors"
+                      className="bg-bg-alt border border-outline-variant/40 text-primary rounded-lg px-3 py-3 text-sm focus:outline-none focus:border-gold transition-colors"
                     >
                       <option value="MT">MT</option>
                       <option value="KG">KG</option>
@@ -425,7 +426,7 @@ function QuoteModal({ product, onClose }) {
 
                 {/* Grade/Spec */}
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-[10px] font-bold tracking-widest uppercase text-steel">
+                  <label className="text-[11px] font-semibold tracking-[0.14em] uppercase text-steel">
                     Grade / Specification
                   </label>
                   <input
@@ -433,13 +434,13 @@ function QuoteModal({ product, onClose }) {
                     value={form.grade}
                     onChange={handleChange}
                     placeholder="e.g. IS 2062 E250, ASTM A36"
-                    className="bg-bg-alt border border-outline-variant/40 text-primary placeholder:text-steel/50 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#ffe088]/60 transition-colors"
+                    className="bg-bg-alt border border-outline-variant/40 text-primary placeholder:text-steel/50 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-gold transition-colors"
                   />
                 </div>
 
                 {/* Message */}
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-[10px] font-bold tracking-widest uppercase text-steel">
+                  <label className="text-[11px] font-semibold tracking-[0.14em] uppercase text-steel">
                     Additional Requirements
                   </label>
                   <textarea
@@ -448,14 +449,14 @@ function QuoteModal({ product, onClose }) {
                     onChange={handleChange}
                     rows={3}
                     placeholder="Delivery port, certifications, packaging preferences..."
-                    className="bg-bg-alt border border-outline-variant/40 text-primary placeholder:text-steel/50 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#ffe088]/60 transition-colors resize-none"
+                    className="bg-bg-alt border border-outline-variant/40 text-primary placeholder:text-steel/50 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-gold transition-colors resize-none"
                   />
                 </div>
 
                 {/* Submit */}
                 <button
                   type="submit"
-                  className="mt-2 w-full bg-gold text-bg font-bold tracking-widest uppercase text-xs py-4 rounded-lg hover:bg-white transition-colors flex items-center justify-center gap-3"
+                  className="mt-2 w-full bg-[#131313] text-white font-bold tracking-widest uppercase text-xs py-4 rounded-lg hover:bg-gold transition-colors flex items-center justify-center gap-3"
                 >
                   Submit Quote Request
                   <HiOutlineArrowRight className="text-lg" />
@@ -481,13 +482,13 @@ function QuoteModal({ product, onClose }) {
                   Request Received!
                 </h3>
                 <p className="text-steel text-sm leading-relaxed">
-                  Thank you for your enquiry for <span className="text-[#ffe088] font-semibold">{product.product}</span>.
+                  Thank you for your enquiry for <span className="text-gold font-semibold">{product.product}</span>.
                   Our team will contact you within 24 hours.
                 </p>
               </div>
               <button
                 onClick={onClose}
-                className="mt-2 border border-outline-variant/40 text-primary text-sm px-8 py-3 rounded-lg hover:border-[#ffe088]/60 transition-colors"
+                className="mt-2 border border-outline-variant/40 text-primary text-sm px-8 py-3 rounded-lg hover:border-gold transition-colors"
               >
                 Close
               </button>
@@ -511,15 +512,36 @@ export default function Products() {
   const [showQuoteModal, setShowQuoteModal] = useState(false);
 
   const currentProducts = activeCategory === "long" ? longProducts : flatProducts;
+  const activeIndex = Math.max(0, currentProducts.findIndex((p) => p.product === activeProduct.product));
+  const detailRef = useRef(null);
+
+  const selectProduct = (product) => {
+    setActiveProduct(product);
+    // Stacked layout on small screens: bring the detail panel into view.
+    if (window.innerWidth < 1024) {
+      requestAnimationFrame(() => detailRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }));
+    }
+  };
+
+  const stepProduct = (dir) => {
+    const next = (activeIndex + dir + currentProducts.length) % currentProducts.length;
+    setActiveProduct(currentProducts[next]);
+  };
 
   useEffect(() => {
     setActiveProduct(activeCategory === "long" ? longProducts[0] : flatProducts[0]);
   }, [activeCategory]);
 
+  // Arriving via Products → Flat / Long in the navbar (?category=flat|long)
+  // shows only that category; plain /products shows both with tabs.
+  const categoryParam = searchParams.get("category");
+  const lockedCategory = categoryParam === "flat" || categoryParam === "long" ? categoryParam : null;
+
   // Respond to the nav dropdown / footer links changing ?category= after mount
   useEffect(() => {
     const param = searchParams.get("category") === "long" ? "long" : "flat";
     setActiveCategory(param);
+    window.scrollTo({ top: 0 });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
@@ -543,13 +565,13 @@ export default function Products() {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
-            className="flex flex-col border-l-2 border-[#ffe088] pl-6 mb-6"
+            className="flex flex-col border-l-2 border-gold pl-6 mb-6"
           >
-            <span className="text-[#ffe088] font-bold tracking-[0.2em] uppercase text-xs mb-2">
-              Inventory Hub
+            <span className="text-gold font-bold tracking-[0.2em] uppercase text-xs mb-2">
+              {lockedCategory ? "Product Catalog" : "Inventory Hub"}
             </span>
             <h1 className="text-4xl md:text-6xl font-display font-medium uppercase tracking-tight text-primary">
-              Product Catalog
+              {lockedCategory === "flat" ? "Flat Products" : lockedCategory === "long" ? "Long Products" : "Product Catalog"}
             </h1>
           </motion.div>
           <motion.p
@@ -563,12 +585,13 @@ export default function Products() {
           </motion.p>
         </div>
 
-        {/* Category Toggles */}
+        {/* Category Toggles — only when browsing the full catalog */}
+        {!lockedCategory && (
         <div className="flex gap-4 mb-12 border-b border-outline-variant/30 pb-px relative">
           <button
             onClick={() => setActiveCategory("flat")}
             className={`pb-4 px-2 font-display text-sm md:text-lg font-medium tracking-wide transition-colors relative flex items-center gap-2 ${
-              activeCategory === "flat" ? "text-[#ffe088]" : "text-steel hover:text-ivory"
+              activeCategory === "flat" ? "text-ivory" : "text-steel hover:text-ivory"
             }`}
           >
             <HiOutlineViewBoards className="text-xl" />
@@ -576,14 +599,14 @@ export default function Products() {
             {activeCategory === "flat" && (
               <motion.div
                 layoutId="activeTab"
-                className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#ffe088]"
+                className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold"
               />
             )}
           </button>
           <button
             onClick={() => setActiveCategory("long")}
             className={`pb-4 px-2 font-display text-sm md:text-lg font-medium tracking-wide transition-colors relative flex items-center gap-2 ${
-              activeCategory === "long" ? "text-[#ffe088]" : "text-steel hover:text-ivory"
+              activeCategory === "long" ? "text-ivory" : "text-steel hover:text-ivory"
             }`}
           >
             <HiOutlineCube className="text-xl" />
@@ -591,11 +614,12 @@ export default function Products() {
             {activeCategory === "long" && (
               <motion.div
                 layoutId="activeTab"
-                className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#ffe088]"
+                className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold"
               />
             )}
           </button>
         </div>
+        )}
 
         {/* Master-Detail Layout */}
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-start min-h-[600px]">
@@ -615,22 +639,28 @@ export default function Products() {
                 return (
                   <button
                     key={idx}
-                    onClick={() => setActiveProduct(product)}
-                    className={`w-full text-left p-4 border-b border-outline-variant/30 transition-all duration-300 flex justify-between items-center gap-3 group ${
+                    onClick={() => selectProduct(product)}
+                    className={`w-full text-left px-4 py-3.5 border-b border-outline-variant/30 transition-all duration-300 flex justify-between items-center gap-3 group ${
                       isActive
-                        ? "bg-bg-alt/80 border-l-4 border-l-[#ffe088]"
-                        : "hover:bg-bg-alt/40 border-l-4 border-l-transparent"
+                        ? "bg-surface-container-low border-l-4 border-l-gold"
+                        : "hover:bg-surface-container-low/60 border-l-4 border-l-transparent"
                     }`}
                   >
                     <div className="flex items-center gap-3 min-w-0">
+                      <span className="w-5 text-[11px] tabular-nums text-steel/60 shrink-0">
+                        {String(idx + 1).padStart(2, "0")}
+                      </span>
                       <img
                         src={productImage}
                         alt=""
-                        className="w-12 h-12 md:w-14 md:h-14 object-cover rounded-sm border border-outline-variant/30 grayscale group-hover:grayscale-0 transition-all duration-300 shrink-0"
+                        loading="lazy"
+                        className={`w-12 h-12 md:w-14 md:h-14 object-cover rounded-sm border border-outline-variant/30 transition-all duration-300 shrink-0 ${
+                          isActive ? "" : "grayscale group-hover:grayscale-0"
+                        }`}
                       />
                       <span
-                        className={`font-display font-medium text-sm md:text-base ${
-                          isActive ? "text-[#ffe088]" : "text-on-surface-variant group-hover:text-ivory"
+                        className={`font-display text-sm md:text-base leading-snug ${
+                          isActive ? "font-semibold text-ivory" : "font-medium text-on-surface-variant group-hover:text-ivory"
                         }`}
                       >
                         {product.product}
@@ -639,7 +669,7 @@ export default function Products() {
                     <HiOutlineArrowRight
                       className={`text-lg transition-transform duration-300 ${
                         isActive
-                          ? "text-[#ffe088] translate-x-0"
+                          ? "text-gold translate-x-0"
                           : "text-steel -translate-x-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-0"
                       }`}
                     />
@@ -650,7 +680,7 @@ export default function Products() {
           </div>
 
           {/* Detail Viewer */}
-          <div className="w-full lg:w-2/3 lg:sticky lg:top-32">
+          <div ref={detailRef} className="w-full lg:w-2/3 lg:sticky lg:top-32 scroll-mt-28">
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeProduct.product}
@@ -659,44 +689,69 @@ export default function Products() {
                 exit={{ opacity: 0, y: -10, filter: "blur(4px)" }}
                 transition={{ duration: 0.4, ease: "easeOut" }}
               >
-                {/* Visual Header */}
-                <div className="relative h-48 md:h-64 w-full overflow-hidden rounded-sm border border-outline-variant/30 mb-8 group">
+                {/* Product photo — shown clean, nothing drawn over it */}
+                <div className="relative h-60 md:h-80 w-full overflow-hidden rounded-sm border border-outline-variant/30 group shadow-[0_30px_60px_-30px_rgba(0,0,0,0.45)]">
                   <img
                     src={getProductImage(activeProduct.product, activeCategory)}
                     alt={activeProduct.product}
-                    className="w-full h-full object-cover grayscale brightness-50 group-hover:brightness-75 group-hover:scale-105 transition-all duration-700"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[1200ms] ease-out"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                  <div className="absolute bottom-6 left-6 right-6">
-                    <h2 className="font-display text-3xl md:text-5xl lg:text-6xl font-semibold text-white uppercase tracking-tight drop-shadow-lg">
+                </div>
+
+                {/* Title + counter / prev-next, below the photo */}
+                <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mt-6 mb-8">
+                  <div>
+                    <span className="block text-[11px] font-semibold uppercase tracking-[0.25em] text-gold mb-2">
+                      {activeCategory === "flat" ? "Flat Product" : "Long Product"}
+                    </span>
+                    <h2 className="font-display text-3xl md:text-5xl font-semibold text-ivory uppercase tracking-tight leading-[1.05]">
                       {activeProduct.product}
                     </h2>
+                  </div>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <span className="px-3 py-1.5 text-[11px] font-semibold tracking-[0.14em] text-steel tabular-nums">
+                      {String(activeIndex + 1).padStart(2, "0")} / {String(currentProducts.length).padStart(2, "0")}
+                    </span>
+                    <button
+                      onClick={() => stepProduct(-1)}
+                      aria-label="Previous product"
+                      className="w-10 h-10 rounded-full border border-outline-variant text-ivory flex items-center justify-center hover:bg-[#131313] hover:text-white hover:border-[#131313] transition-colors"
+                    >
+                      <HiOutlineArrowLeft />
+                    </button>
+                    <button
+                      onClick={() => stepProduct(1)}
+                      aria-label="Next product"
+                      className="w-10 h-10 rounded-full border border-outline-variant text-ivory flex items-center justify-center hover:bg-[#131313] hover:text-white hover:border-[#131313] transition-colors"
+                    >
+                      <HiOutlineArrowRight />
+                    </button>
                   </div>
                 </div>
 
                 {/* Technical Specs Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
                   {/* Sizes Block */}
-                  <div className="bg-bg-alt border border-outline-variant/30 p-6 rounded-sm relative overflow-hidden">
+                  <div className="bg-bg-alt border border-outline-variant/30 p-6 md:p-7 rounded-sm relative overflow-hidden shadow-sm">
                     <div className="absolute top-0 right-0 w-16 h-16 bg-outline-variant/10 rotate-45 translate-x-8 -translate-y-8 opacity-20" />
-                    <span className="text-[10px] font-bold tracking-[0.2em] text-steel uppercase mb-4 block">
+                    <span className="text-[11px] font-semibold tracking-[0.2em] text-gold uppercase mb-4 block">
                       Dimensions &amp; Sizes
                     </span>
-                    <p className="text-ivory font-label-md text-sm leading-relaxed border-l-2 border-outline-variant/40 pl-4">
+                    <p className="text-ivory text-base md:text-lg leading-relaxed border-l-2 border-gold/50 pl-4">
                       {activeProduct.size}
                     </p>
                   </div>
 
                   {/* Grades Block */}
-                  <div className="bg-bg-alt border border-outline-variant/30 p-6 rounded-sm">
-                    <span className="text-[10px] font-bold tracking-[0.2em] text-steel uppercase mb-4 block">
+                  <div className="bg-bg-alt border border-outline-variant/30 p-6 md:p-7 rounded-sm shadow-sm">
+                    <span className="text-[11px] font-semibold tracking-[0.2em] text-gold uppercase mb-4 block">
                       Supported Grades
                     </span>
                     <div className="flex flex-wrap gap-2">
                       {parseGrades(activeProduct.grade).map((grade, idx) => (
                         <span
                           key={idx}
-                          className="px-3 py-1.5 border border-outline-variant/40 text-xs font-label-md text-ivory rounded-sm bg-bg hover:border-[#ffe088] hover:text-[#ffe088] transition-colors cursor-default"
+                          className="px-3 py-1.5 border border-outline-variant text-sm text-ivory rounded-sm bg-bg hover:border-gold hover:text-gold transition-colors cursor-default"
                         >
                           {grade}
                         </span>
@@ -713,7 +768,7 @@ export default function Products() {
                   </div>
                   <button
                     onClick={() => setShowQuoteModal(true)}
-                    className="w-full md:w-auto bg-gold text-bg px-8 py-4 font-bold tracking-widest uppercase text-xs hover:bg-white transition-colors flex items-center justify-center gap-3"
+                    className="w-full md:w-auto bg-[#131313] text-white px-8 py-4 font-bold tracking-widest uppercase text-xs hover:bg-gold transition-colors flex items-center justify-center gap-3"
                   >
                     Request Quote
                     <HiOutlineArrowRight className="text-lg" />
