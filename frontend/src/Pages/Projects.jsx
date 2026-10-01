@@ -13,13 +13,15 @@ import {
 // Local assets for project photos
 import heroBg from "../assets/projects/hero_projects.jpg";
 import heroBgLight from "../assets/projects/modern_steel_facade_right.png";
-import neomImg from "../assets/projects/future_district.jpg";
-import jafurahImg from "../assets/projects/modern_steel_facade.png";
-import oxyImg from "../assets/projects/dubai_south.jpg";
-import dhafraImg from "../assets/projects/downtown_dubai.jpg";
-import sudairImg from "../assets/projects/modern_steel_facade_right.png";
-import shuaibahImg from "../assets/projects/business_bay.jpg";
-import animalShedImg from "../assets/projects/jebel_ali.jpg";
+import neomImg from "../assets/Flat/Hot Rolled Steel.png";
+import oxyImg from "../assets/Flat/Steel Plates.png";
+import dhafraImg from "../assets/Flat/Galvanized Coils.png";
+import sudairImg from "../assets/projects/solar_pv_site.jpeg";
+import shuaibahImg from "../assets/Flat/Hot Rolled Steel Coil.png";
+import animalShedImg from "../assets/projects/oman_animal_shed.jpeg";
+import inspectFlatBars from "../assets/projects/inspection_flat_bars.jpeg";
+import inspectMillVisit from "../assets/projects/inspection_mill_visit.jpeg";
+import inspectBundleCheck from "../assets/projects/inspection_bundle_check.jpeg";
 
 // ── Real Projects Data with Globe Pins & Full Details ────────────────────────
 const FEATURED_PROJECTS = [
@@ -30,43 +32,22 @@ const FEATURED_PROJECTS = [
     latOffset: 6,
     lngOffset: -10,
     altitude: 1.28,
-    name: "Neom Project",
+    name: "NEOM Project",
     country: "SAUDI ARABIA",
-    location: "Tabuk / Neom, KSA",
+    location: "Tabuk / NEOM, KSA",
     year: "2024",
-    subcontractor: "ARAMCO",
+    subcontractor: "NEOM",
     material: "Hot Rolled Steel Plates",
     src: neomImg,
     sector: "INFRASTRUCTURE",
     description:
-      "Heavy industrial structural steel and premium Hot Rolled Steel Plates supplied for the groundbreaking Neom mega-city infrastructure project under Aramco contracting standards.",
+      "Heavy industrial structural steel and premium Hot Rolled Steel Plates supplied for the NEOM mega-city infrastructure project.",
     details:
-      "2024 Year • Subcontractor: ARAMCO • Material Supplied: Hot Rolled Steel Plates.",
+      "2024 Year • NEOM • Material Supplied: Hot Rolled Steel Plates.",
     span: "md:col-span-8",
   },
   {
     id: "02",
-    lat: 25.4,
-    lng: 49.6,
-    latOffset: 10,
-    lngOffset: 8,
-    altitude: 1.30,
-    name: "Jafurah Project",
-    country: "SAUDI ARABIA",
-    location: "Eastern Province, KSA",
-    year: "2024",
-    subcontractor: "ARAMCO",
-    material: "Hot Rolled Steel Plates",
-    src: jafurahImg,
-    sector: "ENERGY & GAS",
-    description:
-      "High-grade Hot Rolled Steel Plates supplied for Aramco's flagship Jafurah unconventional gas basin development project.",
-    details:
-      "2024 Year • Subcontractor: ARAMCO • Material Supplied: Hot Rolled Steel Plates.",
-    span: "md:col-span-4",
-  },
-  {
-    id: "03",
     lat: 20.15,
     lng: 56.4,
     latOffset: -10,
@@ -87,7 +68,7 @@ const FEATURED_PROJECTS = [
     span: "md:col-span-4",
   },
   {
-    id: "04",
+    id: "03",
     lat: 24.15,
     lng: 54.5,
     latOffset: 4,
@@ -105,10 +86,10 @@ const FEATURED_PROJECTS = [
       "Located 30 km south of Abu Dhabi, this is the largest single-site solar photovoltaic plant in the world, generating over 2 GW of clean energy and powering over 160,000 households.",
     details:
       "Subcontractor: EWEC and MASDAR • Material Supplied: Zinc Aluminium Magnesium Coated Steel Coils.",
-    span: "md:col-span-8",
+    span: "md:col-span-4",
   },
   {
-    id: "05",
+    id: "04",
     lat: 25.6,
     lng: 45.6,
     latOffset: 12,
@@ -126,10 +107,10 @@ const FEATURED_PROJECTS = [
       "A 1,500 MW solar facility in Riyadh Province backed by Saudi Public Investment Fund (PIF) and ACWA Power providing power to roughly 185,000 homes.",
     details:
       "Subcontractor: PIF and ACWA Power • Material Supplied: Zinc Aluminium Magnesium Coated Steel Coils.",
-    span: "md:col-span-6",
+    span: "md:col-span-8",
   },
   {
-    id: "06",
+    id: "05",
     lat: 20.67,
     lng: 39.54,
     latOffset: -6,
@@ -147,10 +128,10 @@ const FEATURED_PROJECTS = [
       "A 2.6 GW capacity split across two sites south of Jeddah utilizing advanced bifacial modules.",
     details:
       "Subcontractor: ACWA Power and PIF • Material Supplied: Zinc Aluminium Magnesium Coated Steel Coils.",
-    span: "md:col-span-6",
+    span: "md:col-span-4",
   },
   {
-    id: "07",
+    id: "06",
     lat: 23.588,
     lng: 58.382,
     latOffset: -3,
@@ -168,9 +149,15 @@ const FEATURED_PROJECTS = [
       "Pre-Painted Galvanised Coils (PPGI) supplied for animal shed roofing, livestock shelters, and agricultural infrastructure across Oman.",
     details:
       "Supplied for Animal Shed • Material Supplied: Pre-Painted Galvanised Coils (PPGI).",
-    span: "md:col-span-12",
-    isWide: true,
+    span: "md:col-span-8",
   },
+];
+
+// Our own photos from mill visits — pre-shipment inspection of material.
+const INSPECTION_PHOTOS = [
+  { src: inspectFlatBars, alt: "Inspecting bundled flat bars with the mill team", caption: "Checking bundled flat bars with the mill team" },
+  { src: inspectBundleCheck, alt: "Verifying bundle markings and dimensions", caption: "Verifying bundle markings and dimensions" },
+  { src: inspectMillVisit, alt: "Walking the rolling mill floor", caption: "On the rolling mill floor" },
 ];
 
 const PARTNERS = [
@@ -411,6 +398,50 @@ export default function Projects() {
                 </motion.div>
               );
             })}
+          </div>
+        </section>
+
+        {/* ── INSPECTION AT THE MILL (own photos) ─────────────────────────────── */}
+        <section className="px-5 md:px-20 pb-20 max-w-[1440px] mx-auto">
+          <div className="text-left mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
+            <div>
+              <span className="text-xs font-semibold text-gold uppercase tracking-[0.2em] block mb-2">
+                On the Ground
+              </span>
+              <h2 className="font-headline-lg text-2xl md:text-4xl text-primary uppercase">
+                Inspected at the mill, before it ships
+              </h2>
+              <div className="w-12 h-[2px] bg-gold mt-3" />
+            </div>
+            <p className="text-steel text-sm max-w-md leading-relaxed">
+              We visit the mills we source from and check material in person, alongside independent third-party inspection.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {INSPECTION_PHOTOS.map((photo, idx) => (
+              <motion.figure
+                key={photo.caption}
+                className="group"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.8, delay: idx * 0.1, ease: "easeOut" }}
+              >
+                <div className="relative h-[380px] md:h-[440px] overflow-hidden rounded-lg border border-outline-variant/35 shadow-xl bg-surface-container">
+                  <img
+                    src={photo.src}
+                    alt={photo.alt}
+                    loading="lazy"
+                    className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
+                  />
+                </div>
+                <figcaption className="mt-4 flex items-start gap-3">
+                  <span className="text-xs font-semibold text-gold tabular-nums pt-0.5">0{idx + 1}</span>
+                  <span className="text-sm text-on-surface-variant leading-relaxed">{photo.caption}</span>
+                </figcaption>
+              </motion.figure>
+            ))}
           </div>
         </section>
 
