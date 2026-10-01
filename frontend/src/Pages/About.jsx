@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion'
 import steelBeams from '../assets/about/steel_beams.jpg'
 import dubaiFacade from '../assets/about/building_detail.jpg'
@@ -561,34 +561,6 @@ function Leadership() {
     )
 }
 
-function ClosingCta() {
-    return (
-        <section className="px-6 md:px-12 pb-24 lg:pb-32">
-            <FadeUp className="relative max-w-6xl mx-auto overflow-hidden rounded-sm bg-[#0e0e0e] px-8 py-14 md:px-16 md:py-20 flex flex-col md:flex-row md:items-center md:justify-between gap-8">
-                <div
-                    className="absolute -right-24 -top-24 w-80 h-80 rounded-full blur-3xl opacity-20 pointer-events-none"
-                    style={{ background: DARK_GOLD }}
-                />
-                <div className="relative">
-                    <Eyebrow dark>Work with us</Eyebrow>
-                    <h2 className="font-display text-2xl md:text-4xl font-semibold text-white uppercase leading-tight max-w-xl">
-                        Let's source the steel your next project needs
-                    </h2>
-                </div>
-                <Link
-                    to="/contact"
-                    className="relative shrink-0 inline-flex items-center gap-3 px-8 py-4 text-xs font-semibold uppercase tracking-[0.2em] text-black transition-all duration-300 hover:gap-5"
-                    style={{ background: DARK_GOLD }}
-                >
-                    Get in touch
-                    <span aria-hidden="true">&rarr;</span>
-                </Link>
-            </FadeUp>
-        </section>
-    )
-}
-
-
 // ── Main About Page ──────────────────────────────────────────────────────────
 
 const About = () => {
@@ -617,7 +589,6 @@ const About = () => {
             <ValueCreation />
             <WhyUs />
             <Leadership />
-            <ClosingCta />
         </div>
     )
 }

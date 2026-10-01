@@ -17,6 +17,24 @@ export default function Footer() {
       {/* Main Container */}
       <div className="px-5 md:px-20 max-w-[1440px] mx-auto relative z-10">
 
+        {/* Site-wide quote CTA */}
+        <div className="relative overflow-hidden rounded-sm border border-[#e9c349]/20 bg-gradient-to-br from-[#16171b] to-[#0e0f12] px-8 py-12 md:px-14 md:py-14 mb-20 flex flex-col md:flex-row md:items-center md:justify-between gap-8">
+          <div className="absolute -right-24 -top-24 w-80 h-80 rounded-full blur-3xl opacity-15 pointer-events-none bg-[#e9c349]" />
+          <div className="relative">
+            <span className="text-xs font-semibold uppercase tracking-[0.22em] block mb-3 text-[#e9c349]">Customised orders</span>
+            <h2 className="font-display text-2xl md:text-4xl font-semibold text-white uppercase leading-tight max-w-xl">
+              Supplying a project of your own?
+            </h2>
+          </div>
+          <Link
+            to="/contact"
+            className="relative shrink-0 inline-flex items-center gap-3 px-8 py-4 text-xs font-bold uppercase tracking-[0.2em] text-[#131313] bg-[#e9c349] hover:bg-white transition-all duration-300 hover:gap-5"
+          >
+            Request a Quote
+            <span aria-hidden="true">&rarr;</span>
+          </Link>
+        </div>
+
         {/* Middle Section: Links Grid & Newsletter Sign-up */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 pb-20 items-start">
 

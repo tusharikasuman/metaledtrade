@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { Globe3D } from "../components/ui/3d-globe";
 import { HiX } from "react-icons/hi";
 import {
@@ -8,20 +9,23 @@ import {
   HiOutlineCube,
   HiOutlineMapPin,
   HiOutlineArrowRight,
+  HiOutlineArrowLeft,
 } from "react-icons/hi2";
 
 // Local assets for project photos
-import heroBg from "../assets/projects/hero_projects.jpg";
-import heroBgLight from "../assets/projects/modern_steel_facade_right.png";
-import neomImg from "../assets/Flat/Hot Rolled Steel.png";
-import oxyImg from "../assets/Flat/Steel Plates.png";
-import dhafraImg from "../assets/Flat/Galvanized Coils.png";
+import heroImg from "../assets/projects/oman_animal_shed.jpeg";
+import neomImg from "../assets/Flat/Hot Rolled Steel.jpg";
+import oxyImg from "../assets/Flat/Steel Plates.jpg";
+import dhafraImg from "../assets/Flat/Galvanized Coils.jpg";
 import sudairImg from "../assets/projects/solar_pv_site.jpeg";
-import shuaibahImg from "../assets/Flat/Hot Rolled Steel Coil.png";
+import shuaibahImg from "../assets/Flat/Hot Rolled Steel Coil.jpg";
 import animalShedImg from "../assets/projects/oman_animal_shed.jpeg";
 import inspectFlatBars from "../assets/projects/inspection_flat_bars.jpeg";
 import inspectMillVisit from "../assets/projects/inspection_mill_visit.jpeg";
 import inspectBundleCheck from "../assets/projects/inspection_bundle_check.jpeg";
+
+const EASE = [0.16, 1, 0.3, 1];
+const DARK_GOLD = "#e9c349";
 
 // ── Real Projects Data with Globe Pins & Full Details ────────────────────────
 const FEATURED_PROJECTS = [
@@ -219,73 +223,302 @@ const PARTNERS = [
   },
 ];
 
+// Photos for a project: its `gallery` if provided, otherwise the card image.
+const projectPhotos = (project) => (project.gallery && project.gallery.length ? project.gallery : [project.src]);
+
+const STATS = [
+  { value: FEATURED_PROJECTS.length, label: "Featured projects" },
+  { value: new Set(FEATURED_PROJECTS.map((p) => p.country)).size, label: "Countries" },
+  { value: new Set(FEATURED_PROJECTS.map((p) => p.material)).size, label: "Materials supplied" },
+];
+
+function SectionHeading({ eyebrow, title, intro, center = false }) {
+  return (
+    <div className={`mb-10 md:mb-12 flex flex-col gap-4 ${center ? "items-center text-center" : "md:flex-row md:items-end md:justify-between"}`}>
+      <div>
+        <span className="text-xs font-semibold text-gold uppercase tracking-[0.22em] block mb-3">{eyebrow}</span>
+        <h2 className="font-display text-3xl md:text-5xl font-semibold text-ivory uppercase leading-[1.1]">{title}</h2>
+        <div className={`w-12 h-0.5 bg-gold mt-5 ${center ? "mx-auto" : ""}`} />
+      </div>
+      {intro && <p className="text-steel text-sm md:text-base leading-relaxed max-w-md">{intro}</p>}
+    </div>
+  );
+}
+
+function ProjectModal({ project, onClose }) {
+  const photos = projectPhotos(project);
+  const [photoIdx, setPhotoIdx] = useState(0);
+  const step = (dir) => setPhotoIdx((i) => (i + dir + photos.length) % photos.length);
+
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === "Escape") onClose();
+      if (photos.length > 1 && e.key === "ArrowRight") step(1);
+      if (photos.length > 1 && e.key === "ArrowLeft") step(-1);
+    };
+    window.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ opacity: 0, scale: 0.96, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.96, y: 20 }}
+        transition={{ duration: 0.35, ease: EASE }}
+        className="bg-bg-alt rounded-sm shadow-2xl w-full max-w-3xl max-h-[92vh] overflow-y-auto relative"
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-label={project.name}
+      >
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 z-20 w-10 h-10 flex items-center justify-center bg-black/55 text-white hover:bg-black rounded-full backdrop-blur transition-colors"
+          aria-label="Close"
+        >
+          <HiX className="text-lg" />
+        </button>
+
+        {/* Photos */}
+        <div className="relative aspect-[16/9] bg-[#0b0b0c] overflow-hidden">
+          <AnimatePresence mode="wait">
+            <motion.img
+              key={photoIdx}
+              src={photos[photoIdx]}
+              alt={`${project.name} — photo ${photoIdx + 1}`}
+              className="absolute inset-0 w-full h-full object-cover"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            />
+          </AnimatePresence>
+          {photos.length > 1 && (
+            <div className="absolute bottom-4 right-4 flex items-center gap-2">
+              <span className="px-3 py-1.5 rounded-full bg-black/55 backdrop-blur text-[11px] font-semibold text-white tabular-nums">
+                {photoIdx + 1} / {photos.length}
+              </span>
+              <button onClick={() => step(-1)} aria-label="Previous photo" className="w-9 h-9 rounded-full bg-black/55 backdrop-blur text-white flex items-center justify-center hover:bg-black">
+                <HiOutlineArrowLeft />
+              </button>
+              <button onClick={() => step(1)} aria-label="Next photo" className="w-9 h-9 rounded-full bg-black/55 backdrop-blur text-white flex items-center justify-center hover:bg-black">
+                <HiOutlineArrowRight />
+              </button>
+            </div>
+          )}
+        </div>
+        {photos.length > 1 && (
+          <div className="flex gap-2 px-6 sm:px-8 pt-4 overflow-x-auto">
+            {photos.map((src, i) => (
+              <button
+                key={src + i}
+                onClick={() => setPhotoIdx(i)}
+                aria-label={`Show photo ${i + 1}`}
+                className={`shrink-0 w-20 h-14 rounded-sm overflow-hidden ring-2 transition ${i === photoIdx ? "ring-gold" : "ring-transparent opacity-60 hover:opacity-100"}`}
+              >
+                <img src={src} alt="" className="w-full h-full object-cover" />
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* Details */}
+        <div className="p-6 sm:p-8">
+          <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-gold">{project.sector}</span>
+          <h3 className="font-display text-2xl sm:text-4xl font-semibold text-ivory uppercase leading-tight mt-2">{project.name}</h3>
+
+          <dl className="mt-6 grid grid-cols-1 sm:grid-cols-3 border-y border-outline-variant divide-y sm:divide-y-0 sm:divide-x divide-outline-variant">
+            {[
+              { icon: HiOutlineMapPin, label: "Location", value: project.location },
+              { icon: HiOutlineCalendar, label: "Year", value: project.year },
+              { icon: HiOutlineUserGroup, label: "Client / Subcontractor", value: project.subcontractor },
+            ].map(({ icon: Icon, label, value }) => (
+              <div key={label} className="py-4 sm:px-5 first:sm:pl-0">
+                <dt className="text-[11px] uppercase tracking-[0.16em] text-steel flex items-center gap-1.5 mb-1.5">
+                  <Icon className="text-gold" /> {label}
+                </dt>
+                <dd className="text-sm font-semibold text-ivory">{value}</dd>
+              </div>
+            ))}
+          </dl>
+
+          <div className="mt-6 border-l-2 border-gold pl-4">
+            <span className="text-[11px] uppercase tracking-[0.16em] text-steel flex items-center gap-1.5 mb-1">
+              <HiOutlineCube className="text-gold" /> Material Supplied
+            </span>
+            <p className="text-base font-semibold text-ivory">{project.material}</p>
+          </div>
+
+          <p className="mt-6 text-on-surface-variant leading-relaxed">{project.description}</p>
+
+          <div className="mt-8 pt-6 border-t border-outline-variant flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-4">
+            <button onClick={onClose} className="text-sm font-semibold text-steel hover:text-ivory transition-colors self-start">
+              Close
+            </button>
+            <Link
+              to="/contact"
+              className="inline-flex items-center justify-center gap-3 bg-[#131313] text-white px-7 py-3.5 text-xs font-bold uppercase tracking-[0.18em] hover:bg-gold transition-colors"
+            >
+              Request a Quote for similar supply
+              <HiOutlineArrowRight />
+            </Link>
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+// The project whose photo leads the hero (Oman Animal Shed).
+const HERO_PROJECT = FEATURED_PROJECTS.find((p) => p.src === heroImg);
+const HERO_LINES = [
+  { text: "Steel for landmark", gold: false },
+  { text: "projects", gold: true },
+];
+
 export default function Projects() {
   const [selectedProject, setSelectedProject] = useState(null);
-  const [hoveredIndex, setHoveredIndex] = useState(null);
-  const [themeMode, setThemeMode] = useState("light");
+  const heroRef = useRef(null);
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
+  const heroImgY = useTransform(scrollYProgress, [0, 1], ["0%", "16%"]);
+  const heroCopyY = useTransform(scrollYProgress, [0, 1], ["0%", "35%"]);
+  const heroCopyOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
     document.documentElement.classList.add("light");
   }, []);
 
-  const handleReachUsClick = (e) => {
-    e.preventDefault();
-    const footer = document.querySelector("footer");
-    if (footer) {
-      footer.scrollIntoView({ behavior: "smooth" });
-    }
-  };
-
   return (
-    <div className="min-h-screen bg-bg text-ivory font-body-md overflow-x-hidden flex flex-col justify-between">
+    <div className="min-h-screen bg-bg text-ivory font-body overflow-x-hidden flex flex-col justify-between">
       <main className="flex-grow">
-        {/* Hero Section */}
-        <section className="relative h-[75vh] min-h-[480px] flex flex-col justify-end overflow-hidden">
-          <div className="absolute inset-0 z-0">
-            <div
-              className={`w-full h-full bg-cover bg-center transition-all duration-1000 ${themeMode === "light" ? "opacity-100" : ""}`}
-              style={{ backgroundImage: `url(${themeMode === "light" ? heroBgLight : heroBg})` }}
+        {/* ── Hero: real project photo (Oman Animal Shed), cinematic treatment ── */}
+        <section ref={heroRef} className="relative h-screen min-h-[620px] flex flex-col overflow-hidden bg-[#0b0b0c]">
+          <motion.div className="absolute inset-0" style={{ y: heroImgY }}>
+            <motion.img
+              src={heroImg}
+              alt="PPGI roofing on the Oman Animal Shed Project"
+              className="absolute inset-0 w-full h-full object-cover object-[center_65%]"
+              initial={{ scale: 1.15, opacity: 0 }}
+              animate={{ scale: 1.03, opacity: 1 }}
+              transition={{ duration: 2.6, ease: EASE }}
             />
-            <div className="absolute inset-0 bg-gradient-to-t " />
-          </div>
+          </motion.div>
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{ background: "linear-gradient(90deg, rgba(9,10,12,0.88) 0%, rgba(9,10,12,0.55) 45%, rgba(9,10,12,0.15) 100%), linear-gradient(0deg, rgba(9,10,12,0.92) 0%, rgba(9,10,12,0.2) 45%, rgba(9,10,12,0.35) 100%)" }}
+          />
 
-          <div className="relative z-10 w-full max-w-[1440px] mx-auto px-5 md:px-20 pb-12">
-            <div className="max-w-2xl">
-              <p className="font-bold text-xs md:text-sm text-[#ffd862] mb-3 uppercase tracking-[0.25em]">
-                Global Supply Footprint
-              </p>
-              <h1
-                className={`font-semibold text-4xl sm:text-5xl md:text-7xl leading-[1.1] mb-4 uppercase ${themeMode === "light" ? "text-primary" : "text-white"
-                  }`}
-              >
-                Architectural <br />
-                Integrity
+          <motion.div
+            className="relative z-10 flex-1 flex items-end w-full max-w-[1440px] mx-auto px-6 md:px-20 pt-32 pb-14 md:pb-20"
+            style={{ y: heroCopyY, opacity: heroCopyOpacity }}
+          >
+            <div className="max-w-3xl">
+              <h1 className="font-display text-[2.6rem] sm:text-6xl md:text-7xl lg:text-[5.5rem] font-semibold uppercase leading-[1.02] text-white">
+                {HERO_LINES.map((line, i) => (
+                  <span key={line.text} className="block overflow-hidden pb-[0.06em]">
+                    <motion.span
+                      className="block"
+                      style={line.gold ? { color: DARK_GOLD } : undefined}
+                      initial={{ y: "110%" }}
+                      animate={{ y: "0%" }}
+                      transition={{ duration: 1.1, delay: 0.5 + i * 0.14, ease: EASE }}
+                    >
+                      {line.text}
+                    </motion.span>
+                  </span>
+                ))}
               </h1>
-              <p
-                className={`font-extrabold text-sm md:text-base leading-relaxed ${themeMode === "light" ? "text-on-surface-variant" : "text-zinc-300"
-                  }`}
+              <motion.div
+                className="w-20 h-px my-7 origin-left"
+                style={{ background: DARK_GOLD }}
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ duration: 1, delay: 1.1, ease: EASE }}
+              />
+              <motion.p
+                className="text-zinc-300 text-base md:text-lg leading-relaxed max-w-xl"
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 1.2, ease: EASE }}
               >
-                Forging the backbone of the world&apos;s most ambitious infrastructure projects with certified industrial steel, specialized solar coatings, and heavy structural plates.
-              </p>
+                Plates, coated coils and PPGI supplied to solar, energy, infrastructure and agricultural projects across Saudi Arabia, the UAE and Oman.
+              </motion.p>
             </div>
+          </motion.div>
+
+          {/* Bottom bar: the featured project in the photo + scroll cue */}
+          <motion.div
+            className="relative z-10 border-t border-white/15"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 1.5 }}
+          >
+            <div className="max-w-[1440px] mx-auto px-6 md:px-20 py-5 flex items-center justify-between gap-6">
+              {HERO_PROJECT && (
+                <button
+                  type="button"
+                  onClick={() => setSelectedProject(HERO_PROJECT)}
+                  className="group flex items-center gap-4 text-left"
+                >
+                  <span className="text-[11px] font-semibold uppercase tracking-[0.22em]" style={{ color: DARK_GOLD }}>In the photo</span>
+                  <span className="hidden sm:block w-8 h-px bg-white/30" />
+                  <span className="text-sm text-white/85 group-hover:text-white transition-colors">
+                    {HERO_PROJECT.name} <span className="text-white/50">· {HERO_PROJECT.material}</span>
+                  </span>
+                  <HiOutlineArrowRight className="text-white/70 transition-transform group-hover:translate-x-1" />
+                </button>
+              )}
+              <span className="hidden md:flex items-center gap-3 text-[10px] uppercase tracking-[0.35em] text-white/55" aria-hidden="true">
+                Scroll
+                <span className="relative block w-10 h-px bg-white/20 overflow-hidden">
+                  <motion.span
+                    className="absolute inset-y-0 left-0 w-1/2"
+                    style={{ background: DARK_GOLD }}
+                    animate={{ x: ["-100%", "200%"] }}
+                    transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+                  />
+                </span>
+              </span>
+            </div>
+          </motion.div>
+        </section>
+
+        {/* ── Stats strip ── */}
+        <section className="border-b border-outline-variant bg-bg-alt">
+          <div className="max-w-[1440px] mx-auto px-6 md:px-20 grid grid-cols-3 divide-x divide-outline-variant">
+            {STATS.map((s) => (
+              <div key={s.label} className="py-8 md:py-10 px-3 md:px-8 text-center">
+                <span className="block font-display text-3xl md:text-5xl font-semibold text-ivory tabular-nums">{s.value}</span>
+                <span className="block mt-2 text-[11px] md:text-xs uppercase tracking-[0.18em] text-steel">{s.label}</span>
+              </div>
+            ))}
           </div>
         </section>
 
-        {/* ── STANDALONE 3D GLOBE SECTION (Centered, No Right-Side Text List) ──────── */}
-        <section className="bg-surface-container-lowest border-y border-[#444748]/20 py-20 relative overflow-hidden select-none">
-          <div className="max-w-[1440px] mx-auto px-5 md:px-20 text-center relative z-10 mb-8">
-            <span className="font-label-md text-xs text-[#ffd862] uppercase tracking-[0.25em] block mb-2">
-              Global Operations Map
-            </span>
-            <h2 className="font-headline-lg text-3xl md:text-5xl text-primary uppercase tracking-wide">
-              Worldwide Supply Chain
-            </h2>
-            <p className="text-steel text-sm max-w-xl mx-auto mt-3">
-              Click or hover on any glowing project pin to inspect project photos, subcontractor details, and supply specifications across Saudi Arabia, UAE, and Oman.
-            </p>
+        {/* ── Globe ── */}
+        <section className="py-20 md:py-24 relative overflow-hidden select-none">
+          <div className="max-w-[1440px] mx-auto px-6 md:px-20 relative z-10">
+            <SectionHeading
+              center
+              eyebrow="Where we supply"
+              title="Project map"
+              intro="Select a pin to see the project, the client and the material we supplied."
+            />
           </div>
-
           <div style={{ width: "100%", maxWidth: "1050px", margin: "0 auto", position: "relative" }}>
             <Globe3D
               markers={FEATURED_PROJECTS}
@@ -296,168 +529,94 @@ export default function Projects() {
           </div>
         </section>
 
-        {/* Separator / Brand Text banner */}
-        <section className="bg-surface-container-lowest border-b border-outline-variant/30 py-8 overflow-hidden select-none">
-          <div className="flex whitespace-nowrap gap-20 items-center justify-center animate-pulse">
-            <span className="font-display-lg text-xl md:text-3xl font-extrabold text-gold-soft/30 uppercase tracking-widest">
-              LANDMARK STEEL SOLUTIONS
-            </span>
-            <span className="text-gold-soft/30 text-2xl">•</span>
-            <span className="font-display-lg text-xl md:text-3xl font-extrabold text-gold-soft/30 uppercase tracking-widest">
-              CERTIFIED QUALITY ASSURED
-            </span>
-            <span className="text-gold-soft/30 text-2xl">•</span>
-            <span className="font-display-lg text-xl md:text-3xl font-extrabold text-[#ffd862]/30 uppercase tracking-widest">
-              GLOBAL SMELTING NETWORK
-            </span>
-          </div>
-        </section>
-
-        {/* ── FEATURED PROJECTS SHOWCASE GRID ─────────────────────────────────── */}
-        <section className="px-5 md:px-20 py-20 max-w-[1440px] mx-auto">
-          <div className="text-left mb-12 flex flex-col md:flex-row md:items-end justify-between gap-4">
-            <div>
-              <span className="font-label-md text-xs text-[#ffd862] uppercase tracking-widest block mb-2">
-                Portfolio Showcase
-              </span>
-              <h2 className="font-headline-lg text-2xl md:text-4xl text-primary uppercase">
-                Featured Infrastructure Projects
-              </h2>
-              <div className="w-12 h-[2px] bg-[#ffd862] mt-3" />
-            </div>
-            <p className="text-steel text-xs md:text-sm max-w-md">
-              Click any project card to view full subcontractor details, material grades, photos, and supply scope.
-            </p>
-          </div>
+        {/* ── Project cards ── */}
+        <section className="px-6 md:px-20 pb-20 md:pb-28 max-w-[1440px] mx-auto">
+          <SectionHeading
+            eyebrow="Portfolio"
+            title="Featured projects"
+            intro="Open any project for the client, location, year and the material we supplied."
+          />
 
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
             {FEATURED_PROJECTS.map((project, idx) => {
-              const isThird = project.isWide;
-              const isCol4 = project.span.includes("col-span-4");
+              const isNarrow = project.span.includes("col-span-4");
               return (
-                <motion.div
+                <motion.button
+                  type="button"
                   key={project.id}
                   onClick={() => setSelectedProject(project)}
-                  className={`group relative overflow-hidden bg-surface-container border border-outline-variant/35 rounded-lg shadow-xl cursor-pointer ${project.span
-                    } ${isThird ? "h-[400px]" : "h-[480px]"}`}
+                  className={`group relative overflow-hidden rounded-sm text-left bg-[#0b0b0c] h-[440px] md:h-[480px] shadow-[0_30px_60px_-30px_rgba(0,0,0,0.5)] focus:outline-none focus-visible:ring-2 focus-visible:ring-gold ${project.span}`}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, amount: 0.15 }}
-                  transition={{ duration: 0.8, delay: idx * 0.08, ease: "easeOut" }}
+                  transition={{ duration: 0.8, delay: (idx % 2) * 0.1, ease: EASE }}
                 >
-                  <div
-                    className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 ease-out group-hover:scale-105"
-                    style={{ backgroundImage: `url(${project.src})` }}
+                  <img
+                    src={project.src}
+                    alt=""
+                    loading="lazy"
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-105"
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-black/0" />
 
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent group-hover:from-black/90 transition-colors duration-500" />
+                  <span className="absolute top-5 left-5 md:top-6 md:left-6 text-xs font-semibold tracking-[0.2em] text-white/80 tabular-nums">
+                    {project.id}
+                  </span>
 
-                  {/* Top Badges */}
-                  <div className="absolute top-4 left-4 right-4 z-20 flex items-center justify-between pointer-events-none">
-                    <span className="font-label-sm text-[10px] bg-[#ffd862] text-[#131313] font-bold px-3 py-1 uppercase rounded-sm shadow-md">
-                      {project.subcontractor}
+                  <div className="absolute inset-x-0 bottom-0 p-6 md:p-8">
+                    <span className="block text-[11px] font-semibold uppercase tracking-[0.2em] mb-2" style={{ color: DARK_GOLD }}>
+                      {project.sector}
                     </span>
-                    <span className="font-label-sm text-[10px] bg-black/80 text-[#ffd862] border border-[#ffd862]/40 px-3 py-1 uppercase rounded-sm backdrop-blur-sm">
-                      {project.year}
-                    </span>
-                  </div>
-
-                  {/* Bottom Card Details */}
-                  <div className="absolute bottom-0 left-0 p-8 w-full transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500 z-20">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="font-label-md text-xs text-[#ffd862] font-semibold">
-                        {project.id} / {project.country}
-                      </span>
-                      <span className="text-zinc-500">•</span>
-                      <span className="font-label-sm text-[10px] text-zinc-300 uppercase tracking-wider">
-                        {project.location}
-                      </span>
-                    </div>
-
-                    <h3
-                      className={`text-white mb-2 uppercase font-display-lg ${isCol4 ? "text-xl md:text-2xl" : "text-2xl md:text-3xl"
-                        }`}
-                    >
+                    <h3 className={`font-display font-semibold text-white uppercase leading-tight ${isNarrow ? "text-2xl" : "text-2xl md:text-4xl"}`}>
                       {project.name}
                     </h3>
-
-                    <p className="text-zinc-300 text-xs line-clamp-2 mb-4 leading-relaxed font-body">
-                      {project.description}
+                    <p className="mt-3 text-sm text-zinc-300">
+                      {project.material} · {project.year} · {project.location}
                     </p>
-
-                    <div className="flex items-center justify-between border-t border-white/15 pt-3">
-                      <span className="font-label-sm text-[11px] text-[#ffd862] uppercase tracking-wider font-semibold">
-                        {project.material}
-                      </span>
-                      <span className="text-xs font-bold text-white flex items-center gap-1 group-hover:text-[#ffd862] transition-colors">
-                        View Details
-                        <HiOutlineArrowRight className="text-base" />
-                      </span>
-                    </div>
+                    <span className="mt-5 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-white border-b border-white/30 pb-1 group-hover:border-[#e9c349] group-hover:text-[#e9c349] transition-colors">
+                      View project
+                      <HiOutlineArrowRight className="transition-transform group-hover:translate-x-1" />
+                    </span>
                   </div>
-                </motion.div>
+                </motion.button>
               );
             })}
           </div>
         </section>
 
-        {/* ── INSPECTION AT THE MILL (own photos) ─────────────────────────────── */}
-        <section className="px-5 md:px-20 pb-20 max-w-[1440px] mx-auto">
-          <div className="text-left mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
-            <div>
-              <span className="text-xs font-semibold text-gold uppercase tracking-[0.2em] block mb-2">
-                On the Ground
-              </span>
-              <h2 className="font-headline-lg text-2xl md:text-4xl text-primary uppercase">
-                Inspected at the mill, before it ships
-              </h2>
-              <div className="w-12 h-[2px] bg-gold mt-3" />
+        {/* ── Inspection at the mill (own photos) ── */}
+        <section className="bg-bg-alt border-y border-outline-variant py-20 md:py-28">
+          <div className="px-6 md:px-20 max-w-[1440px] mx-auto">
+            <SectionHeading
+              eyebrow="On the ground"
+              title="Inspected at the mill, before it ships"
+              intro="We visit the mills we source from and check material in person, alongside independent third-party inspection."
+            />
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {INSPECTION_PHOTOS.map((photo, idx) => (
+                <motion.figure
+                  key={photo.caption}
+                  className="group"
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{ duration: 0.8, delay: idx * 0.1, ease: EASE }}
+                >
+                  <div className="relative h-[380px] md:h-[440px] overflow-hidden rounded-sm bg-surface-container shadow-[0_30px_60px_-30px_rgba(0,0,0,0.4)]">
+                    <img
+                      src={photo.src}
+                      alt={photo.alt}
+                      loading="lazy"
+                      className="w-full h-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-105"
+                    />
+                  </div>
+                  <figcaption className="mt-4 flex items-start gap-3">
+                    <span className="text-xs font-semibold text-gold tabular-nums pt-0.5">0{idx + 1}</span>
+                    <span className="text-sm text-on-surface-variant leading-relaxed">{photo.caption}</span>
+                  </figcaption>
+                </motion.figure>
+              ))}
             </div>
-            <p className="text-steel text-sm max-w-md leading-relaxed">
-              We visit the mills we source from and check material in person, alongside independent third-party inspection.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {INSPECTION_PHOTOS.map((photo, idx) => (
-              <motion.figure
-                key={photo.caption}
-                className="group"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.8, delay: idx * 0.1, ease: "easeOut" }}
-              >
-                <div className="relative h-[380px] md:h-[440px] overflow-hidden rounded-lg border border-outline-variant/35 shadow-xl bg-surface-container">
-                  <img
-                    src={photo.src}
-                    alt={photo.alt}
-                    loading="lazy"
-                    className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
-                  />
-                </div>
-                <figcaption className="mt-4 flex items-start gap-3">
-                  <span className="text-xs font-semibold text-gold tabular-nums pt-0.5">0{idx + 1}</span>
-                  <span className="text-sm text-on-surface-variant leading-relaxed">{photo.caption}</span>
-                </figcaption>
-              </motion.figure>
-            ))}
-          </div>
-        </section>
-
-        {/* Customized Orders Reach Us banner */}
-        <section className="bg-[#1c2c43] border-y border-[#ffd862]/10 py-16 px-5 text-center relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#ffd862]/5 to-transparent pointer-events-none" />
-          <div className="max-w-2xl mx-auto relative z-10">
-            <h3 className="font-display-lg text-lg sm:text-2xl md:text-3xl font-extrabold text-white uppercase tracking-widest mb-6">
-              Looking for customised orders?
-            </h3>
-            <button
-              onClick={handleReachUsClick}
-              className="bg-[#ffd862] text-[#131313] hover:bg-white hover:text-black transition-colors duration-300 font-display-lg text-xs md:text-sm font-bold uppercase tracking-widest px-8 py-3.5 shadow-xl cursor-pointer"
-            >
-              Reach Us
-            </button>
           </div>
         </section>
 
@@ -496,107 +655,11 @@ export default function Projects() {
             </div>
           </div>
         </section>
+
       </main>
 
-      {/* ── PROJECT DETAIL MODAL ──────────────────────────────────────────────── */}
       <AnimatePresence>
-        {selectedProject && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-md flex items-center justify-center p-4"
-            onClick={() => setSelectedProject(null)}
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.92, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.92, y: 20 }}
-              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              className="bg-[#12141a] border border-[#ffd862]/40 rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto relative text-ivory overflow-hidden"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Close Button */}
-              <button
-                onClick={() => setSelectedProject(null)}
-                className="absolute top-4 right-4 z-20 p-2 bg-black/60 text-ivory hover:text-[#ffd862] rounded-full backdrop-blur-md border border-white/20 transition-colors"
-                aria-label="Close detail modal"
-              >
-                <HiX className="text-xl" />
-              </button>
-
-              {/* Header Image */}
-              <div className="relative h-64 w-full">
-                <img
-                  src={selectedProject.src}
-                  alt={selectedProject.name}
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#12141a] via-[#12141a]/40 to-transparent" />
-                <div className="absolute bottom-4 left-6 right-6 flex items-end justify-between">
-                  <div>
-                    <span className="font-label-sm text-[10px] font-bold text-[#ffd862] uppercase tracking-widest bg-black/60 px-3 py-1 rounded border border-[#ffd862]/30">
-                      {selectedProject.sector}
-                    </span>
-                    <h3 className="text-2xl sm:text-3xl font-display uppercase font-bold text-white mt-2">
-                      {selectedProject.name}
-                    </h3>
-                  </div>
-                </div>
-              </div>
-
-              {/* Body Info */}
-              <div className="p-6 sm:p-8 space-y-6">
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 bg-white/5 border border-white/10 p-4 rounded-lg">
-                  <div className="flex flex-col">
-                    <span className="text-[10px] text-steel uppercase tracking-wider flex items-center gap-1 mb-1">
-                      <HiOutlineMapPin className="text-[#ffd862]" /> Location
-                    </span>
-                    <strong className="text-xs text-white">{selectedProject.location}</strong>
-                  </div>
-
-                  <div className="flex flex-col">
-                    <span className="text-[10px] text-steel uppercase tracking-wider flex items-center gap-1 mb-1">
-                      <HiOutlineCalendar className="text-[#ffd862]" /> Year
-                    </span>
-                    <strong className="text-xs text-white">{selectedProject.year}</strong>
-                  </div>
-
-                  <div className="flex flex-col col-span-2 sm:col-span-1">
-                    <span className="text-[10px] text-steel uppercase tracking-wider flex items-center gap-1 mb-1">
-                      <HiOutlineUserGroup className="text-[#ffd862]" /> Client / Subcontractor
-                    </span>
-                    <strong className="text-xs text-[#ffd862] font-bold">{selectedProject.subcontractor}</strong>
-                  </div>
-                </div>
-
-                <div className="border-l-2 border-[#ffd862] pl-4">
-                  <span className="text-[10px] text-steel uppercase tracking-wider flex items-center gap-1 mb-1">
-                    <HiOutlineCube className="text-[#ffd862]" /> Material Supplied
-                  </span>
-                  <p className="text-sm font-semibold text-white">{selectedProject.material}</p>
-                </div>
-
-                <div>
-                  <h4 className="text-xs font-bold text-[#ffd862] uppercase tracking-wider mb-2">
-                    Project Scope & Overview
-                  </h4>
-                  <p className="text-steel text-sm leading-relaxed mb-3">{selectedProject.description}</p>
-                  <p className="text-zinc-400 text-xs leading-relaxed italic">{selectedProject.details}</p>
-                </div>
-
-                <div className="pt-4 border-t border-white/10 flex justify-end">
-                  <button
-                    onClick={() => setSelectedProject(null)}
-                    className="bg-[#ffd862] text-[#131313] font-bold uppercase tracking-wider text-xs px-6 py-2.5 rounded hover:bg-white transition-colors"
-                  >
-                    Close Project Info
-                  </button>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
+        {selectedProject && <ProjectModal key={selectedProject.id} project={selectedProject} onClose={() => setSelectedProject(null)} />}
       </AnimatePresence>
     </div>
   );
