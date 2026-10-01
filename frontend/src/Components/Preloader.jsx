@@ -28,6 +28,11 @@ const BEAM_PARTS = [
   { faces: boxFaces([0, 70, 0], [60, 80, DEPTH]), delay: 0.44 },  // top flange
 ];
 
+// Maps flat text onto the top flange's upper face: text runs along the beam
+// (−z) with letter tops pointing to −x, centred on the face.
+const [stampX, stampY] = project(30, 80, DEPTH / 2);
+const STAMP_TRANSFORM = `matrix(${COS30} -0.5 ${COS30} 0.5 ${stampX} ${stampY})`;
+
 const CUBE = 12;
 const cubeFaces = boxFaces([0, 0, 0], [CUBE, CUBE, CUBE]);
 
@@ -92,7 +97,7 @@ export default function Preloader() {
           role="status"
           aria-label="Loading"
         >
-          <svg viewBox="-100 -120 170 240" className="w-36 md:w-44 h-auto overflow-visible" aria-hidden="true">
+          <svg viewBox="-100 -120 170 240" className="w-60 md:w-72 h-auto overflow-visible" aria-hidden="true">
             {/* Floor shadow */}
             <motion.polygon
               points={pts([[-4, 0, -4], [66, 0, -4], [66, 0, DEPTH + 6], [-4, 0, DEPTH + 6]])}
@@ -112,6 +117,25 @@ export default function Preloader() {
                 transition={{ duration: 0.55, delay: part.delay, ease: [0.34, 1.4, 0.64, 1] }}
               >
                 <Faces faces={part.faces} palette={GOLD} />
+
+                {/* Name stamped into the top flange, like a mill's rolled marking */}
+                {i === BEAM_PARTS.length - 1 && (
+                  <motion.g
+                    transform={STAMP_TRANSFORM}
+                    fill={GOLD.front}
+                    textAnchor="middle"
+                    initial={reduceMotion ? false : { opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.5, delay: part.delay + 0.35 }}
+                  >
+                    <text y="1" fontFamily="Fraunces, serif" fontWeight="600" fontSize="13" letterSpacing="1">
+                      METALED
+                    </text>
+                    <text y="11" fontFamily="Inter, sans-serif" fontWeight="600" fontSize="6.2" letterSpacing="2.6">
+                      TRADE FZCO
+                    </text>
+                  </motion.g>
+                )}
               </motion.g>
             ))}
 
