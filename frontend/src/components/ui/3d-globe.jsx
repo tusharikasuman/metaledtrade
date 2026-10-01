@@ -257,9 +257,14 @@ function Scene({ markers, config, onMarkerClick, onMarkerHover }) {
   const { camera } = useThree();
 
   useEffect(() => {
-    camera.position.set(0, 0, config.radius * 3.5);
+    // Optionally start with a given lat/lng facing the viewer.
+    if (config.focus) {
+      camera.position.copy(latLngToVector3(config.focus.lat, config.focus.lng, config.radius * 3.5));
+    } else {
+      camera.position.set(0, 0, config.radius * 3.5);
+    }
     camera.lookAt(0, 0, 0);
-  }, [camera, config.radius]);
+  }, [camera, config.radius, config.focus]);
 
   return (
     <>

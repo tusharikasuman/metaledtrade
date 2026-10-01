@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { Globe3D } from "../components/ui/3d-globe";
-import HeroVideoBackground from "../Components/HeroVideoBackground";
+import HeroVideoCrossfade from "../Components/HeroVideoCrossfade";
 import { HiX } from "react-icons/hi";
 import {
   HiOutlineCalendar,
@@ -14,7 +14,6 @@ import {
 } from "react-icons/hi2";
 
 // Local assets for project photos
-import heroImg from "../assets/projects/oman_animal_shed.jpeg";
 import neomImg from "../assets/projects/neom_hr_plates.jpg";
 import oxyImg from "../assets/projects/oman_oxy_pipes.jpg";
 import dhafraImg from "../assets/projects/al_dhafra_zam_coils.jpg";
@@ -230,12 +229,6 @@ const PARTNERS = [
 // Photos for a project: its `gallery` if provided, otherwise the card image.
 const projectPhotos = (project) => (project.gallery && project.gallery.length ? project.gallery : [project.src]);
 
-const STATS = [
-  { value: FEATURED_PROJECTS.length, label: "Featured projects" },
-  { value: new Set(FEATURED_PROJECTS.map((p) => p.country)).size, label: "Countries" },
-  { value: new Set(FEATURED_PROJECTS.map((p) => p.material)).size, label: "Materials supplied" },
-];
-
 function SectionHeading({ eyebrow, title, intro, center = false }) {
   return (
     <div className={`mb-10 md:mb-12 flex flex-col gap-4 ${center ? "items-center text-center" : "md:flex-row md:items-end md:justify-between"}`}>
@@ -302,7 +295,7 @@ function ProjectModal({ project, onClose }) {
             <motion.img
               key={photoIdx}
               src={photos[photoIdx]}
-              alt={`${project.name} — photo ${photoIdx + 1}`}
+              alt={`${project.name}, photo ${photoIdx + 1}`}
               className="absolute inset-0 w-full h-full object-cover"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -386,24 +379,11 @@ function ProjectModal({ project, onClose }) {
   );
 }
 
-// Hero clips, each with the label shown in the bottom bar while it plays.
-const HERO_CLIPS = [
-  {
-    video: "/videos/oman-animal-shed.mp4",
-    label: "Featured project",
-    title: "Oman Animal Shed Project",
-    detail: "Pre-Painted Galvanised Coils",
-    project: FEATURED_PROJECTS.find((p) => p.src === heroImg),
-  },
-  {
-    video: "/videos/solar-pv-flyover.mp4",
-    label: "Solar PV",
-    title: "Utility-scale solar projects",
-    detail: "Zinc Aluminium Magnesium Coated Steel Coils",
-    project: FEATURED_PROJECTS.find((p) => p.name === "Sudair Solar PV Plant"),
-  },
-];
-const HERO_VIDEOS = HERO_CLIPS.map((c) => c.video);
+const HERO_VIDEOS = ["/videos/oman-animal-shed.mp4", "/videos/solar-pv-flyover.mp4"];
+
+// Globe opens facing the Gulf (most of our projects are in and around Saudi Arabia)
+// and stays put; visitors can still drag to rotate.
+const GLOBE_CONFIG = { bumpScale: 3, autoRotateSpeed: 0, showAtmosphere: false, focus: { lat: 24, lng: 47 } };
 const HERO_LINES = [
   { text: "Steel for landmark", gold: false },
   { text: "projects", gold: true },
@@ -411,9 +391,7 @@ const HERO_LINES = [
 
 export default function Projects() {
   const [selectedProject, setSelectedProject] = useState(null);
-  const [heroClip, setHeroClip] = useState(0);
   const heroRef = useRef(null);
-  const clip = HERO_CLIPS[heroClip];
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
   const heroImgY = useTransform(scrollYProgress, [0, 1], ["0%", "16%"]);
   const heroCopyY = useTransform(scrollYProgress, [0, 1], ["0%", "35%"]);
@@ -437,13 +415,10 @@ export default function Projects() {
               animate={{ scale: 1.02, opacity: 1 }}
               transition={{ duration: 2.4, ease: EASE }}
             >
-              <HeroVideoBackground
+              <HeroVideoCrossfade
                 sources={HERO_VIDEOS}
-                fallbackSrc={heroPoster}
-                fallbackAlt="Aerial view of PPGI roofing on the Oman Animal Shed Project"
-                clipSeconds={8}
-                backdropClassName="bg-[#0b0b0c]"
-                onClipChange={setHeroClip}
+                poster={heroPoster}
+                posterAlt="Aerial view of PPGI roofing on the Oman Animal Shed Project"
               />
             </motion.div>
           </motion.div>
@@ -479,85 +454,17 @@ export default function Projects() {
                 animate={{ scaleX: 1 }}
                 transition={{ duration: 1, delay: 1.1, ease: EASE }}
               />
-              <motion.p
-                className="text-zinc-300 text-base md:text-lg leading-relaxed max-w-xl"
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 1.2, ease: EASE }}
-              >
-                Plates, coated coils and PPGI supplied to solar, energy, infrastructure and agricultural projects across Saudi Arabia, the UAE and Oman.
-              </motion.p>
             </div>
           </motion.div>
 
-          {/* Bottom bar: what the current clip shows (follows the video) + scroll cue */}
-          <motion.div
-            className="relative z-10 border-t border-white/15"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 1.5 }}
-          >
-            <div className="max-w-[1440px] mx-auto px-6 md:px-20 py-5 flex items-center justify-between gap-6">
-              <AnimatePresence mode="wait">
-                <motion.button
-                  key={heroClip}
-                  type="button"
-                  onClick={() => clip.project && setSelectedProject(clip.project)}
-                  className="group flex items-center gap-4 text-left"
-                  initial={{ opacity: 0, y: 6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -6 }}
-                  transition={{ duration: 0.4, ease: EASE }}
-                >
-                  <span className="text-[11px] font-semibold uppercase tracking-[0.22em]" style={{ color: DARK_GOLD }}>{clip.label}</span>
-                  <span className="hidden sm:block w-8 h-px bg-white/30" />
-                  <span className="text-sm text-white/85 group-hover:text-white transition-colors">
-                    {clip.title} <span className="text-white/50">· {clip.detail}</span>
-                  </span>
-                  <HiOutlineArrowRight className="text-white/70 transition-transform group-hover:translate-x-1" />
-                </motion.button>
-              </AnimatePresence>
-              <span className="hidden md:flex items-center gap-3 text-[10px] uppercase tracking-[0.35em] text-white/55" aria-hidden="true">
-                Scroll
-                <span className="relative block w-10 h-px bg-white/20 overflow-hidden">
-                  <motion.span
-                    className="absolute inset-y-0 left-0 w-1/2"
-                    style={{ background: DARK_GOLD }}
-                    animate={{ x: ["-100%", "200%"] }}
-                    transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-                  />
-                </span>
-              </span>
-            </div>
-          </motion.div>
-        </section>
-
-        {/* ── Stats strip ── */}
-        <section className="border-b border-outline-variant bg-bg-alt">
-          <div className="max-w-[1440px] mx-auto px-6 md:px-20 grid grid-cols-3 divide-x divide-outline-variant">
-            {STATS.map((s) => (
-              <div key={s.label} className="py-8 md:py-10 px-3 md:px-8 text-center">
-                <span className="block font-display text-3xl md:text-5xl font-semibold text-ivory tabular-nums">{s.value}</span>
-                <span className="block mt-2 text-[11px] md:text-xs uppercase tracking-[0.18em] text-steel">{s.label}</span>
-              </div>
-            ))}
-          </div>
         </section>
 
         {/* ── Globe ── */}
         <section className="py-20 md:py-24 relative overflow-hidden select-none">
-          <div className="max-w-[1440px] mx-auto px-6 md:px-20 relative z-10">
-            <SectionHeading
-              center
-              eyebrow="Where we supply"
-              title="Project map"
-              intro="Select a pin to see the project, the client and the material we supplied."
-            />
-          </div>
           <div style={{ width: "100%", maxWidth: "1050px", margin: "0 auto", position: "relative" }}>
             <Globe3D
               markers={FEATURED_PROJECTS}
-              config={{ bumpScale: 3, autoRotateSpeed: 0.35, showAtmosphere: false }}
+              config={GLOBE_CONFIG}
               onMarkerClick={(marker) => setSelectedProject(marker)}
               isModalOpen={!!selectedProject}
             />

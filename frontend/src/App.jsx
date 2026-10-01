@@ -3,9 +3,8 @@ import About from './Pages/About.jsx'
 import Home from './Pages/Home.jsx'
 import Products from './Pages/Products.jsx'
 import Contact from './Pages/Contact.jsx'
-import Careers from './Pages/Careers.jsx'
 import Projects from './Pages/Projects.jsx'
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './Components/Navbar.jsx'
 import Footer from './Components/Footer.jsx'
 import Preloader from './Components/Preloader.jsx'
@@ -28,7 +27,8 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/products" element={<Products />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/careers" element={<Careers />} />
+          {/* Careers page removed; send old links home */}
+          <Route path="/careers" element={<Navigate to="/" replace />} />
           <Route path="/projects" element={<Projects />} />
         </Routes>
       </main>

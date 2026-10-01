@@ -27,6 +27,19 @@ const STANDARDS = [
     { code: 'JIS', origin: 'Japanese' },
 ]
 
+const FINANCE_OPTIONS = [
+    {
+        title: 'Letters of Credit',
+        desc: 'Most of our trade is settled through Letters of Credit, giving both buyer and seller a secure, bank-backed payment structure.',
+        icon: 'account_balance',
+    },
+    {
+        title: 'Structured financing',
+        desc: 'Where an end user or buyer needs it, we arrange structured financing solutions tailored to the order and the project.',
+        icon: 'tune',
+    },
+]
+
 const INSPECTION_STEPS = [
     { title: 'Third-party laboratory testing', desc: 'Material is tested by independent third-party laboratories against the standard specified for your order.', icon: 'science' },
     { title: 'Registered third-party inspectors', desc: 'Registered third-party inspectors examine the material before it is released for shipment.', icon: 'fact_check' },
@@ -48,7 +61,7 @@ const WHY_US = [
 
 const COMPETENCIES = [
     { title: 'For Steel Producers', desc: 'We act as your dedicated bridge to global markets, offering cost-effective marketing and financial services that reliably secure new customers overseas.' },
-    { title: 'For Steel Buyers', desc: 'More than a supplier — a flexible, dependable sourcing partner ready to back you with the financial support your projects require.' },
+    { title: 'For Steel Buyers', desc: 'More than a supplier: a flexible, dependable sourcing partner ready to back you with the financial support your projects require.' },
     { title: 'Value Additions', desc: 'From careful handling and rigorous inspections to securing delivery and insurance, we provide a seamless, all-in-one platform for your sourcing needs.' },
 ]
 
@@ -242,8 +255,8 @@ function Profile() {
                     <FadeUp delay={0.1}>
                         <p className="text-steel leading-relaxed mb-5">
                             We work on both sides of the trade. For steel mills, we open doors to buyers in new markets.
-                            For buyers, we source the right grade from the right mill — in India, Vietnam, China or the
-                            GCC — and back the order with trade finance when your project needs it.
+                            For buyers, we source the right grade from the right mill in India, Vietnam, China or the
+                            GCC, and back the order with trade finance when your project needs it.
                         </p>
                         <p className="text-steel leading-relaxed">
                             Between the mill and your site, we manage the parts that make steel trading complex:
@@ -346,6 +359,40 @@ function Inspection() {
     )
 }
 
+function TradeFinance() {
+    return (
+        <section className="max-w-6xl mx-auto px-6 md:px-12 py-24 lg:py-32">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+                <FadeUp className="lg:col-span-5">
+                    <Eyebrow>Trade Finance</Eyebrow>
+                    <h2 className="font-display text-3xl md:text-5xl font-semibold text-ivory uppercase leading-[1.1] mb-6">
+                        How trade finance works with us
+                    </h2>
+                    <p className="text-steel leading-relaxed">
+                        We work with Letters of Credit and structured financing solutions, set up as required by the end
+                        user or buyer.
+                    </p>
+                </FadeUp>
+
+                <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    {FINANCE_OPTIONS.map((opt, i) => (
+                        <FadeUp key={opt.title} delay={i * 0.1} amount={0.2}>
+                            <div className="group relative h-full p-8 bg-bg-alt border border-outline-variant rounded-sm overflow-hidden transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_24px_50px_-20px_rgba(0,0,0,0.25)] hover:border-gold/40">
+                                <span className="absolute top-0 left-0 h-[2px] w-full bg-gold origin-left scale-x-0 transition-transform duration-500 group-hover:scale-x-100" />
+                                <div className="w-12 h-12 mb-8 flex items-center justify-center rounded-sm border border-gold/30 text-gold bg-gold/5 transition-colors duration-500 group-hover:bg-gold group-hover:text-white">
+                                    <span className="material-symbols-outlined text-2xl">{opt.icon}</span>
+                                </div>
+                                <h3 className="font-display text-xl font-semibold text-ivory uppercase leading-snug mb-3">{opt.title}</h3>
+                                <p className="text-sm text-steel leading-relaxed">{opt.desc}</p>
+                            </div>
+                        </FadeUp>
+                    ))}
+                </div>
+            </div>
+        </section>
+    )
+}
+
 function Journey() {
     return (
         <section className="relative bg-[#0e0e0e] text-white py-24 lg:py-32 overflow-hidden">
@@ -360,7 +407,7 @@ function Journey() {
                         <h2 className="font-display text-3xl md:text-5xl font-semibold uppercase leading-[1.1]">Our journey</h2>
                     </div>
                     <p className="max-w-sm text-sm text-zinc-400 leading-relaxed">
-                        Over a decade of steady growth — from regional deliveries in Dubai to large-volume mill partnerships worldwide.
+                        Over a decade of steady growth, from regional deliveries in Dubai to large-volume mill partnerships worldwide.
                     </p>
                 </FadeUp>
 
@@ -423,7 +470,7 @@ function Mission() {
                         delivered <span style={{ color: DARK_GOLD }}>on time, every time.</span>
                     </blockquote>
                     <p className="mt-8 text-sm text-zinc-400 max-w-xl mx-auto leading-relaxed">
-                        Every decision we make is guided by this mission — from the mills we source from to the logistics partners we choose.
+                        Every decision we make is guided by this mission, from the mills we source from to the logistics partners we choose.
                     </p>
                 </FadeUp>
 
@@ -529,7 +576,7 @@ function Leadership() {
                     <FadeUp>
                         <Eyebrow>Leadership</Eyebrow>
                         <p className="font-display text-2xl md:text-4xl text-ivory leading-[1.25] mb-8">
-                            &ldquo;Sourcing steel isn't just about buying a commodity —
+                            &ldquo;Sourcing steel isn't just about buying a commodity;
                             <span className="text-gold"> it's about cutting through complexity.</span>&rdquo;
                         </p>
                     </FadeUp>
@@ -542,7 +589,7 @@ function Leadership() {
                         </p>
                         <p className="text-steel leading-relaxed">
                             Add to that the logistical challenges of land and sea transport, complex payment structures, and
-                            shifting global dynamics—especially when dealing with large volumes. That's exactly where we come
+                            shifting global dynamics, especially when dealing with large volumes. That's exactly where we come
                             in. At Metaled Trade FZCO, we take pride in cutting through that complexity. Whether you need
                             strategic sourcing, flexible financing, or a seamless supply chain, we are here to provide our
                             customers with reliable, efficient solutions for every project.
@@ -584,6 +631,7 @@ const About = () => {
             <Hero />
             <Profile />
             <Inspection />
+            <TradeFinance />
             <Journey />
             <Mission />
             <ValueCreation />

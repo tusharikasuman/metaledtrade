@@ -1,7 +1,28 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { FaLinkedin, FaYoutube, FaWeixin, FaFacebook } from "react-icons/fa";
+import { FaLinkedin, FaYoutube, FaWeixin, FaFacebook, FaWhatsapp } from "react-icons/fa";
 import { PinContainer } from "./ui/3d-pin";
+
+const LINK = "block text-[#c4c7c7] hover:text-white transition-colors duration-200";
+
+const PLATFORM_LINKS = [
+  { label: "Home", to: "/" },
+  { label: "About Us", to: "/about" },
+  { label: "Products", to: "/products" },
+  { label: "Projects", to: "/projects" },
+  { label: "Contact", to: "/contact" },
+];
+
+// Materials shown in our projects, linked to the matching product on /products.
+const productLink = (category, product) =>
+  `/products?category=${category}&product=${encodeURIComponent(product)}`;
+const MATERIAL_LINKS = [
+  { label: "Hot Rolled Plates", to: productLink("flat", "Hot Rolled Steel Plates / Sheets") },
+  { label: "High Tensile & Offshore Plates", to: productLink("flat", "Steel Plates: High Tensile & Offshore Quality") },
+  { label: "Galvanised & Coated Coils", to: productLink("flat", "Galvanized Coils") },
+  { label: "Structural Beams", to: productLink("long", "Hot Rolled I-Beams") },
+  { label: "Seamless Steel Pipes", to: productLink("long", "Seamless Steel Pipes") },
+];
 
 export default function Footer() {
   const handleScrollToTop = () => {
@@ -12,7 +33,6 @@ export default function Footer() {
     <footer className="w-full bg-[#0a0a0c] text-[#e4e2e1] pt-24 pb-8 border-t border-[#444748]/20 relative overflow-hidden mt-20">
       {/* Molten Steel Ambient Glows */}
       <div className="absolute -bottom-32 -left-32 w-[400px] h-[400px] bg-[#ffd862]/3 rounded-full blur-[100px] pointer-events-none" />
-      <div className="absolute -top-32 -right-32 w-[400px] h-[400px] bg-amber-600/3 rounded-full blur-[100px] pointer-events-none" />
 
       {/* Main Container */}
       <div className="px-5 md:px-20 max-w-[1440px] mx-auto relative z-10">
@@ -45,7 +65,7 @@ export default function Footer() {
                 METALED <span className="text-[#ffd862]">TRADE FZCO</span>
               </h2>
               <p className="font-body-md text-sm text-[#c4c7c7] leading-relaxed mb-6 font-light">
-                Delivering structural steel, heavy plates, and high-performance alloys — certified to ASTM, EN and BS standards with full mill test certificates — to landmark infrastructure developments across the Middle East, Southeast Asia and Africa.
+                Delivering structural steel, heavy plates, and high-performance alloys, certified to ASTM, EN and BS standards with full mill test certificates, to landmark infrastructure developments across the Middle East, Southeast Asia and Africa.
               </p>
             </div>
 
@@ -59,7 +79,9 @@ export default function Footer() {
                 <FaLinkedin className="text-base" />
               </a>
               <a
-                href="#facebook"
+                href="https://www.facebook.com/steel4all/"
+                target="_blank"
+                rel="noopener noreferrer"
                 aria-label="Metaled Trade FZCO on Facebook"
                 className="w-10 h-10 rounded-full bg-[#141517] border border-[#2a2c35]/40 flex items-center justify-center text-[#8e9192] hover:text-[#ffd862] hover:border-[#ffd862]/30 hover:scale-110 transition-all duration-300"
               >
@@ -89,19 +111,12 @@ export default function Footer() {
               <h4 className="font-label-md text-xs text-[#ffd862] uppercase tracking-[0.2em] mb-6">
                 Platform
               </h4>
-              <ul className="flex flex-col gap-4 text-sm font-light text-[#c4c7c7]">
-                <li>
-                  <Link to="/" className="hover:text-white transition-colors hover:pl-1 transition-all duration-200 block">Home</Link>
-                </li>
-                <li>
-                  <Link to="/about" className="hover:text-white transition-colors hover:pl-1 transition-all duration-200 block">About Us</Link>
-                </li>
-                <li>
-                  <Link to="/products" className="hover:text-white transition-colors hover:pl-1 transition-all duration-200 block">Products</Link>
-                </li>
-                <li>
-                  <Link to="/projects" className="hover:text-white transition-colors hover:pl-1 transition-all duration-200 block">Projects</Link>
-                </li>
+              <ul className="flex flex-col gap-4 text-sm font-light">
+                {PLATFORM_LINKS.map(({ label, to }) => (
+                  <li key={label}>
+                    <Link to={to} className={LINK}>{label}</Link>
+                  </li>
+                ))}
               </ul>
             </div>
 
@@ -110,19 +125,12 @@ export default function Footer() {
               <h4 className="font-label-md text-xs text-[#ffd862] uppercase tracking-[0.2em] mb-6">
                 Materials
               </h4>
-              <ul className="flex flex-col gap-4 text-sm font-light text-[#c4c7c7]">
-                <li>
-                  <Link to="/products#structural" className="hover:text-white transition-colors hover:pl-1 transition-all duration-200 block">Structural Beams</Link>
-                </li>
-                <li>
-                  <Link to="/products#heavy-plates" className="hover:text-white transition-colors hover:pl-1 transition-all duration-200 block">Corrosion Plates</Link>
-                </li>
-                <li>
-                  <Link to="/products#pipes" className="hover:text-white transition-colors hover:pl-1 transition-all duration-200 block">Line Pipes</Link>
-                </li>
-                <li>
-                  <Link to="/products#marine" className="hover:text-white transition-colors hover:pl-1 transition-all duration-200 block">Marine Alloys</Link>
-                </li>
+              <ul className="flex flex-col gap-4 text-sm font-light">
+                {MATERIAL_LINKS.map(({ label, to }) => (
+                  <li key={label}>
+                    <Link to={to} className={LINK}>{label}</Link>
+                  </li>
+                ))}
               </ul>
             </div>
 
@@ -133,13 +141,13 @@ export default function Footer() {
                   Direct Desk
                 </h4>
 
-                <PinContainer title="Dubai Headquarters" href="https://maps.google.com/?q=Jumeirah+Lakes+Towers,+DMCC+Free+Zone,+Dubai">
+                <PinContainer title="Dubai Headquarters" href="https://maps.google.com/?q=Gemplex+Building+3,+DMCC,+Jumeirah+Lakes+Towers,+Dubai">
                   <div className="flex flex-col bg-[#141517]/80 border border-[#2a2c35]/40 rounded-xl p-6 shadow-lg backdrop-blur-sm transition-colors duration-300 hover:border-[#ffd862]/20 w-full max-w-[280px]">
                     <span className="font-body-md text-[10px] text-[#8e9192] uppercase tracking-widest mb-3 block">Headquarters</span>
                     <p className="font-body-md text-sm text-white font-light leading-relaxed">
+                      Office #403, Building 3, Gemplex<br />
                       Jumeirah Lakes Towers,<br />
-                      DMCC Free Zone,<br />
-                      Dubai, UAE
+                      DMCC Free Zone, Dubai, UAE
                     </p>
                     <span className="text-[10px] font-mono text-[#ffd862] mt-4 flex items-center gap-1">
                       <span className="material-symbols-outlined text-xs">location_on</span>
@@ -154,13 +162,24 @@ export default function Footer() {
                 <a href="mailto:indronil@metaledtrade.com" className="font-mono text-sm text-[#ffd862] hover:text-white transition-colors block mb-4">
                   indronil@metaledtrade.com
                 </a>
-                <p className="font-body-md text-xs text-[#8e9192] uppercase tracking-wider mb-2">PHONE</p>
-                <a href="tel:+97144412782" className="font-mono text-sm text-[#ffd862] hover:text-white transition-colors block">
-                  +971 4 441 2782
-                </a>
-                <a href="tel:+971542178600" className="font-mono text-sm text-[#ffd862] hover:text-white transition-colors block">
-                  +971 54 217 8600
-                </a>
+                <dl className="flex flex-col gap-2 text-sm">
+                  <div className="flex items-baseline gap-3">
+                    <dt className="w-16 shrink-0 text-xs text-[#8e9192] uppercase tracking-wider">Office</dt>
+                    <dd><a href="tel:+97144412782" className="font-mono text-[#ffd862] hover:text-white transition-colors">+971 4 441 2782</a></dd>
+                  </div>
+                  <div className="flex items-baseline gap-3">
+                    <dt className="w-16 shrink-0 text-xs text-[#8e9192] uppercase tracking-wider">Mobile</dt>
+                    <dd><a href="tel:+971542178600" className="font-mono text-[#ffd862] hover:text-white transition-colors">+971 54 217 8600</a></dd>
+                  </div>
+                  <div className="flex items-baseline gap-3">
+                    <dt className="w-16 shrink-0 text-xs text-[#8e9192] uppercase tracking-wider">WhatsApp</dt>
+                    <dd>
+                      <a href="https://wa.me/971542178600" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 font-mono text-[#ffd862] hover:text-white transition-colors">
+                        <FaWhatsapp className="text-sm" /> +971 54 217 8600
+                      </a>
+                    </dd>
+                  </div>
+                </dl>
               </div>
             </div>
           </div>

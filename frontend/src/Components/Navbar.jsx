@@ -22,7 +22,6 @@ const NAV_LINKS = [
     ],
   },
   { label: "Projects", href: "/projects" },
-  { label: "Careers", href: "/careers" },
 ];
 
 export default function Navbar() {

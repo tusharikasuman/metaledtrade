@@ -528,9 +528,12 @@ export default function Products() {
     setActiveProduct(currentProducts[next]);
   };
 
+  // ?product=<name> (e.g. from footer links) opens that product; otherwise the first one.
+  const productParam = searchParams.get("product");
   useEffect(() => {
-    setActiveProduct(activeCategory === "long" ? longProducts[0] : flatProducts[0]);
-  }, [activeCategory]);
+    const list = activeCategory === "long" ? longProducts : flatProducts;
+    setActiveProduct(list.find((p) => p.product === productParam) || list[0]);
+  }, [activeCategory, productParam]);
 
   // Arriving via Products → Flat / Long in the navbar (?category=flat|long)
   // shows only that category; plain /products shows both with tabs.
