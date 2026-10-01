@@ -75,9 +75,8 @@ export default function Home() {
               transition={{ duration: 0.8, delay: 0.75, ease: "easeOut" }}
             >
               <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-semibold uppercase leading-[1.12] mb-6 text-white">
-                Inspected steel from
-                <br /> trusted mills, <span className="text-[#ffd862]">delivered</span>
-                <br /> <span className="text-[#ffd862]">on time</span>
+                Gateway to reliable
+                <br /> <span className="text-[#ffd862]">steel sourcing</span>
               </h1>
               <div className="w-16 h-0.5 bg-[#ffd862] my-6" />
 
@@ -186,7 +185,7 @@ export default function Home() {
         {/* CEO Message */}
         <section id="ceo-message" className="grid grid-cols-1 md:grid-cols-[0.8fr_1.2fr] gap-10 md:gap-14 items-center max-w-6xl mx-auto px-6 md:px-12 pb-24">
           <div className="rounded-lg overflow-hidden h-[300px] md:h-[500px]">
-            <img src={ceoPhoto} alt="CEO Mr Indronil Mukherjee" className="w-full h-full object-cover object-[center_50%] md:object-[center_66%]" />
+            <img src={ceoPhoto} alt="Indronil Mukherjee, CEO of Metaled Trade FZCO" className="w-full h-full object-cover object-[center_50%] md:object-[center_66%]" />
           </div>
 
           <motion.div
@@ -199,17 +198,20 @@ export default function Home() {
             <span className="font-display text-5xl text-gold-soft leading-none block mb-2">&ldquo;</span>
             <span className="inline-block text-[0.72rem] font-semibold tracking-[0.22em] uppercase text-gold mb-4">Message from CEO</span>
 
-            <div className="space-y-4">
-              <p className="text-steel text-sm md:text-base leading-relaxed">
-                From the day we started, our goal has always been simple: to understand exactly what the market needs, to keep innovating, and to empower our people to do their very best work. We know that sourcing steel isn't just about buying a commodity. With its wide range of technical specifications, varied origins, and unique mill capabilities, it can be an incredibly complex process.
-              </p>
-              <p className="text-steel text-sm md:text-base leading-relaxed">
-                Add to that the logistical challenges of land and sea transport, complex payment structures, and shifting global dynamics—especially when dealing with large volumes. That's exactly where we come in. At Metaled Trade FZCO, we take pride in cutting through that complexity. Whether you need strategic sourcing, flexible financing, or a seamless supply chain, we are here to provide our customers with reliable, efficient solutions for every project.
-              </p>
-            </div>
+            <p className="font-display text-xl md:text-2xl text-ivory leading-snug">
+              We know that sourcing steel isn't just about buying a commodity. At Metaled Trade FZCO, we take pride in cutting through that complexity.
+            </p>
+
+            <Link
+              to="/about#leadership"
+              className="mt-6 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-gold hover:gap-3 transition-all"
+            >
+              Read the full message
+              <span aria-hidden="true">&rarr;</span>
+            </Link>
 
             <footer className="mt-8 pt-6 border-t border-white/10 flex flex-col gap-1">
-              <strong className="text-ivory text-sm tracking-wide">Mr Indronil Mukherjee</strong>
+              <strong className="text-ivory text-sm tracking-wide">Indronil Mukherjee</strong>
               <span className="text-gold text-xs uppercase tracking-wider">CEO, Metaled Trade FZCO</span>
             </footer>
           </motion.div>

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import steelBeams from '../assets/about/steel_beams.jpg'
 import dubaiFacade from '../assets/about/building_detail.jpg'
@@ -20,7 +20,6 @@ const HERO_FACTS = [
     { value: '2012', label: 'Founded in Dubai' },
     { value: '3', label: 'Core regions served' },
     { value: '4', label: 'Sourcing hubs' },
-    { value: 'Mill → Site', label: 'End-to-end trade' },
 ]
 
 const SOURCING_HUBS = ['India', 'Vietnam', 'China', 'GCC']
@@ -112,24 +111,20 @@ function Hero() {
                 style={{ background: 'linear-gradient(180deg, rgba(9, 10, 12, 0.45) 0%, rgba(9, 10, 12, 0.92) 100%)' }}
             />
 
-            {/* Left-aligned copy, vertically centred — mirrors the Home hero */}
-            <div className="relative z-20 flex-1 flex items-center w-full px-6 md:px-12 pt-28 pb-10">
+            {/* Centred copy */}
+            <div className="relative z-20 flex-1 flex items-center justify-center w-full px-6 md:px-12 pt-28 pb-10 text-center">
                 <motion.div
                     initial={{ opacity: 0, y: 28 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.2, ease: 'easeOut' }}
-                    className="w-full max-w-[620px]"
+                    className="w-full max-w-3xl mx-auto"
                 >
                     <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-semibold uppercase leading-[1.12] text-white">
-                        Gateway to reliable
+                        Your partner from
                         <br />
-                        <span style={{ color: DARK_GOLD }}>steel sourcing</span>
+                        <span style={{ color: DARK_GOLD }}>mill to site</span>
                     </h1>
-                    <div className="w-16 h-0.5 my-6" style={{ background: DARK_GOLD }} />
-                    <p className="text-zinc-300 leading-relaxed max-w-[480px]">
-                        We oversee the entire lifecycle of steel trade — from the production mill to final delivery —
-                        for the fastest-growing markets of the Middle East, South East Asia and Africa.
-                    </p>
+                    <div className="w-16 h-0.5 mt-6 mx-auto" style={{ background: DARK_GOLD }} />
                 </motion.div>
             </div>
 
@@ -139,11 +134,11 @@ function Hero() {
                 transition={{ duration: 1, delay: 0.7 }}
                 className="relative z-20 w-full px-6 md:px-12 pb-8 md:pb-10"
             >
-                <div className="max-w-4xl grid grid-cols-2 md:grid-cols-4 border-t border-white/15">
+                <div className="max-w-4xl mx-auto grid grid-cols-3 border-t border-white/15 text-center">
                     {HERO_FACTS.map((fact, i) => (
                         <div
                             key={fact.label}
-                            className={`pt-5 pb-1 pr-4 ${i > 0 ? 'md:pl-6 md:border-l md:border-white/15' : ''} ${i % 2 === 1 ? 'pl-4 border-l border-white/15 md:pl-6' : ''}`}
+                            className={`pt-5 pb-1 px-2 md:px-4 ${i > 0 ? 'border-l border-white/15' : ''}`}
                         >
                             <span className="block font-display text-2xl md:text-3xl font-semibold text-white">{fact.value}</span>
                             <span className="block mt-1 text-[0.68rem] uppercase tracking-[0.2em] text-zinc-400">{fact.label}</span>
@@ -175,7 +170,7 @@ function Profile() {
                     <FadeUp>
                         <Eyebrow>Corporate Profile</Eyebrow>
                         <h2 className="font-display text-3xl md:text-5xl font-semibold text-ivory uppercase leading-[1.1] mb-8">
-                            From the mill<br />to your site
+                            Working both sides<br />of the trade
                         </h2>
                     </FadeUp>
                     <FadeUp delay={0.1}>
@@ -451,14 +446,14 @@ function WhyUs() {
 
 function Leadership() {
     return (
-        <section className="max-w-6xl mx-auto px-6 md:px-12 py-24 lg:py-32">
+        <section id="leadership" className="scroll-mt-24 max-w-6xl mx-auto px-6 md:px-12 py-24 lg:py-32">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-14 lg:gap-20 items-center">
                 <FadeUp className="lg:col-span-5 relative">
                     <div className="absolute -bottom-4 -right-4 w-full h-full border border-gold/40 rounded-sm hidden sm:block" />
                     <div className="group relative rounded-sm overflow-hidden aspect-[4/5] shadow-[0_30px_60px_-20px_rgba(0,0,0,0.35)]">
                         <img
                             src={ceoPhoto}
-                            alt="Mr Indronil Mukherjee, Chief Executive Officer"
+                            alt="Indronil Mukherjee, Chief Executive Officer"
                             className="w-full h-full object-cover object-[center_66%] transition-transform duration-1000 ease-out group-hover:scale-105"
                         />
                     </div>
@@ -474,20 +469,23 @@ function Leadership() {
                     </FadeUp>
                     <FadeUp delay={0.1} className="space-y-4">
                         <p className="text-steel leading-relaxed">
-                            From the day we started, our goal has been simple: to understand exactly what the market needs,
-                            to keep innovating, and to empower our people to do their very best work. With its wide range of
-                            technical specifications, varied origins and unique mill capabilities, steel sourcing can be an
-                            incredibly complex process.
+                            From the day we started, our goal has always been simple: to understand exactly what the market
+                            needs, to keep innovating, and to empower our people to do their very best work. We know that
+                            sourcing steel isn't just about buying a commodity. With its wide range of technical
+                            specifications, varied origins, and unique mill capabilities, it can be an incredibly complex process.
                         </p>
                         <p className="text-steel leading-relaxed">
-                            That's where we come in. Whether you need strategic sourcing, flexible financing or a seamless
-                            supply chain, we are here to provide reliable, efficient solutions for every project.
+                            Add to that the logistical challenges of land and sea transport, complex payment structures, and
+                            shifting global dynamics—especially when dealing with large volumes. That's exactly where we come
+                            in. At Metaled Trade FZCO, we take pride in cutting through that complexity. Whether you need
+                            strategic sourcing, flexible financing, or a seamless supply chain, we are here to provide our
+                            customers with reliable, efficient solutions for every project.
                         </p>
                     </FadeUp>
                     <FadeUp delay={0.2} className="mt-10 pt-6 border-t border-outline-variant flex items-center gap-4">
                         <span className="h-10 w-px bg-gold" />
                         <div>
-                            <span className="block font-display text-lg font-semibold text-ivory">Mr Indronil Mukherjee</span>
+                            <span className="block font-display text-lg font-semibold text-ivory">Indronil Mukherjee</span>
                             <span className="block text-xs uppercase tracking-[0.2em] text-gold mt-0.5">Chief Executive Officer</span>
                         </div>
                     </FadeUp>
@@ -528,9 +526,20 @@ function ClosingCta() {
 // ── Main About Page ──────────────────────────────────────────────────────────
 
 const About = () => {
+    const { hash } = useLocation()
+
     useEffect(() => {
         document.documentElement.classList.add('light')
     }, [])
+
+    // Support deep links like /about#leadership (e.g. Home's "Read more").
+    useEffect(() => {
+        if (!hash) return
+        const t = setTimeout(() => {
+            document.getElementById(hash.slice(1))?.scrollIntoView({ behavior: 'smooth' })
+        }, 100)
+        return () => clearTimeout(t)
+    }, [hash])
 
     return (
         <div className="bg-bg text-on-surface font-body min-h-screen antialiased">
