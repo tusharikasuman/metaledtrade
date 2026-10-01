@@ -9,7 +9,8 @@ import CountUpStat from "../Components/CountUpStat";
 import { isPreloaderDone, onPreloaderDone } from "../lib/preloaderStatus";
 import bgImg from "../assets/homebg.png";
 import bgImgLight from "../assets/homebg_light.png";
-import ceoPhoto from "../assets/ceo_photo.jpeg";
+import ceoPhoto from "../assets/ceo.jpeg";
+import stockyardImg from "../assets/about/steel_beams.jpg";
 
 const HERO_VIDEOS = [
   "/videos/metaled-hero-reel-1.mp4",
@@ -17,12 +18,14 @@ const HERO_VIDEOS = [
 ];
 
 const ABOUT_SUMMARY =
-  "Based in the heart of Dubai, Metaled Trade FZCO oversees every step of the steel supply chain, from production at the mill right down to final delivery, with a strong focus on markets across the Middle East, South East Asia, and Africa. Our strong network of seasoned industry partners and our own expert team work tirelessly to bring you world-class steel precisely when and where you need it.";
+  "Based in Dubai, Metaled Trade FZCO manages every step of the steel supply chain, from production at the mill to final delivery, for customers across the Middle East, South East Asia and Africa. Our in-house team, backed by a network of seasoned industry partners, gets you the right steel precisely when and where you need it.";
+
+const FOUNDED = 2012;
 
 const STATS = [
   { value: "10M+", label: "Tons Shipped" },
   { value: "30+", label: "Countries Served" },
-  { value: "15+", label: "Years of Excellence" },
+  { value: String(new Date().getFullYear() - FOUNDED), label: `Years in Trade, Since ${FOUNDED}` },
 ];
 
 const VIDEO_ID = "DSWfdyWgg_A";
@@ -71,16 +74,28 @@ export default function Home() {
               animate={revealed ? { opacity: 1, y: 0 } : undefined}
               transition={{ duration: 0.8, delay: 0.75, ease: "easeOut" }}
             >
-              <span className="inline-block text-[0.72rem] font-semibold tracking-[0.22em] uppercase text-[#ffd862] mb-3">Established Excellence</span>
               <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-semibold uppercase leading-[1.12] mb-6 text-white">
-                A Legacy of Strength in
-                <br /> the Heart of Dubai
+                Inspected steel from
+                <br /> trusted mills, <span className="text-[#ffd862]">delivered</span>
+                <br /> <span className="text-[#ffd862]">on time</span>
               </h1>
               <div className="w-16 h-0.5 bg-[#ffd862] my-6" />
-              <p className="text-zinc-300 leading-relaxed max-w-[480px]">
-                Structural steel, plates and alloys, sourced from trusted mills
-                and delivered on time across the Middle East, Asia and Africa.
-              </p>
+
+              <div className="mt-8 flex flex-wrap gap-3">
+                <Link
+                  to="/contact"
+                  className="inline-flex items-center gap-2 px-7 py-3.5 bg-[#ffd862] text-[#131313] text-xs font-bold uppercase tracking-[0.18em] transition-all duration-300 hover:bg-white hover:gap-3"
+                >
+                  Request a Quote
+                  <span aria-hidden="true">&rarr;</span>
+                </Link>
+                <Link
+                  to="/products"
+                  className="inline-flex items-center px-7 py-3.5 border border-white/40 text-white text-xs font-bold uppercase tracking-[0.18em] transition-colors duration-300 hover:border-[#ffd862] hover:text-[#ffd862]"
+                >
+                  Explore Products
+                </Link>
+              </div>
             </motion.div>
           </div>
         </section>
@@ -109,7 +124,7 @@ export default function Home() {
               ))}
             </div>
             <p className="text-xs uppercase tracking-wider text-steel mb-8">
-              Key projects delivered across the Middle East, India and Africa
+              Key projects delivered across Saudi Arabia, the UAE and Oman
             </p>
 
             <Link
@@ -128,7 +143,7 @@ export default function Home() {
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
           >
-            <img src={bgImg} alt="Metaled Trade FZCO steel production facility" className="w-full h-full object-cover grayscale-[0.2] contrast-[1.05]" />
+            <img src={stockyardImg} alt="Structural steel sections stacked in a stockyard" className="w-full h-full object-cover grayscale-[0.2] contrast-[1.05]" />
             <span className="absolute right-4 bottom-4 inline-flex items-center gap-2 bg-gold text-bg text-xs font-bold tracking-wider px-4 py-2 rounded">
               <HiOutlineGlobeAlt className="text-lg" />
               Global Supply Network
@@ -171,7 +186,7 @@ export default function Home() {
         {/* CEO Message */}
         <section id="ceo-message" className="grid grid-cols-1 md:grid-cols-[0.8fr_1.2fr] gap-10 md:gap-14 items-center max-w-6xl mx-auto px-6 md:px-12 pb-24">
           <div className="rounded-lg overflow-hidden h-[300px] md:h-[500px]">
-            <img src={ceoPhoto} alt="CEO Mr Indronil Mukherjee" className="w-full h-full object-cover" />
+            <img src={ceoPhoto} alt="CEO Mr Indronil Mukherjee" className="w-full h-full object-cover object-[center_50%] md:object-[center_66%]" />
           </div>
 
           <motion.div

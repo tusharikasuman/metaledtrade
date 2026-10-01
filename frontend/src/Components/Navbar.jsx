@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { HiMenu, HiX, HiChevronDown } from "react-icons/hi";
 import { motion, AnimatePresence } from "framer-motion";
 import logo from "../assets/metaled-logo.png";
+import logoLight from "../assets/metaled-logo-light.png";
+
+// Pages whose top section is a dark video/photo hero — the unscrolled,
+// transparent navbar sits on dark there, so it needs the light logo.
+const DARK_HERO_PATHS = ["/", "/about", "/projects"];
 
 const NAV_LINKS = [
   { label: "Home", href: "/" },
@@ -23,6 +28,8 @@ const NAV_LINKS = [
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const { pathname } = useLocation();
+  const onDarkHero = !isScrolled && DARK_HERO_PATHS.includes(pathname);
 
   useEffect(() => {
     document.documentElement.classList.add("light");
@@ -50,7 +57,7 @@ export default function Navbar() {
         <div className="max-w-[1400px] mx-auto px-5 md:px-10 flex items-center justify-between gap-6">
           <Link to="/" className="shrink-0 flex items-center">
             <img
-              src={logo}
+              src={onDarkHero ? logoLight : logo}
               alt="Metaled Trade FZCO"
               className="h-8 md:h-10 w-auto object-contain"
             />

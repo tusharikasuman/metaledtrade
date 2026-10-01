@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import steelBeams from '../assets/about/steel_beams.jpg'
 import dubaiFacade from '../assets/about/building_detail.jpg'
-import ceoPhoto from '../assets/ceo_photo.jpeg'
+import ceoPhoto from '../assets/ceo.jpeg'
 import HeroVideoBackground from '../Components/HeroVideoBackground'
 
 const HERO_VIDEOS = [
@@ -25,6 +25,19 @@ const HERO_FACTS = [
 
 const SOURCING_HUBS = ['India', 'Vietnam', 'China', 'GCC']
 const MARKETS = ['Middle East', 'South East Asia', 'Africa']
+
+const STANDARDS = [
+    { code: 'EN', origin: 'European' },
+    { code: 'BS', origin: 'British' },
+    { code: 'ASTM', origin: 'American' },
+    { code: 'JIS', origin: 'Japanese' },
+]
+
+const INSPECTION_STEPS = [
+    { title: 'Third-party laboratory testing', desc: 'Material is tested by independent third-party laboratories against the standard specified for your order.', icon: 'science' },
+    { title: 'Registered third-party inspectors', desc: 'Registered third-party inspectors examine the material before it is released for shipment.', icon: 'fact_check' },
+    { title: 'TPI final report', desc: 'Third Party Inspection (TPI) final reports are submitted to the end user, as required.', icon: 'description' },
+]
 
 const MISSION_PILLARS = [
     { title: 'Industry Standards', desc: 'Every shipment verified against recognized international specifications before it ships.', icon: 'verified' },
@@ -88,40 +101,45 @@ function Eyebrow({ children, dark = false, center = false }) {
 
 function Hero() {
     return (
-        <section className="relative min-h-[92vh] pt-32 md:pt-36 flex flex-col justify-end overflow-hidden">
+        <section className="relative min-h-screen flex flex-col overflow-hidden">
             <HeroVideoBackground
                 sources={HERO_VIDEOS}
                 fallbackSrc={steelBeams}
                 fallbackAlt="Metaled Trade FZCO steel operations"
             />
-            <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/85 via-black/55 to-black/10" />
-            <div className="absolute inset-x-0 bottom-0 h-1/2 z-10 bg-gradient-to-t from-black/90 to-transparent" />
+            <div
+                className="absolute inset-0 z-10 pointer-events-none"
+                style={{ background: 'linear-gradient(180deg, rgba(9, 10, 12, 0.45) 0%, rgba(9, 10, 12, 0.92) 100%)' }}
+            />
 
-            <div className="relative z-20 w-full max-w-6xl mx-auto px-6 md:px-12 pb-10 md:pb-14">
+            {/* Left-aligned copy, vertically centred — mirrors the Home hero */}
+            <div className="relative z-20 flex-1 flex items-center w-full px-6 md:px-12 pt-28 pb-10">
                 <motion.div
-                    initial={{ opacity: 0, y: 32 }}
+                    initial={{ opacity: 0, y: 28 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 1, delay: 0.2, ease: EASE }}
-                    className="max-w-3xl"
+                    transition={{ duration: 0.8, delay: 0.2, ease: 'easeOut' }}
+                    className="w-full max-w-[620px]"
                 >
-                    <Eyebrow dark>About Us · Dubai, UAE</Eyebrow>
-                    <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold text-white uppercase leading-[1.05] tracking-tight">
+                    <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-semibold uppercase leading-[1.12] text-white">
                         Gateway to reliable
                         <br />
                         <span style={{ color: DARK_GOLD }}>steel sourcing</span>
                     </h1>
-                    <p className="mt-7 max-w-xl text-base md:text-lg text-zinc-300 leading-relaxed">
+                    <div className="w-16 h-0.5 my-6" style={{ background: DARK_GOLD }} />
+                    <p className="text-zinc-300 leading-relaxed max-w-[480px]">
                         We oversee the entire lifecycle of steel trade — from the production mill to final delivery —
                         for the fastest-growing markets of the Middle East, South East Asia and Africa.
                     </p>
                 </motion.div>
+            </div>
 
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 1, delay: 0.7 }}
-                    className="mt-12 md:mt-16 grid grid-cols-2 md:grid-cols-4 border-t border-white/15"
-                >
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 1, delay: 0.7 }}
+                className="relative z-20 w-full px-6 md:px-12 pb-8 md:pb-10"
+            >
+                <div className="max-w-4xl grid grid-cols-2 md:grid-cols-4 border-t border-white/15">
                     {HERO_FACTS.map((fact, i) => (
                         <div
                             key={fact.label}
@@ -131,8 +149,8 @@ function Hero() {
                             <span className="block mt-1 text-[0.68rem] uppercase tracking-[0.2em] text-zinc-400">{fact.label}</span>
                         </div>
                     ))}
-                </motion.div>
-            </div>
+                </div>
+            </motion.div>
         </section>
     )
 }
@@ -157,18 +175,19 @@ function Profile() {
                     <FadeUp>
                         <Eyebrow>Corporate Profile</Eyebrow>
                         <h2 className="font-display text-3xl md:text-5xl font-semibold text-ivory uppercase leading-[1.1] mb-8">
-                            More than a<br />steel trading company
+                            From the mill<br />to your site
                         </h2>
                     </FadeUp>
                     <FadeUp delay={0.1}>
-                        <p className="text-lg text-on-surface-variant leading-relaxed mb-5">
-                            Based in the heart of Dubai, Metaled Trade FZCO is a team of dedicated specialists overseeing the
-                            entire lifecycle of steel trading — from the moment it leaves the mill to final delivery.
+                        <p className="text-steel leading-relaxed mb-5">
+                            We work on both sides of the trade. For steel mills, we open doors to buyers in new markets.
+                            For buyers, we source the right grade from the right mill — in India, Vietnam, China or the
+                            GCC — and back the order with trade finance when your project needs it.
                         </p>
                         <p className="text-steel leading-relaxed">
-                            We source from the world's most reputable steel-producing hubs and leverage a strong network of
-                            experienced partners to create tailored financial and distribution solutions that actually work
-                            for your projects.
+                            Between the mill and your site, we manage the parts that make steel trading complex:
+                            technical specifications, independent inspection, shipping by land and sea, insurance and
+                            payment structures.
                         </p>
                     </FadeUp>
 
@@ -186,6 +205,76 @@ function Profile() {
                             <div className="flex flex-wrap gap-2">
                                 {MARKETS.map((m) => (
                                     <span key={m} className="px-3 py-1.5 text-xs font-medium rounded-full bg-gold/10 text-gold border border-gold/25">{m}</span>
+                                ))}
+                            </div>
+                        </div>
+                        <div className="sm:col-span-2">
+                            <span className="block text-[0.68rem] uppercase tracking-[0.22em] text-steel mb-3">Standards followed</span>
+                            <div className="flex flex-wrap gap-2">
+                                {STANDARDS.map((st) => (
+                                    <span key={st.code} className="px-3 py-1.5 text-xs font-medium border border-outline-variant rounded-full text-ivory bg-bg-alt">
+                                        {st.code} <span className="text-steel font-normal">· {st.origin}</span>
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                    </FadeUp>
+                </div>
+            </div>
+        </section>
+    )
+}
+
+function Inspection() {
+    return (
+        <section className="bg-bg-alt border-y border-outline-variant py-24 lg:py-32">
+            <div className="max-w-6xl mx-auto px-6 md:px-12">
+                <FadeUp className="max-w-2xl mb-14 md:mb-16">
+                    <Eyebrow>Quality Assurance</Eyebrow>
+                    <h2 className="font-display text-3xl md:text-5xl font-semibold text-ivory uppercase leading-[1.1] mb-6">How we inspect material</h2>
+                    <p className="text-steel leading-relaxed">
+                        Every order is checked independently. We use both third-party laboratories and registered
+                        third-party inspectors, and follow all major international standards.
+                    </p>
+                </FadeUp>
+
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+                    <div className="lg:col-span-7 relative">
+                        <span className="absolute left-6 top-6 bottom-6 w-px bg-outline-variant" aria-hidden="true" />
+                        {INSPECTION_STEPS.map((step, i) => (
+                            <FadeUp key={step.title} delay={i * 0.12} className="relative">
+                                <div className={`group flex gap-6 ${i < INSPECTION_STEPS.length - 1 ? 'pb-10' : ''}`}>
+                                    <span className="relative z-10 shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-bg-alt border border-gold/40 text-gold transition-colors duration-500 group-hover:bg-gold group-hover:text-white">
+                                        <span className="material-symbols-outlined text-xl">{step.icon}</span>
+                                    </span>
+                                    <div className="pt-2">
+                                        <span className="block text-[0.68rem] uppercase tracking-[0.22em] text-gold mb-1">Step 0{i + 1}</span>
+                                        <h3 className="font-display text-xl md:text-2xl font-semibold text-ivory uppercase mb-2">{step.title}</h3>
+                                        <p className="text-steel leading-relaxed">{step.desc}</p>
+                                    </div>
+                                </div>
+                            </FadeUp>
+                        ))}
+                    </div>
+
+                    <FadeUp delay={0.2} className="lg:col-span-5">
+                        <div className="relative overflow-hidden rounded-sm bg-[#0e0e0e] p-8 md:p-10">
+                            <div
+                                className="absolute -right-20 -top-20 w-64 h-64 rounded-full blur-3xl opacity-15 pointer-events-none"
+                                style={{ background: DARK_GOLD }}
+                            />
+                            <span className="relative block text-[0.68rem] uppercase tracking-[0.25em] mb-2" style={{ color: DARK_GOLD }}>
+                                International standards
+                            </span>
+                            <p className="relative font-display text-xl md:text-2xl text-white leading-snug mb-8">
+                                All international standards followed
+                            </p>
+                            <div className="relative grid grid-cols-2 gap-px bg-white/10">
+                                {STANDARDS.map((st) => (
+                                    <div key={st.code} className="bg-[#0e0e0e] p-5 md:p-6">
+                                        <span className="block font-display text-3xl md:text-4xl font-semibold" style={{ color: DARK_GOLD }}>{st.code}</span>
+                                        <span className="block mt-1 text-[0.68rem] uppercase tracking-[0.2em] text-zinc-400">{st.origin}</span>
+                                    </div>
                                 ))}
                             </div>
                         </div>
@@ -370,7 +459,7 @@ function Leadership() {
                         <img
                             src={ceoPhoto}
                             alt="Mr Indronil Mukherjee, Chief Executive Officer"
-                            className="w-full h-full object-cover object-top transition-transform duration-1000 ease-out group-hover:scale-105"
+                            className="w-full h-full object-cover object-[center_66%] transition-transform duration-1000 ease-out group-hover:scale-105"
                         />
                     </div>
                 </FadeUp>
@@ -447,6 +536,7 @@ const About = () => {
         <div className="bg-bg text-on-surface font-body min-h-screen antialiased">
             <Hero />
             <Profile />
+            <Inspection />
             <Journey />
             <Mission />
             <ValueCreation />
