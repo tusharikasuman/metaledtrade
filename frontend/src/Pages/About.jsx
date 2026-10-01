@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion'
 import steelBeams from '../assets/about/steel_beams.jpg'
 import dubaiFacade from '../assets/about/building_detail.jpg'
 import ceoPhoto from '../assets/ceo.jpeg'
 import HeroVideoBackground from '../Components/HeroVideoBackground'
+import { isPreloaderDone, onPreloaderDone } from '../lib/preloaderStatus'
 
 const HERO_VIDEOS = [
     '/videos/metaled-hero-reel-1.mp4',
@@ -15,12 +16,6 @@ const EASE = [0.16, 1, 0.3, 1]
 
 // Gold tuned for dark bands — the theme's light-mode gold (#b8860b) is too muddy on black.
 const DARK_GOLD = '#e9c349'
-
-const HERO_FACTS = [
-    { value: '2012', label: 'Founded in Dubai' },
-    { value: '3', label: 'Core regions served' },
-    { value: '4', label: 'Sourcing hubs' },
-]
 
 const SOURCING_HUBS = ['India', 'Vietnam', 'China', 'GCC']
 const MARKETS = ['Middle East', 'South East Asia', 'Africa']
@@ -98,53 +93,124 @@ function Eyebrow({ children, dark = false, center = false }) {
 
 // ── Sections ─────────────────────────────────────────────────────────────────
 
-function Hero() {
+const HERO_LINES = [
+    { text: 'Your partner from', gold: false },
+    { text: 'mill to site', gold: true },
+]
+
+// Thin gold L-bracket for one corner of the hero frame.
+function CornerMark({ className }) {
     return (
-        <section className="relative min-h-screen flex flex-col overflow-hidden">
-            <HeroVideoBackground
-                sources={HERO_VIDEOS}
-                fallbackSrc={steelBeams}
-                fallbackAlt="Metaled Trade FZCO steel operations"
-            />
-            <div
-                className="absolute inset-0 z-10 pointer-events-none"
-                style={{ background: 'linear-gradient(180deg, rgba(9, 10, 12, 0.45) 0%, rgba(9, 10, 12, 0.92) 100%)' }}
-            />
+        <span className={`absolute w-6 h-6 md:w-8 md:h-8 pointer-events-none ${className}`} aria-hidden="true">
+            <span className="absolute inset-x-0 top-0 h-px" style={{ background: DARK_GOLD }} />
+            <span className="absolute inset-y-0 left-0 w-px" style={{ background: DARK_GOLD }} />
+        </span>
+    )
+}
 
-            {/* Centred copy */}
-            <div className="relative z-20 flex-1 flex items-center justify-center w-full px-6 md:px-12 pt-28 pb-10 text-center">
-                <motion.div
-                    initial={{ opacity: 0, y: 28 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: 0.2, ease: 'easeOut' }}
-                    className="w-full max-w-3xl mx-auto"
-                >
-                    <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-semibold uppercase leading-[1.12] text-white">
-                        Your partner from
-                        <br />
-                        <span style={{ color: DARK_GOLD }}>mill to site</span>
-                    </h1>
-                    <div className="w-16 h-0.5 mt-6 mx-auto" style={{ background: DARK_GOLD }} />
-                </motion.div>
-            </div>
+function Hero() {
+    const sectionRef = useRef(null)
+    const reduceMotion = useReducedMotion()
+    // Hold the entrance until the preloader has lifted, same as Home.
+    const [revealed, setRevealed] = useState(isPreloaderDone())
+    useEffect(() => onPreloaderDone(() => setRevealed(true)), [])
 
+    const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start start', 'end start'] })
+    const videoY = useTransform(scrollYProgress, [0, 1], ['0%', '18%'])
+    const copyY = useTransform(scrollYProgress, [0, 1], ['0%', '45%'])
+    const copyOpacity = useTransform(scrollYProgress, [0, 0.55], [1, 0])
+
+    const play = revealed || reduceMotion
+
+    return (
+        <section ref={sectionRef} className="relative h-screen min-h-[600px] bg-[#0b0b0c] p-3 pt-24 md:p-5 md:pt-28 overflow-hidden">
+            {/* Framed video panel — opens from a smaller inset on load */}
             <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 1, delay: 0.7 }}
-                className="relative z-20 w-full px-6 md:px-12 pb-8 md:pb-10"
+                className="relative w-full h-full overflow-hidden rounded-sm"
+                initial={reduceMotion ? false : { clipPath: 'inset(14% 10% 14% 10%)' }}
+                animate={play ? { clipPath: 'inset(0% 0% 0% 0%)' } : undefined}
+                transition={{ duration: 1.5, ease: EASE }}
             >
-                <div className="max-w-4xl mx-auto grid grid-cols-3 border-t border-white/15 text-center">
-                    {HERO_FACTS.map((fact, i) => (
-                        <div
-                            key={fact.label}
-                            className={`pt-5 pb-1 px-2 md:px-4 ${i > 0 ? 'border-l border-white/15' : ''}`}
-                        >
-                            <span className="block font-display text-2xl md:text-3xl font-semibold text-white">{fact.value}</span>
-                            <span className="block mt-1 text-[0.68rem] uppercase tracking-[0.2em] text-zinc-400">{fact.label}</span>
-                        </div>
-                    ))}
-                </div>
+                <motion.div
+                    className="absolute inset-0"
+                    style={reduceMotion ? undefined : { y: videoY }}
+                    initial={reduceMotion ? false : { scale: 1.18 }}
+                    animate={play ? { scale: 1.05 } : undefined}
+                    transition={{ duration: 2.2, ease: EASE }}
+                >
+                    <HeroVideoBackground
+                        sources={HERO_VIDEOS}
+                        fallbackSrc={steelBeams}
+                        fallbackAlt="Metaled Trade FZCO steel operations"
+                    />
+                </motion.div>
+
+                {/* Vignette + base shade for legibility */}
+                <div
+                    className="absolute inset-0 pointer-events-none"
+                    style={{ background: 'radial-gradient(ellipse at center, rgba(9,10,12,0.35) 0%, rgba(9,10,12,0.78) 75%), linear-gradient(180deg, rgba(9,10,12,0.25) 0%, rgba(9,10,12,0.7) 100%)' }}
+                />
+
+                <motion.div
+                    className="absolute inset-0"
+                    initial={reduceMotion ? false : { opacity: 0 }}
+                    animate={play ? { opacity: 1 } : undefined}
+                    transition={{ duration: 0.8, delay: 1.1 }}
+                >
+                    <CornerMark className="top-5 left-5 md:top-8 md:left-8" />
+                    <CornerMark className="top-5 right-5 md:top-8 md:right-8 rotate-90" />
+                    <CornerMark className="bottom-5 right-5 md:bottom-8 md:right-8 rotate-180" />
+                    <CornerMark className="bottom-5 left-5 md:bottom-8 md:left-8 -rotate-90" />
+                </motion.div>
+
+                {/* Headline — each line slides up from behind a mask */}
+                <motion.div
+                    className="relative z-10 h-full flex flex-col items-center justify-center px-6 text-center"
+                    style={reduceMotion ? undefined : { y: copyY, opacity: copyOpacity }}
+                >
+                    <h1 className="font-display font-semibold uppercase text-white leading-[1.02] tracking-[-0.01em] text-[2.6rem] sm:text-6xl md:text-7xl lg:text-[6.5rem]">
+                        {HERO_LINES.map((line, i) => (
+                            <span key={line.text} className="block overflow-hidden pb-[0.08em]">
+                                <motion.span
+                                    className="block"
+                                    style={line.gold ? { color: DARK_GOLD } : undefined}
+                                    initial={reduceMotion ? false : { y: '110%' }}
+                                    animate={play ? { y: '0%' } : undefined}
+                                    transition={{ duration: 1.1, delay: 0.55 + i * 0.14, ease: EASE }}
+                                >
+                                    {line.text}
+                                </motion.span>
+                            </span>
+                        ))}
+                    </h1>
+
+                    <motion.span
+                        className="block h-px w-24 md:w-32 mt-8 origin-center"
+                        style={{ background: `linear-gradient(90deg, transparent, ${DARK_GOLD}, transparent)` }}
+                        initial={reduceMotion ? false : { scaleX: 0 }}
+                        animate={play ? { scaleX: 1 } : undefined}
+                        transition={{ duration: 1, delay: 1.2, ease: EASE }}
+                    />
+                </motion.div>
+
+                {/* Scroll cue */}
+                <motion.div
+                    className="absolute bottom-6 md:bottom-9 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-3"
+                    initial={reduceMotion ? false : { opacity: 0 }}
+                    animate={play ? { opacity: 1 } : undefined}
+                    transition={{ duration: 0.8, delay: 1.6 }}
+                    aria-hidden="true"
+                >
+                    <span className="text-[0.6rem] uppercase tracking-[0.35em] text-white/60">Scroll</span>
+                    <span className="relative block w-px h-10 bg-white/20 overflow-hidden">
+                        <motion.span
+                            className="absolute left-0 top-0 w-px h-1/2"
+                            style={{ background: DARK_GOLD }}
+                            animate={reduceMotion ? undefined : { y: ['-100%', '200%'] }}
+                            transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
+                        />
+                    </span>
+                </motion.div>
             </motion.div>
         </section>
     )
