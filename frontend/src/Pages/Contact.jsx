@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { WorldMap } from "../components/ui/world-map";
+import HoneypotField from "../Components/HoneypotField";
+import { submitForm } from "../lib/api";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -15,7 +17,23 @@ const itemVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
 };
 
-const INITIAL_FORM = { name: "", email: "", company: "", message: "" };
+const INITIAL_FORM = { name: "", email: "", company: "", message: "", website: "" };
+
+// maxLength mirrors the backend limits, so visitors can't type more than the server accepts.
+const FIELDS = [
+  { id: "name", label: "Full Name", type: "text", autoComplete: "name", maxLength: 100 },
+  { id: "email", label: "Email Address", type: "email", autoComplete: "email", maxLength: 254 },
+  { id: "company", label: "Company", type: "text", autoComplete: "organization", maxLength: 150, optional: true },
+  { id: "message", label: "Your Message", multiline: true, maxLength: 5000 },
+];
+
+const fieldBase =
+  "w-full bg-transparent border-b py-3 text-ivory text-sm focus:outline-none transition-colors peer placeholder-transparent";
+const fieldOk = "border-surface-variant focus:border-ivory";
+const fieldError = "border-red-500/70 focus:border-red-500";
+// The label floats up while the field is focused or has text in it.
+const labelClass =
+  "absolute left-0 top-3 text-steel text-sm uppercase tracking-wider transition-all pointer-events-none peer-focus:-top-4 peer-focus:text-[10px] peer-focus:text-ivory peer-not-placeholder-shown:-top-4 peer-not-placeholder-shown:text-[10px]";
 
 export default function Contact() {
   const [form, setForm] = useState(INITIAL_FORM);
@@ -33,7 +51,7 @@ export default function Contact() {
     const e = {};
     if (!form.name.trim() || form.name.trim().length < 2)
       e.name = "Please enter your full name.";
-    if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
+    if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim()))
       e.email = "Please enter a valid email address.";
     if (!form.message.trim() || form.message.trim().length < 10)
       e.message = "Message must be at least 10 characters.";
@@ -42,6 +60,8 @@ export default function Contact() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (status === "loading") return; // ignore double-clicks
+
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
@@ -51,36 +71,17 @@ export default function Contact() {
     setStatus("loading");
     setErrors({});
 
-    try {
-      const res = await fetch("http://localhost:5000/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
+    const result = await submitForm("/api/contact", form);
 
-      const data = await res.json();
-
-      if (res.ok && data.success) {
-        setStatus("success");
-        setForm(INITIAL_FORM);
-      } else {
-        // Server returned validation errors
-        if (data.errors) setErrors(data.errors);
-        setServerMessage(data.message || "Something went wrong. Please try again.");
-        setStatus("error");
-      }
-    } catch {
-      setServerMessage("Could not connect to the server. Please try again later.");
+    if (result.ok) {
+      setStatus("success");
+      setForm(INITIAL_FORM);
+    } else {
+      setErrors(result.errors);
+      setServerMessage(result.message);
       setStatus("error");
     }
   };
-
-  const inputBase =
-    "w-full bg-transparent border-b border-[#353535] py-3 text-[#e4e2e1] text-sm focus:outline-none transition-colors peer placeholder-transparent";
-  const inputFocus = "focus:border-[#e4e2e1]";
-  const inputError = "border-red-500/70 focus:border-red-400";
-  const labelBase =
-    "absolute left-0 top-3 text-[#8e9192] text-sm transition-all peer-focus:-top-4 peer-focus:text-[10px] peer-valid:-top-4 peer-valid:text-[10px] peer-valid:text-[#8e9192] uppercase tracking-wider";
 
   return (
     <div className="min-h-screen bg-bg text-ivory font-body flex flex-col relative overflow-hidden">
@@ -150,97 +151,83 @@ export default function Contact() {
               
               <h3 className="font-display text-2xl font-medium mb-10 text-ivory">Send a Message</h3>
 
-              <form className="space-y-8 relative z-10">
-                {/* Name */}
-                <div className="relative group">
-                  <input 
-                    type="text" 
-                    id="name"
-                    required
-                    className="w-full bg-transparent border-b border-surface-variant py-3 text-ivory text-sm focus:outline-none focus:border-ivory transition-colors peer placeholder-transparent"
-                    placeholder="Full Name"
-                  />
-                  <label 
-                    htmlFor="name" 
-                    className="absolute left-0 top-3 text-steel text-sm transition-all peer-focus:-top-4 peer-focus:text-[10px] peer-focus:text-ivory peer-valid:-top-4 peer-valid:text-[10px] peer-valid:text-steel uppercase tracking-wider"
+              <AnimatePresence mode="wait">
+                {status === "success" ? (
+                  <motion.div
+                    key="success"
+                    role="status"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="relative z-10"
                   >
-                    Full Name
-                  </label>
-                </div>
-
-                {/* Email */}
-                <div className="relative group">
-                  <input 
-                    type="email" 
-                    id="email"
-                    required
-                    className="w-full bg-transparent border-b border-surface-variant py-3 text-ivory text-sm focus:outline-none focus:border-ivory transition-colors peer placeholder-transparent"
-                    placeholder="Email Address"
-                  />
-                  <label 
-                    htmlFor="email" 
-                    className="absolute left-0 top-3 text-steel text-sm transition-all peer-focus:-top-4 peer-focus:text-[10px] peer-focus:text-ivory peer-valid:-top-4 peer-valid:text-[10px] peer-valid:text-steel uppercase tracking-wider"
+                    <p className="font-display text-xl text-ivory mb-3">Thank you — your message is on its way.</p>
+                    <p className="text-steel text-sm leading-relaxed mb-8">
+                      We've sent a confirmation to your inbox. Our team will get back to you within 1–2 business days.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => setStatus("idle")}
+                      className="text-xs font-bold uppercase tracking-widest text-ivory border-b border-ivory/40 pb-1 hover:border-ivory transition-colors"
+                    >
+                      Send another message
+                    </button>
+                  </motion.div>
+                ) : (
+                  <motion.form
+                    key="form"
+                    onSubmit={handleSubmit}
+                    noValidate
+                    exit={{ opacity: 0 }}
+                    className="space-y-8 relative z-10"
                   >
-                    Email Address
-                  </label>
-                </div>
+                    <HoneypotField value={form.website} onChange={handleChange} />
 
-                    {/* Company (optional) */}
-                    <div className="relative">
-                      <input
-                        type="text"
-                        id="company"
-                        value={form.company}
-                        onChange={handleChange}
-                        className={`${inputBase} ${inputFocus}`}
-                        placeholder="Company Name"
-                        autoComplete="organization"
-                      />
-                      <label htmlFor="company" className={`${labelBase} peer-focus:text-[#e4e2e1]`}>
-                        Company <span className="normal-case text-[#444748]">(optional)</span>
-                      </label>
-                    </div>
-                {/* Company */}
-                <div className="relative group">
-                  <input 
-                    type="text" 
-                    id="company"
-                    required
-                    className="w-full bg-transparent border-b border-surface-variant py-3 text-ivory text-sm focus:outline-none focus:border-ivory transition-colors peer placeholder-transparent"
-                    placeholder="Company Name"
-                  />
-                  <label 
-                    htmlFor="company" 
-                    className="absolute left-0 top-3 text-steel text-sm transition-all peer-focus:-top-4 peer-focus:text-[10px] peer-focus:text-ivory peer-valid:-top-4 peer-valid:text-[10px] peer-valid:text-steel uppercase tracking-wider"
-                  >
-                    Company Name
-                  </label>
-                </div>
+                    {FIELDS.map((field) => {
+                      const Tag = field.multiline ? "textarea" : "input";
+                      const error = errors[field.id];
+                      return (
+                        <div key={field.id} className="relative">
+                          <Tag
+                            id={field.id}
+                            {...(field.multiline ? { rows: 4 } : { type: field.type })}
+                            value={form[field.id]}
+                            onChange={handleChange}
+                            placeholder={field.label}
+                            autoComplete={field.autoComplete}
+                            maxLength={field.maxLength}
+                            aria-invalid={Boolean(error)}
+                            aria-describedby={error ? `${field.id}-error` : undefined}
+                            className={`${fieldBase} ${field.multiline ? "resize-none" : ""} ${error ? fieldError : fieldOk}`}
+                          />
+                          <label htmlFor={field.id} className={labelClass}>
+                            {field.label}
+                            {field.optional && <span className="normal-case text-steel/60"> (optional)</span>}
+                          </label>
+                          {error && (
+                            <p id={`${field.id}-error`} className="mt-2 text-xs text-red-500">
+                              {error}
+                            </p>
+                          )}
+                        </div>
+                      );
+                    })}
 
-                {/* Message */}
-                <div className="relative group">
-                  <textarea 
-                    id="message"
-                    required
-                    rows="4"
-                    className="w-full bg-transparent border-b border-surface-variant py-3 text-ivory text-sm focus:outline-none focus:border-ivory transition-colors peer placeholder-transparent resize-none"
-                    placeholder="Your Message"
-                  ></textarea>
-                  <label 
-                    htmlFor="message" 
-                    className="absolute left-0 top-3 text-steel text-sm transition-all peer-focus:-top-4 peer-focus:text-[10px] peer-focus:text-ivory peer-valid:-top-4 peer-valid:text-[10px] peer-valid:text-steel uppercase tracking-wider"
-                  >
-                    Your Message
-                  </label>
-                </div>
+                    {status === "error" && serverMessage && (
+                      <p role="alert" className="text-sm text-red-500">
+                        {serverMessage}
+                      </p>
+                    )}
 
-                <button 
-                  type="submit"
-                  className="w-full mt-6 bg-ivory text-bg py-4 text-xs font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-colors duration-300"
-                >
-                  Submit Inquiry
-                </button>
-              </form>
+                    <button
+                      type="submit"
+                      disabled={status === "loading"}
+                      className="w-full mt-6 bg-ivory text-bg py-4 text-xs font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-colors duration-300 disabled:opacity-60 disabled:cursor-wait"
+                    >
+                      {status === "loading" ? "Sending…" : "Submit Inquiry"}
+                    </button>
+                  </motion.form>
+                )}
+              </AnimatePresence>
             </div>
           </motion.div>
 
