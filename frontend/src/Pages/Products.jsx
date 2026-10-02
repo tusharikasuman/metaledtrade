@@ -4,6 +4,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import bgImg from "../assets/homebg.png";
 import productImages from "../data/productImages.json";
 import { longProducts, flatProducts } from "../data/productsData";
+import HoneypotField from "../Components/HoneypotField";
+import { submitForm } from "../lib/api";
 
 // Load all product images from the Flat/Long asset folders.
 const flatImageModules = import.meta.glob("../assets/Flat/*", {
@@ -269,6 +271,19 @@ function CustomerReviews() {
 }
 
 // ── Quote Request Modal ──────────────────────────────────────────────────────
+const QUOTE_UNITS = ["MT", "KG", "Pieces", "Coils"];
+
+const labelClass = "text-[11px] font-semibold tracking-[0.14em] uppercase text-steel";
+
+function FieldError({ id, error }) {
+  if (!error) return null;
+  return (
+    <p id={id} className="text-xs text-red-500">
+      {error}
+    </p>
+  );
+}
+
 function QuoteModal({ product, onClose }) {
   const [form, setForm] = useState({
     name: "",
@@ -279,17 +294,48 @@ function QuoteModal({ product, onClose }) {
     unit: "MT",
     grade: "",
     message: "",
+    website: "",
   });
-  const [submitted, setSubmitted] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [status, setStatus] = useState("idle"); // idle | loading | success | error
+  const [serverMessage, setServerMessage] = useState("");
 
   const handleChange = (e) => {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitted(true);
+    if (status === "loading") return; // ignore double-clicks
+
+    setStatus("loading");
+    setErrors({});
+
+    const result = await submitForm("/api/quote", { ...form, product: product.product });
+
+    if (result.ok) {
+      setStatus("success");
+    } else {
+      setErrors(result.errors);
+      setServerMessage(result.message);
+      setStatus("error");
+    }
   };
+
+  // Props shared by every input: value binding, error styling and screen-reader links.
+  const fieldProps = (name, extraClass = "") => ({
+    id: `quote-${name}`,
+    name,
+    value: form[name],
+    onChange: handleChange,
+    className: `${extraClass} bg-bg-alt border ${
+      errors[name] ? "border-red-500/70" : "border-outline-variant/40"
+    } text-primary placeholder:text-steel/50 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-gold transition-colors`,
+    "aria-invalid": Boolean(errors[name]),
+    "aria-describedby": errors[name] ? `quote-${name}-error` : undefined,
+  });
 
   return (
     <AnimatePresence>
@@ -319,7 +365,7 @@ function QuoteModal({ product, onClose }) {
             <HiX className="text-xl" />
           </button>
 
-          {!submitted ? (
+          {status !== "success" ? (
             <div className="p-8">
               {/* Modal Header */}
               <div className="mb-8">
@@ -334,132 +380,92 @@ function QuoteModal({ product, onClose }) {
                 </p>
               </div>
 
-              <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+              <form onSubmit={handleSubmit} className="flex flex-col gap-5 relative">
+                <HoneypotField value={form.website} onChange={handleChange} />
+
                 {/* Name + Company */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[11px] font-semibold tracking-[0.14em] uppercase text-steel">
-                      Full Name *
-                    </label>
-                    <input
-                      required
-                      name="name"
-                      value={form.name}
-                      onChange={handleChange}
-                      placeholder="John Doe"
-                      className="bg-bg-alt border border-outline-variant/40 text-primary placeholder:text-steel/50 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-gold transition-colors"
-                    />
+                    <label htmlFor="quote-name" className={labelClass}>Full Name *</label>
+                    <input required maxLength={100} autoComplete="name" placeholder="John Doe" {...fieldProps("name")} />
+                    <FieldError id="quote-name-error" error={errors.name} />
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[11px] font-semibold tracking-[0.14em] uppercase text-steel">
-                      Company
-                    </label>
-                    <input
-                      name="company"
-                      value={form.company}
-                      onChange={handleChange}
-                      placeholder="Your Company"
-                      className="bg-bg-alt border border-outline-variant/40 text-primary placeholder:text-steel/50 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-gold transition-colors"
-                    />
+                    <label htmlFor="quote-company" className={labelClass}>Company</label>
+                    <input maxLength={150} autoComplete="organization" placeholder="Your Company" {...fieldProps("company")} />
+                    <FieldError id="quote-company-error" error={errors.company} />
                   </div>
                 </div>
 
                 {/* Email + Phone */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[11px] font-semibold tracking-[0.14em] uppercase text-steel">
-                      Email *
-                    </label>
-                    <input
-                      required
-                      type="email"
-                      name="email"
-                      value={form.email}
-                      onChange={handleChange}
-                      placeholder="you@company.com"
-                      className="bg-bg-alt border border-outline-variant/40 text-primary placeholder:text-steel/50 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-gold transition-colors"
-                    />
+                    <label htmlFor="quote-email" className={labelClass}>Email *</label>
+                    <input required type="email" maxLength={254} autoComplete="email" placeholder="you@company.com" {...fieldProps("email")} />
+                    <FieldError id="quote-email-error" error={errors.email} />
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[11px] font-semibold tracking-[0.14em] uppercase text-steel">
-                      Phone
-                    </label>
-                    <input
-                      type="tel"
-                      name="phone"
-                      value={form.phone}
-                      onChange={handleChange}
-                      placeholder="+971 50 000 0000"
-                      className="bg-bg-alt border border-outline-variant/40 text-primary placeholder:text-steel/50 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-gold transition-colors"
-                    />
+                    <label htmlFor="quote-phone" className={labelClass}>Phone</label>
+                    <input type="tel" maxLength={30} autoComplete="tel" placeholder="+971 50 000 0000" {...fieldProps("phone")} />
+                    <FieldError id="quote-phone-error" error={errors.phone} />
                   </div>
                 </div>
 
                 {/* Quantity + Unit */}
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-[11px] font-semibold tracking-[0.14em] uppercase text-steel">
-                    Quantity Required *
-                  </label>
+                  <label htmlFor="quote-quantity" className={labelClass}>Quantity Required *</label>
                   <div className="flex gap-2">
                     <input
                       required
                       type="number"
-                      name="quantity"
-                      value={form.quantity}
-                      onChange={handleChange}
+                      min="0"
+                      step="any"
+                      inputMode="decimal"
                       placeholder="e.g. 500"
-                      className="flex-1 bg-bg-alt border border-outline-variant/40 text-primary placeholder:text-steel/50 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-gold transition-colors"
+                      {...fieldProps("quantity", "flex-1 min-w-0")}
                     />
-                    <select
-                      name="unit"
-                      value={form.unit}
-                      onChange={handleChange}
-                      className="bg-bg-alt border border-outline-variant/40 text-primary rounded-lg px-3 py-3 text-sm focus:outline-none focus:border-gold transition-colors"
-                    >
-                      <option value="MT">MT</option>
-                      <option value="KG">KG</option>
-                      <option value="Pieces">Pieces</option>
-                      <option value="Coils">Coils</option>
+                    <select aria-label="Unit" {...fieldProps("unit")}>
+                      {QUOTE_UNITS.map((unit) => (
+                        <option key={unit} value={unit}>{unit}</option>
+                      ))}
                     </select>
                   </div>
+                  <FieldError id="quote-quantity-error" error={errors.quantity || errors.unit} />
                 </div>
 
                 {/* Grade/Spec */}
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-[11px] font-semibold tracking-[0.14em] uppercase text-steel">
-                    Grade / Specification
-                  </label>
-                  <input
-                    name="grade"
-                    value={form.grade}
-                    onChange={handleChange}
-                    placeholder="e.g. IS 2062 E250, ASTM A36"
-                    className="bg-bg-alt border border-outline-variant/40 text-primary placeholder:text-steel/50 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-gold transition-colors"
-                  />
+                  <label htmlFor="quote-grade" className={labelClass}>Grade / Specification</label>
+                  <input maxLength={200} placeholder="e.g. IS 2062 E250, ASTM A36" {...fieldProps("grade")} />
+                  <FieldError id="quote-grade-error" error={errors.grade} />
                 </div>
 
                 {/* Message */}
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-[11px] font-semibold tracking-[0.14em] uppercase text-steel">
-                    Additional Requirements
-                  </label>
+                  <label htmlFor="quote-message" className={labelClass}>Additional Requirements</label>
                   <textarea
-                    name="message"
-                    value={form.message}
-                    onChange={handleChange}
                     rows={3}
+                    maxLength={5000}
                     placeholder="Delivery port, certifications, packaging preferences..."
-                    className="bg-bg-alt border border-outline-variant/40 text-primary placeholder:text-steel/50 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-gold transition-colors resize-none"
+                    {...fieldProps("message", "resize-none")}
                   />
+                  <FieldError id="quote-message-error" error={errors.message} />
                 </div>
+
+                {status === "error" && serverMessage && (
+                  <p role="alert" className="text-sm text-red-500">
+                    {serverMessage}
+                  </p>
+                )}
 
                 {/* Submit */}
                 <button
                   type="submit"
-                  className="mt-2 w-full bg-[#131313] text-white font-bold tracking-widest uppercase text-xs py-4 rounded-lg hover:bg-gold transition-colors flex items-center justify-center gap-3"
+                  disabled={status === "loading"}
+                  className="mt-2 w-full bg-[#131313] text-white font-bold tracking-widest uppercase text-xs py-4 rounded-lg hover:bg-gold transition-colors flex items-center justify-center gap-3 disabled:opacity-60 disabled:cursor-wait"
                 >
-                  Submit Quote Request
-                  <HiOutlineArrowRight className="text-lg" />
+                  {status === "loading" ? "Sending…" : "Submit Quote Request"}
+                  {status !== "loading" && <HiOutlineArrowRight className="text-lg" />}
                 </button>
               </form>
             </div>
