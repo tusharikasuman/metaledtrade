@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion'
 import steelBeams from '../assets/about/steel_beams.jpg'
 import dubaiFacade from '../assets/about/building_detail.jpg'
@@ -274,6 +275,10 @@ function Profile() {
                                     <span key={hub} className="px-3 py-1.5 text-xs font-medium border border-outline-variant rounded-full text-ivory bg-bg-alt">{hub}</span>
                                 ))}
                             </div>
+                            <p className="mt-4 text-xs text-steel leading-relaxed max-w-xs">
+                                We continually evaluate additional sources based on quality, competitiveness, reliability and
+                                market requirements.
+                            </p>
                         </div>
                         <div>
                             <span className="block text-[0.68rem] uppercase tracking-[0.22em] text-steel mb-3">Serving</span>
@@ -373,6 +378,13 @@ function TradeFinance() {
                         We work with Letters of Credit and structured financing solutions, set up as required by the end
                         user or buyer.
                     </p>
+                    <Link
+                        to="/trade-finance"
+                        className="group mt-8 inline-flex items-center gap-3 bg-[#131313] text-white px-7 py-3.5 text-xs font-bold uppercase tracking-[0.18em] hover:bg-gold transition-colors"
+                    >
+                        Know more
+                        <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">&rarr;</span>
+                    </Link>
                 </FadeUp>
 
                 <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-5">
