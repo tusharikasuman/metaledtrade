@@ -526,7 +526,7 @@ export default function Projects() {
         </section>
 
         {/* ── Inspection at the mill (own photos) ── */}
-        <section className="bg-bg-alt border-y border-outline-variant py-20 md:py-28">
+        <section id="inspection" className="scroll-mt-20 bg-bg-alt border-y border-outline-variant py-20 md:py-28">
           <div className="px-6 md:px-20 max-w-[1440px] mx-auto">
             <SectionHeading
               eyebrow="On the ground"
@@ -562,7 +562,7 @@ export default function Projects() {
         </section>
 
         {/* Partners Showcase Section (Infinite Marquee) */}
-        <section className="bg-bg-alt border-y border-[#444748]/30 py-12 relative overflow-hidden">
+        <section id="mills" className="scroll-mt-20 bg-bg-alt border-y border-[#444748]/30 py-12 relative overflow-hidden">
           <div className="max-w-[1440px] mx-auto mb-8 px-5 md:px-20 text-center">
             <span className="font-label-md text-xs text-[#ffd862] uppercase tracking-[0.25em] block mb-2">
               Mill Collaborations

@@ -4,6 +4,7 @@ import Home from './Pages/Home.jsx'
 import Products from './Pages/Products.jsx'
 import Contact from './Pages/Contact.jsx'
 import Projects from './Pages/Projects.jsx'
+import Logistics from './Pages/Logistics.jsx'
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './Components/Navbar.jsx'
 import Footer from './Components/Footer.jsx'
@@ -32,6 +33,7 @@ function App() {
           {/* Careers page removed; send old links home */}
           <Route path="/careers" element={<Navigate to="/" replace />} />
           <Route path="/projects" element={<Projects />} />
+          <Route path="/logistics" element={<Logistics />} />
         </Routes>
       </main>
       <Footer/>

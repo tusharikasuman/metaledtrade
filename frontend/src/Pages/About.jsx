@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { useLocation } from 'react-router-dom'
 import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion'
 import steelBeams from '../assets/about/steel_beams.jpg'
 import dubaiFacade from '../assets/about/building_detail.jpg'
@@ -611,20 +610,9 @@ function Leadership() {
 // ── Main About Page ──────────────────────────────────────────────────────────
 
 const About = () => {
-    const { hash } = useLocation()
-
     useEffect(() => {
         document.documentElement.classList.add('light')
     }, [])
-
-    // Support deep links like /about#leadership (e.g. Home's "Read more").
-    useEffect(() => {
-        if (!hash) return
-        const t = setTimeout(() => {
-            document.getElementById(hash.slice(1))?.scrollIntoView({ behavior: 'smooth' })
-        }, 100)
-        return () => clearTimeout(t)
-    }, [hash])
 
     return (
         <div className="bg-bg text-on-surface font-body min-h-screen antialiased">

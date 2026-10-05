@@ -7,7 +7,7 @@ import logoLight from "../assets/metaled-logo-light.png";
 
 // Pages whose top section is a dark video/photo hero — the unscrolled,
 // transparent navbar sits on dark there, so it needs the light logo.
-const DARK_HERO_PATHS = ["/", "/about", "/projects"];
+const DARK_HERO_PATHS = ["/", "/about", "/projects", "/logistics"];
 
 const NAV_LINKS = [
   { label: "Home", href: "/" },
@@ -22,6 +22,7 @@ const NAV_LINKS = [
     ],
   },
   { label: "Projects", href: "/projects" },
+  { label: "Logistics", href: "/logistics" },
 ];
 
 export default function Navbar() {
