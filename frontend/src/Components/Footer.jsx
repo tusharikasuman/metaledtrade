@@ -1,9 +1,23 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { FaLinkedin, FaYoutube, FaWeixin, FaFacebook, FaWhatsapp } from "react-icons/fa";
+import { FaLinkedinIn, FaYoutube, FaWeixin, FaFacebookF, FaWhatsapp, FaPhoneAlt, FaMobileAlt } from "react-icons/fa";
 import { PinContainer } from "./ui/3d-pin";
 
 const LINK = "block text-[#c4c7c7] hover:text-white transition-colors duration-200";
+
+// Official brand colours.
+const SOCIAL_LINKS = [
+  { label: "LinkedIn", href: "#linkedin", color: "#0A66C2", icon: FaLinkedinIn },
+  { label: "Facebook", href: "https://www.facebook.com/steel4all/", color: "#1877F2", icon: FaFacebookF },
+  { label: "YouTube", href: "#youtube", color: "#FF0000", icon: FaYoutube },
+  { label: "WeChat", href: "#wechat", color: "#07C160", icon: FaWeixin },
+];
+
+const PHONE_LINKS = [
+  { label: "Office", number: "+971 4 441 2782", href: "tel:+97144412782", icon: FaPhoneAlt },
+  { label: "Mobile", number: "+971 54 217 8600", href: "tel:+971542178600", icon: FaMobileAlt },
+  { label: "WhatsApp", number: "+971 54 217 8600", href: "https://wa.me/971542178600", icon: FaWhatsapp, iconColor: "#25D366", external: true },
+];
 
 const PLATFORM_LINKS = [
   { label: "Home", to: "/" },
@@ -69,38 +83,20 @@ export default function Footer() {
               </p>
             </div>
 
-            {/* Social Icons Stack */}
+            {/* Social icons in each platform's official colour */}
             <div className="flex gap-4 items-center">
-              <a
-                href="#linkedin"
-                aria-label="Metaled Trade FZCO on LinkedIn"
-                className="w-10 h-10 rounded-full bg-[#141517] border border-[#2a2c35]/40 flex items-center justify-center text-[#8e9192] hover:text-[#ffd862] hover:border-[#ffd862]/30 hover:scale-110 transition-all duration-300"
-              >
-                <FaLinkedin className="text-base" />
-              </a>
-              <a
-                href="https://www.facebook.com/steel4all/"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Metaled Trade FZCO on Facebook"
-                className="w-10 h-10 rounded-full bg-[#141517] border border-[#2a2c35]/40 flex items-center justify-center text-[#8e9192] hover:text-[#ffd862] hover:border-[#ffd862]/30 hover:scale-110 transition-all duration-300"
-              >
-                <FaFacebook className="text-base" />
-              </a>
-              <a
-                href="#youtube"
-                aria-label="Metaled Trade FZCO on YouTube"
-                className="w-10 h-10 rounded-full bg-[#141517] border border-[#2a2c35]/40 flex items-center justify-center text-[#8e9192] hover:text-[#ffd862] hover:border-[#ffd862]/30 hover:scale-110 transition-all duration-300"
-              >
-                <FaYoutube className="text-base" />
-              </a>
-              <a
-                href="#wechat"
-                aria-label="Metaled Trade FZCO on WeChat"
-                className="w-10 h-10 rounded-full bg-[#141517] border border-[#2a2c35]/40 flex items-center justify-center text-[#8e9192] hover:text-[#ffd862] hover:border-[#ffd862]/30 hover:scale-110 transition-all duration-300"
-              >
-                <FaWeixin className="text-base" />
-              </a>
+              {SOCIAL_LINKS.map(({ label, href, color, icon: Icon }) => (
+                <a
+                  key={label}
+                  href={href}
+                  {...(href.startsWith("http") && { target: "_blank", rel: "noopener noreferrer" })}
+                  aria-label={`Metaled Trade FZCO on ${label}`}
+                  className="w-10 h-10 rounded-full flex items-center justify-center text-white shadow-md hover:scale-110 hover:brightness-110 transition-all duration-300"
+                  style={{ backgroundColor: color }}
+                >
+                  <Icon className="text-lg" />
+                </a>
+              ))}
             </div>
           </div>
 
@@ -141,7 +137,7 @@ export default function Footer() {
                   Direct Desk
                 </h4>
 
-                <PinContainer title="Dubai Headquarters" href="https://maps.google.com/?q=Gemplex+Building+3,+DMCC,+Jumeirah+Lakes+Towers,+Dubai">
+                <PinContainer title="Dubai Headquarters" href="https://maps.app.goo.gl/osfwXtZx4HCuTo1i7">
                   <div className="flex flex-col bg-[#141517]/80 border border-[#2a2c35]/40 rounded-xl p-6 shadow-lg backdrop-blur-sm transition-colors duration-300 hover:border-[#ffd862]/20 w-full max-w-[280px]">
                     <span className="font-body-md text-[10px] text-[#8e9192] uppercase tracking-widest mb-3 block">Headquarters</span>
                     <p className="font-body-md text-sm text-white font-light leading-relaxed">
@@ -159,31 +155,31 @@ export default function Footer() {
 
               <div className="mt-8">
                 <p className="font-body-md text-xs text-[#8e9192] uppercase tracking-wider mb-2">EMAIL ENQUIRIES</p>
-                <a href="mailto:indronil@metaledtrade.com" className="font-mono text-sm text-[#ffd862] hover:text-white transition-colors block mb-4">
+                <a href="mailto:indronil@metaledtrade.com" className="font-mono text-sm text-[#ffd862] hover:text-white transition-colors block">
                   indronil@metaledtrade.com
                 </a>
-                <dl className="flex flex-col gap-2 text-sm">
-                  <div className="flex items-baseline gap-3">
-                    <dt className="w-16 shrink-0 text-xs text-[#8e9192] uppercase tracking-wider">Office</dt>
-                    <dd><a href="tel:+97144412782" className="font-mono text-[#ffd862] hover:text-white transition-colors">+971 4 441 2782</a></dd>
-                  </div>
-                  <div className="flex items-baseline gap-3">
-                    <dt className="w-16 shrink-0 text-xs text-[#8e9192] uppercase tracking-wider">Mobile</dt>
-                    <dd><a href="tel:+971542178600" className="font-mono text-[#ffd862] hover:text-white transition-colors">+971 54 217 8600</a></dd>
-                  </div>
-                  <div className="flex items-baseline gap-3">
-                    <dt className="w-16 shrink-0 text-xs text-[#8e9192] uppercase tracking-wider">WhatsApp</dt>
-                    <dd>
-                      <a href="https://wa.me/971542178600" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 font-mono text-[#ffd862] hover:text-white transition-colors">
-                        <FaWhatsapp className="text-sm" /> +971 54 217 8600
-                      </a>
-                    </dd>
-                  </div>
-                </dl>
               </div>
             </div>
           </div>
 
+        </div>
+
+        {/* Phone numbers: one line on desktop, stacked on phones */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-0 sm:divide-x divide-[#444748]/30 pb-12 text-sm">
+          {PHONE_LINKS.map(({ label, number, href, icon: Icon, iconColor, external }) => (
+            <a
+              key={label}
+              href={href}
+              {...(external && { target: "_blank", rel: "noopener noreferrer" })}
+              className="group inline-flex items-center gap-3 whitespace-nowrap sm:px-8"
+            >
+              <span className="text-xs text-[#8e9192] uppercase tracking-wider">{label}</span>
+              <span className="inline-flex items-center gap-1.5 font-mono text-[#ffd862] group-hover:text-white transition-colors">
+                <Icon className="text-sm" style={iconColor && { color: iconColor }} aria-hidden="true" />
+                {number}
+              </span>
+            </a>
+          ))}
         </div>
 
         {/* Giant Watermark Logo - Kinetic Cursor Hover Effect */}

@@ -550,7 +550,6 @@ export default function Products() {
   useEffect(() => {
     const param = searchParams.get("category") === "long" ? "long" : "flat";
     setActiveCategory(param);
-    window.scrollTo({ top: 0 });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
