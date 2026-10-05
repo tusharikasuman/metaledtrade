@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useSearchParams } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { Link, useSearchParams } from "react-router-dom";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import bgImg from "../assets/homebg.png";
 import productImages from "../data/productImages.json";
 import { longProducts, flatProducts } from "../data/productsData";
@@ -62,6 +62,7 @@ import {
   HiCheckCircle,
   HiOutlineArrowLeft,
 } from "react-icons/hi";
+import { HiOutlineArrowDown } from "react-icons/hi2";
 
 // Bullet list for product specs.
 function SpecList({ items, className = "" }) {
@@ -511,6 +512,161 @@ function QuoteModal({ product, onClose }) {
   );
 }
 
+// ── Hero: title + scrolling columns of real product photos ───────────────────
+// Matches the dark heroes on the other pages. Shows the products of the
+// category being viewed; clicking a photo opens that product below.
+const HERO_GOLD = "#e9c349";
+
+function ProductsHero({ title, category, onPick }) {
+  const reduceMotion = useReducedMotion();
+
+  // One tile per product that has its own photo (skip the generic fallback).
+  const tiles = [];
+  const seen = new Set();
+  for (const [cat, list] of [["flat", flatProducts], ["long", longProducts]]) {
+    if (category && category !== cat) continue;
+    for (const product of list) {
+      const src = getProductImage(product.product, cat);
+      if (src === bgImg || seen.has(src)) continue;
+      seen.add(src);
+      tiles.push({ product, category: cat, src });
+    }
+  }
+  const columns = [0, 1, 2].map((c) => tiles.filter((_, i) => i % 3 === c));
+  const [titleStart, titleEnd] = title.split(" ");
+
+  return (
+    <section className="relative overflow-hidden bg-[#0b0b0c]">
+      <style>{`
+        @keyframes products-up { from { transform: translateY(0); } to { transform: translateY(-50%); } }
+        @keyframes products-down { from { transform: translateY(-50%); } to { transform: translateY(0); } }
+        .products-col:hover { animation-play-state: paused; }
+      `}</style>
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage:
+            "linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px)",
+          backgroundSize: "64px 64px",
+        }}
+      />
+
+      <div className="relative z-10 max-w-[1440px] mx-auto px-6 md:px-20 pt-36 pb-32 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center min-h-[86vh]">
+        <div className="lg:col-span-5">
+          <motion.span
+            className="text-xs font-semibold uppercase tracking-[0.22em] block mb-5"
+            style={{ color: HERO_GOLD }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+          >
+            Products
+          </motion.span>
+          <h1 className="font-display text-[2.6rem] sm:text-6xl lg:text-[4.6rem] font-semibold uppercase leading-[1.02] text-white">
+            {[
+              { text: titleStart, gold: false },
+              { text: titleEnd, gold: true },
+            ].map((line, i) => (
+              <span key={line.text} className="block overflow-hidden pb-[0.06em]">
+                <motion.span
+                  className="block"
+                  style={line.gold ? { color: HERO_GOLD } : undefined}
+                  initial={{ y: "110%" }}
+                  animate={{ y: "0%" }}
+                  transition={{ duration: 1.1, delay: 0.4 + i * 0.14, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  {line.text}
+                </motion.span>
+              </span>
+            ))}
+          </h1>
+          <motion.div
+            className="w-20 h-px my-7 origin-left"
+            style={{ background: HERO_GOLD }}
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ duration: 1, delay: 1, ease: [0.16, 1, 0.3, 1] }}
+          />
+        </div>
+
+        {/* Photo columns, faded at top and bottom */}
+        <motion.div
+          className="lg:col-span-7 h-[420px] md:h-[560px] overflow-hidden grid grid-cols-3 gap-3 md:gap-4"
+          style={{
+            maskImage: "linear-gradient(to bottom, transparent, #000 15%, #000 85%, transparent)",
+            WebkitMaskImage: "linear-gradient(to bottom, transparent, #000 15%, #000 85%, transparent)",
+          }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.2, delay: 0.4 }}
+        >
+          {columns.map((col, c) => (
+            <div
+              key={c}
+              className="products-col flex flex-col gap-3 md:gap-4"
+              style={
+                reduceMotion
+                  ? undefined
+                  : { animation: `${c === 1 ? "products-down" : "products-up"} ${32 + c * 6}s linear infinite` }
+              }
+            >
+              {/* Each column is repeated once so the loop is seamless */}
+              {[...col, ...col].map((tile, i) => (
+                <button
+                  type="button"
+                  key={`${tile.src}-${i}`}
+                  onClick={() => onPick(tile.product, tile.category)}
+                  tabIndex={i < col.length ? 0 : -1}
+                  aria-hidden={i >= col.length ? "true" : undefined}
+                  aria-label={i < col.length ? `View ${tile.product.product}` : undefined}
+                  className="group relative shrink-0 aspect-[4/5] overflow-hidden rounded-sm bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e9c349]"
+                >
+                  <img
+                    src={tile.src}
+                    alt=""
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    draggable={false}
+                  />
+                  <span className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent opacity-70 group-hover:opacity-100 transition-opacity" />
+                  <span className="absolute inset-x-0 bottom-0 p-3 text-left text-[11px] md:text-xs font-semibold uppercase tracking-[0.08em] text-white leading-snug">
+                    {tile.product.product}
+                  </span>
+                </button>
+              ))}
+            </div>
+          ))}
+        </motion.div>
+      </div>
+
+      {/* Scroll cue */}
+      <motion.div
+        className="absolute bottom-0 inset-x-0 z-10"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1, delay: 1.4 }}
+      >
+        <div className="max-w-[1440px] mx-auto px-6 md:px-20 pb-8">
+          <Link to="#catalog" className="group inline-flex items-end gap-4 text-white/55 hover:text-white transition-colors">
+            <span className="flex flex-col items-center gap-1">
+              <span className="relative block w-px h-12 bg-white/20 overflow-hidden">
+                {!reduceMotion && (
+                  <motion.span
+                    className="absolute left-0 top-0 w-px h-4 bg-white"
+                    animate={{ y: ["-100%", "300%"] }}
+                    transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+                  />
+                )}
+              </span>
+              <HiOutlineArrowDown className="text-sm transition-transform duration-300 group-hover:translate-y-0.5" />
+            </span>
+            <span className="text-[11px] font-semibold uppercase tracking-[0.22em] pb-0.5">Scroll to browse products</span>
+          </Link>
+        </div>
+      </motion.div>
+    </section>
+  );
+}
+
 // ── Main Products Page ───────────────────────────────────────────────────────
 export default function Products() {
   const [searchParams] = useSearchParams();
@@ -539,17 +695,35 @@ export default function Products() {
     setActiveProduct(currentProducts[next]);
   };
 
-  // ?product=<name> (e.g. from footer links) opens that product; otherwise the first one.
-  const productParam = searchParams.get("product");
-  useEffect(() => {
-    const list = activeCategory === "long" ? longProducts : flatProducts;
-    setActiveProduct(list.find((p) => p.product === productParam) || list[0]);
-  }, [activeCategory, productParam]);
-
   // Arriving via Products → Flat / Long in the navbar (?category=flat|long)
   // shows only that category; plain /products shows both with tabs.
   const categoryParam = searchParams.get("category");
   const lockedCategory = categoryParam === "flat" || categoryParam === "long" ? categoryParam : null;
+
+  // ?product=<name> (e.g. from footer links) opens that product; otherwise the first one.
+  const productParam = searchParams.get("product");
+  const pickedRef = useRef(null);
+  useEffect(() => {
+    const list = activeCategory === "long" ? longProducts : flatProducts;
+    const wanted = pickedRef.current || productParam;
+    pickedRef.current = null;
+    setActiveProduct(list.find((p) => p.product === wanted) || list[0]);
+  }, [activeCategory, productParam]);
+
+  // Clicking a photo in the hero opens that product in the catalog below.
+  const catalogRef = useRef(null);
+  const pickFromHero = (product, category) => {
+    if (category === activeCategory) setActiveProduct(product);
+    else {
+      pickedRef.current = product.product;
+      setActiveCategory(category);
+    }
+    const target = window.innerWidth < 1024 ? detailRef.current : catalogRef.current;
+    requestAnimationFrame(() => target?.scrollIntoView({ behavior: "smooth", block: "start" }));
+  };
+
+  const pageTitle =
+    lockedCategory === "flat" ? "Flat Products" : lockedCategory === "long" ? "Long Products" : "Product Catalog";
 
   // Respond to the nav dropdown / footer links changing ?category= after mount
   useEffect(() => {
@@ -571,33 +745,13 @@ export default function Products() {
   return (
     <div className="min-h-screen bg-bg text-ivory font-body flex flex-col">
 
-      <main className="flex-grow pt-32 pb-20 px-6 md:px-12 max-w-[1440px] mx-auto w-full">
-        {/* Header Section */}
-        <div className="mb-12 md:mb-20">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
-            className="flex flex-col border-l-2 border-gold pl-6 mb-6"
-          >
-            <span className="text-gold font-bold tracking-[0.2em] uppercase text-xs mb-2">
-              {lockedCategory ? "Product Catalog" : "Inventory Hub"}
-            </span>
-            <h1 className="text-4xl md:text-6xl font-display font-medium uppercase tracking-tight text-primary">
-              {lockedCategory === "flat" ? "Flat Products" : lockedCategory === "long" ? "Long Products" : "Product Catalog"}
-            </h1>
-          </motion.div>
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="max-w-2xl text-steel text-sm md:text-base leading-relaxed"
-          >
-            Explore our comprehensive inventory of industrial-grade metal
-            solutions. Precision engineered to meet the highest global standards.
-          </motion.p>
-        </div>
+      <ProductsHero title={pageTitle} category={lockedCategory} onPick={pickFromHero} />
 
+      <main
+        id="catalog"
+        ref={catalogRef}
+        className="flex-grow pt-16 md:pt-20 pb-20 px-6 md:px-12 max-w-[1440px] mx-auto w-full scroll-mt-20"
+      >
         {/* Category Toggles — only when browsing the full catalog */}
         {!lockedCategory && (
         <div className="flex gap-4 mb-12 border-b border-outline-variant/30 pb-px relative">
