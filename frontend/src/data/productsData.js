@@ -204,7 +204,15 @@ export const flatProducts = [
     product: "Hot Rolled Steel Coils",
     sizes: ["1219mm wide", "1.5 Meter wide", "2 Meter wide"],
     thickness: "1.2mm to 22mm",
-    grades: [...HOT_ROLLED_GRADES, "JIS G3131"],
+    grades: [
+      "S235JR",
+      "S275JR",
+      "ASTM A36",
+      "JIS G3131 SPHC or higher",
+      "JIS G3132 SPHT1 or higher",
+      "SAE 1006 or higher",
+    ],
+    extras: ["Higher grades based on final requirement and specifications"],
   },
   {
     product: "Hot Rolled Chequered Plates / Sheets",
