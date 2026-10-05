@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { WorldMap } from "../components/ui/world-map";
+import { WorldMap } from "../Components/ui/world-map";
 import HoneypotField from "../Components/HoneypotField";
 import { submitForm } from "../lib/api";
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
-import { Globe3D } from "../components/ui/3d-globe";
+import { Globe3D } from "../Components/ui/3d-globe";
 import HeroVideoCrossfade from "../Components/HeroVideoCrossfade";
 import { HiX } from "react-icons/hi";
 import {
