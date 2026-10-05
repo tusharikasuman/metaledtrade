@@ -22,9 +22,6 @@ import shuaibahImg from "../assets/projects/al_shuaibah_trackers.jpg";
 import oxyPipeRacks from "../assets/projects/oman_pipe_racks.jpg";
 import animalShedImg from "../assets/projects/oman_animal_shed.jpeg";
 import heroPoster from "../assets/projects/oman_animal_shed_poster.jpg";
-import inspectFlatBars from "../assets/projects/inspection_flat_bars.jpeg";
-import inspectMillVisit from "../assets/projects/inspection_mill_visit.jpeg";
-import inspectBundleCheck from "../assets/projects/inspection_bundle_check.jpeg";
 
 const EASE = [0.16, 1, 0.3, 1];
 const DARK_GOLD = "#e9c349";
@@ -158,13 +155,6 @@ const FEATURED_PROJECTS = [
       "Supplied for Animal Shed • Material Supplied: Pre-Painted Galvanised Coils (PPGI).",
     span: "md:col-span-8",
   },
-];
-
-// Our own photos from mill visits — pre-shipment inspection of material.
-const INSPECTION_PHOTOS = [
-  { src: inspectFlatBars, alt: "Inspecting bundled flat bars with the mill team", caption: "Checking bundled flat bars with the mill team" },
-  { src: inspectBundleCheck, alt: "Verifying bundle markings and dimensions", caption: "Verifying bundle markings and dimensions" },
-  { src: inspectMillVisit, alt: "Walking the rolling mill floor", caption: "On the rolling mill floor" },
 ];
 
 const PARTNERS = [
@@ -522,42 +512,6 @@ export default function Projects() {
                 </motion.button>
               );
             })}
-          </div>
-        </section>
-
-        {/* ── Inspection at the mill (own photos) ── */}
-        <section id="inspection" className="scroll-mt-20 bg-bg-alt border-y border-outline-variant py-20 md:py-28">
-          <div className="px-6 md:px-20 max-w-[1440px] mx-auto">
-            <SectionHeading
-              eyebrow="On the ground"
-              title="Inspected at the mill, before it ships"
-              intro="We visit the mills we source from and check material in person, alongside independent third-party inspection."
-            />
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {INSPECTION_PHOTOS.map((photo, idx) => (
-                <motion.figure
-                  key={photo.caption}
-                  className="group"
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.2 }}
-                  transition={{ duration: 0.8, delay: idx * 0.1, ease: EASE }}
-                >
-                  <div className="relative h-[380px] md:h-[440px] overflow-hidden rounded-sm bg-surface-container shadow-[0_30px_60px_-30px_rgba(0,0,0,0.4)]">
-                    <img
-                      src={photo.src}
-                      alt={photo.alt}
-                      loading="lazy"
-                      className="w-full h-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-105"
-                    />
-                  </div>
-                  <figcaption className="mt-4 flex items-start gap-3">
-                    <span className="text-xs font-semibold text-gold tabular-nums pt-0.5">0{idx + 1}</span>
-                    <span className="text-sm text-on-surface-variant leading-relaxed">{photo.caption}</span>
-                  </figcaption>
-                </motion.figure>
-              ))}
-            </div>
           </div>
         </section>
 

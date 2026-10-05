@@ -67,13 +67,30 @@ function Marker({ marker, radius, onClick, onHover, isModalOpen }) {
     setIsVisible((prev) => (prev === visible ? prev : visible));
   });
 
+  // Bring the hovered pin above its neighbours so its label is never covered.
+  // drei sets the z-index on the Html wrapper (two levels above the button) and,
+  // in screen-space mode, only refreshes it when the pin moves, so set it here.
+  const buttonRef = useRef(null);
+  const raise = (on) => {
+    const wrapper = buttonRef.current?.parentElement?.parentElement;
+    if (!wrapper) return;
+    if (on) {
+      wrapper.dataset.z = wrapper.style.zIndex;
+      wrapper.style.zIndex = "1000";
+    } else {
+      wrapper.style.zIndex = wrapper.dataset.z ?? "";
+    }
+  };
+
   const handleEnter = useCallback(() => {
     setHovered(true);
+    raise(true);
     onHover?.(marker);
   }, [marker, onHover]);
 
   const handleLeave = useCallback(() => {
     setHovered(false);
+    raise(false);
     onHover?.(null);
   }, [onHover]);
 
@@ -121,14 +138,14 @@ function Marker({ marker, radius, onClick, onHover, isModalOpen }) {
       <group ref={imageGroupRef} position={topPosition}>
         {showHtml && (
           <Html
-            transform
+            // Screen-space mode: drei projects the anchor to 2D pixels each frame with
+            // the same camera that draws the leader lines, so tiles stay locked to their
+            // lines at any window width. (CSS3D "transform" mode drifted at some widths.)
             center
-            sprite
-            distanceFactor={2}
-            // The hovered pin jumps above its neighbours so its label is never covered.
-            zIndexRange={hovered ? [100, 90] : [10, 1]}
+            zIndexRange={[10, 1]}
           >
             <button
+              ref={buttonRef}
               type="button"
               aria-label={`View project: ${marker.name}`}
               className="relative block cursor-pointer select-none outline-none"
@@ -143,7 +160,7 @@ function Marker({ marker, radius, onClick, onHover, isModalOpen }) {
                   "block overflow-hidden rounded-[10px] border-[3px] bg-[#12141a] shadow-[0_6px_18px_rgba(0,0,0,0.45)] transition-all duration-300 ease-out",
                   hovered ? "scale-110 border-[#e9c349]" : "border-white"
                 )}
-                style={{ width: 64, height: 64 }}
+                style={{ width: 60, height: 60 }}
               >
                 <img
                   src={marker.src}
