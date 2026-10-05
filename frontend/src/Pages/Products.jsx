@@ -63,14 +63,19 @@ import {
   HiOutlineArrowLeft,
 } from "react-icons/hi";
 
-// Helper to parse complex grade strings into array of tags
-const parseGrades = (gradeString) => {
-  if (!gradeString) return [];
-  return gradeString
-    .split(/\s*[\/,]\s*|\s*\/\/\s*|\s+&\s+/)
-    .map((g) => g.trim())
-    .filter((g) => g.length > 2);
-};
+// Bullet list for product specs.
+function SpecList({ items, className = "" }) {
+  return (
+    <ul className={`text-ivory text-[15px] leading-snug ${className}`}>
+      {items.map((item) => (
+        <li key={item} className="flex items-start gap-2.5">
+          <span className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-gold" aria-hidden="true" />
+          {item}
+        </li>
+      ))}
+    </ul>
+  );
+}
 
 // ── Mock Reviews Data ────────────────────────────────────────────────────────
 const REVIEWS = [
@@ -745,9 +750,22 @@ export default function Products() {
                     <span className="text-[11px] font-semibold tracking-[0.2em] text-gold uppercase mb-4 block">
                       Dimensions &amp; Sizes
                     </span>
-                    <p className="text-ivory text-base md:text-lg leading-relaxed border-l-2 border-gold/50 pl-4">
-                      {activeProduct.size}
-                    </p>
+                    {activeProduct.sizes && (
+                      <SpecList
+                        items={activeProduct.sizes}
+                        className="flex flex-col gap-2.5 border-l-2 border-gold/50 pl-4"
+                      />
+                    )}
+                    {activeProduct.thickness && (
+                      <p
+                        className={`flex flex-wrap items-baseline gap-x-3 ${
+                          activeProduct.sizes ? "mt-5 pt-4 border-t border-outline-variant/30" : ""
+                        }`}
+                      >
+                        <span className="text-[11px] font-semibold tracking-[0.14em] uppercase text-steel">Thickness</span>
+                        <span className="text-ivory text-base font-medium">{activeProduct.thickness}</span>
+                      </p>
+                    )}
                   </div>
 
                   {/* Grades Block */}
@@ -755,16 +773,15 @@ export default function Products() {
                     <span className="text-[11px] font-semibold tracking-[0.2em] text-gold uppercase mb-4 block">
                       Supported Grades
                     </span>
-                    <div className="flex flex-wrap gap-2">
-                      {parseGrades(activeProduct.grade).map((grade, idx) => (
-                        <span
-                          key={idx}
-                          className="px-3 py-1.5 border border-outline-variant text-sm text-ivory rounded-sm bg-bg hover:border-gold hover:text-gold transition-colors cursor-default"
-                        >
-                          {grade}
+                    <SpecList items={activeProduct.grades} className="flex flex-col gap-2.5" />
+                    {activeProduct.extras && (
+                      <div className="mt-5 pt-4 border-t border-outline-variant/30">
+                        <span className="text-[11px] font-semibold tracking-[0.14em] uppercase text-steel block mb-3">
+                          Also available
                         </span>
-                      ))}
-                    </div>
+                        <SpecList items={activeProduct.extras} className="flex flex-col gap-2.5" />
+                      </div>
+                    )}
                   </div>
                 </div>
 
