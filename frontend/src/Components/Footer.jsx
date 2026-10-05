@@ -25,6 +25,7 @@ const PLATFORM_LINKS = [
   { label: "Products", to: "/products" },
   { label: "Projects", to: "/projects" },
   { label: "Logistics", to: "/logistics" },
+  { label: "Trade & Finance", to: "/trade-finance" },
   { label: "Contact", to: "/contact" },
 ];
 

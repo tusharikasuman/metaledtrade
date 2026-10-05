@@ -7,7 +7,7 @@ import logoLight from "../assets/metaled-logo-light.png";
 
 // Pages whose top section is a dark video/photo hero — the unscrolled,
 // transparent navbar sits on dark there, so it needs the light logo.
-const DARK_HERO_PATHS = ["/", "/about", "/projects", "/logistics"];
+const DARK_HERO_PATHS = ["/", "/about", "/projects", "/logistics", "/trade-finance"];
 
 const NAV_LINKS = [
   { label: "Home", href: "/" },
@@ -23,6 +23,7 @@ const NAV_LINKS = [
   },
   { label: "Projects", href: "/projects" },
   { label: "Logistics", href: "/logistics" },
+  { label: "Trade & Finance", href: "/trade-finance" },
 ];
 
 export default function Navbar() {
@@ -63,13 +64,13 @@ export default function Navbar() {
             />
           </Link>
 
-          <nav className="hidden md:flex items-center gap-9">
+          <nav className="hidden lg:flex items-center gap-5 xl:gap-9">
             {NAV_LINKS.map(({ label, href, dropdown, submenu }) =>
               submenu ? (
                 <div key={label} className="relative group">
                   <Link
                     to={href}
-                    className="flex items-center gap-1 text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-gold/90 hover:text-gold-soft transition-colors duration-300 whitespace-nowrap py-3"
+                    className="flex items-center gap-1 text-[0.72rem] font-semibold uppercase tracking-[0.12em] xl:tracking-[0.16em] text-gold/90 hover:text-gold-soft transition-colors duration-300 whitespace-nowrap py-3"
                   >
                     {label}
                     {dropdown && (
@@ -96,7 +97,7 @@ export default function Navbar() {
                 <Link
                   key={label}
                   to={href}
-                  className="text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-gold/90 hover:text-gold-soft transition-colors duration-300 whitespace-nowrap"
+                  className="text-[0.72rem] font-semibold uppercase tracking-[0.12em] xl:tracking-[0.16em] text-gold/90 hover:text-gold-soft transition-colors duration-300 whitespace-nowrap"
                 >
                   {label}
                 </Link>
@@ -107,13 +108,13 @@ export default function Navbar() {
           <div className="flex items-center gap-3">
             <Link
               to="/contact"
-              className="hidden md:inline-flex items-center gap-1 border border-gold text-gold text-[0.68rem] font-bold uppercase tracking-[0.14em] px-6 py-2.5 hover:bg-gold hover:text-[#131313] transition-colors duration-300 whitespace-nowrap"
+              className="hidden lg:inline-flex items-center gap-1 border border-gold text-gold text-[0.68rem] font-bold uppercase tracking-[0.14em] px-6 py-2.5 hover:bg-gold hover:text-[#131313] transition-colors duration-300 whitespace-nowrap"
             >
               Contact Us
             </Link>
 
             <button
-              className="md:hidden text-2xl text-gold transition-colors cursor-pointer"
+              className="lg:hidden text-2xl text-gold transition-colors cursor-pointer"
               onClick={() => setOpen(true)}
               aria-label="Open menu"
             >
