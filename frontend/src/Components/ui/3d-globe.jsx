@@ -18,6 +18,7 @@ const DEFAULT_EARTH_TEXTURE =
   "https://unpkg.com/three-globe@2.31.0/example/img/earth-blue-marble.jpg";
 const DEFAULT_BUMP_TEXTURE =
   "https://unpkg.com/three-globe@2.31.0/example/img/earth-topology.png";
+const PIN_GOLD = "#e9c349";
 
 // ============================================================================
 // Utility
@@ -56,14 +57,14 @@ function Marker({ marker, radius, onClick, onHover, isModalOpen }) {
 
   const lineHeight = topPosition.distanceTo(surfacePosition);
 
+  // Hide pins on the far side of the globe. Only update state when visibility
+  // actually flips — setting it every frame re-rendered every pin 60×/second.
+  const worldPos = useMemo(() => new THREE.Vector3(), []);
   useFrame(() => {
     if (!imageGroupRef.current) return;
-    const worldPos = new THREE.Vector3();
     imageGroupRef.current.getWorldPosition(worldPos);
-    const markerDirection = worldPos.clone().normalize();
-    const cameraDirection = camera.position.clone().normalize();
-    const dot = markerDirection.dot(cameraDirection);
-    setIsVisible(dot > 0.1);
+    const visible = worldPos.normalize().dot(camera.position.clone().normalize()) > 0.1;
+    setIsVisible((prev) => (prev === visible ? prev : visible));
   });
 
   const handleEnter = useCallback(() => {
@@ -86,27 +87,37 @@ function Marker({ marker, radius, onClick, onHover, isModalOpen }) {
     return { lineCenter: center, lineQuaternion: quaternion };
   }, [surfacePosition, topPosition]);
 
+  // Lays the halo disc flat against the globe surface.
+  const surfaceQuaternion = useMemo(
+    () =>
+      new THREE.Quaternion().setFromUnitVectors(
+        new THREE.Vector3(0, 0, 1),
+        surfacePosition.clone().normalize()
+      ),
+    [surfacePosition]
+  );
+
   const showHtml = isVisible && !isModalOpen;
 
   return (
     <group visible={showHtml}>
-      {/* Pin leader line connecting surface dot to floating avatar */}
+      {/* Leader line from the exact location to the photo tile */}
       <mesh position={lineCenter} quaternion={lineQuaternion}>
-        <cylinderGeometry args={[0.003, 0.003, lineHeight, 8]} />
-        <meshBasicMaterial
-          color={hovered ? "#ffd862" : "#a1a1aa"}
-          transparent
-          opacity={hovered ? 0.95 : 0.6}
-        />
+        <cylinderGeometry args={[0.0035, 0.0035, lineHeight, 8]} />
+        <meshBasicMaterial color={PIN_GOLD} transparent opacity={hovered ? 1 : 0.7} />
       </mesh>
 
-      {/* Red/Gold Surface Anchor Dot on exact map location */}
-      <mesh position={surfacePosition} quaternion={lineQuaternion}>
-        <sphereGeometry args={[0.018, 16, 16]} />
-        <meshBasicMaterial color="#ef4444" />
+      {/* Location dot: gold centre on a flat white halo, readable on land and sea */}
+      <mesh position={surfacePosition} quaternion={surfaceQuaternion}>
+        <circleGeometry args={[0.026, 32]} />
+        <meshBasicMaterial color="#ffffff" transparent opacity={0.9} />
+      </mesh>
+      <mesh position={surfacePosition}>
+        <sphereGeometry args={[0.016, 20, 20]} />
+        <meshBasicMaterial color={PIN_GOLD} />
       </mesh>
 
-      {/* Floating Circular Photo Avatar Badge (Matching Reference Image) */}
+      {/* Photo tile */}
       <group ref={imageGroupRef} position={topPosition}>
         {showHtml && (
           <Html
@@ -114,39 +125,50 @@ function Marker({ marker, radius, onClick, onHover, isModalOpen }) {
             center
             sprite
             distanceFactor={2}
-            zIndexRange={[1, 10]}
-            style={{
-              display: isModalOpen ? "none" : "block",
-              pointerEvents: showHtml ? "auto" : "none",
-              opacity: showHtml ? 1 : 0,
-              transition: "opacity 0.2s ease-out",
-            }}
+            // The hovered pin jumps above its neighbours so its label is never covered.
+            zIndexRange={hovered ? [100, 90] : [10, 1]}
           >
-            <div
-              className="relative cursor-pointer group select-none flex flex-col items-center"
+            <button
+              type="button"
+              aria-label={`View project: ${marker.name}`}
+              className="relative block cursor-pointer select-none outline-none"
               onMouseEnter={handleEnter}
               onMouseLeave={handleLeave}
+              onFocus={handleEnter}
+              onBlur={handleLeave}
               onClick={handleClick}
             >
-              {/* Circular Avatar Photo Badge */}
-              <div
+              <span
                 className={cn(
-                  "relative rounded-full border-[10px] border-[#ffd862] bg-[#12141a] shadow-2xl transition-all duration-300 flex items-center justify-center overflow-hidden",
-                  hovered
-                    ? "scale-130 ring-[20px] ring-[#ffd862]/60 z-30 shadow-[#ffd862]/50"
-                    : "hover:scale-110 shadow-black/80"
+                  "block overflow-hidden rounded-[10px] border-[3px] bg-[#12141a] shadow-[0_6px_18px_rgba(0,0,0,0.45)] transition-all duration-300 ease-out",
+                  hovered ? "scale-110 border-[#e9c349]" : "border-white"
                 )}
-                style={{ width: "140px", height: "140px" }}
+                style={{ width: 64, height: 64 }}
               >
                 <img
                   src={marker.src}
-                  alt={marker.name || "Project Pin"}
-                  className="w-full h-full object-cover rounded-full"
+                  alt=""
+                  className="h-full w-full object-cover"
                   decoding="async"
                   draggable={false}
                 />
-              </div>
-            </div>
+              </span>
+
+              {/* Name label, shown on hover */}
+              <span
+                className={cn(
+                  "pointer-events-none absolute left-1/2 top-full mt-2.5 -translate-x-1/2 whitespace-nowrap rounded-[4px] bg-[#131313]/90 px-2.5 py-1.5 text-left shadow-lg transition-all duration-200",
+                  hovered ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-1"
+                )}
+              >
+                <span className="block text-[11px] font-semibold leading-tight text-white">{marker.name}</span>
+                {marker.country && (
+                  <span className="block text-[9px] font-semibold uppercase leading-tight tracking-[0.14em] text-[#e9c349]">
+                    {marker.country}
+                  </span>
+                )}
+              </span>
+            </button>
           </Html>
         )}
       </group>
@@ -157,7 +179,7 @@ function Marker({ marker, radius, onClick, onHover, isModalOpen }) {
 // ============================================================================
 // Globe Mesh
 // ============================================================================
-function RotatingGlobe({ config, markers, onMarkerClick, onMarkerHover }) {
+function RotatingGlobe({ config, markers, onMarkerClick, onMarkerHover, isModalOpen }) {
   const [earthTexture, bumpTexture] = useTexture([
     config.textureUrl,
     config.bumpMapUrl,
@@ -195,6 +217,7 @@ function RotatingGlobe({ config, markers, onMarkerClick, onMarkerHover }) {
           radius={config.radius}
           onClick={onMarkerClick}
           onHover={onMarkerHover}
+          isModalOpen={isModalOpen}
         />
       ))}
     </group>
@@ -253,7 +276,7 @@ function Atmosphere({ radius, color, intensity, blur }) {
 // ============================================================================
 // Scene
 // ============================================================================
-function Scene({ markers, config, onMarkerClick, onMarkerHover }) {
+function Scene({ markers, config, onMarkerClick, onMarkerHover, isModalOpen }) {
   const { camera } = useThree();
 
   useEffect(() => {
@@ -284,6 +307,7 @@ function Scene({ markers, config, onMarkerClick, onMarkerHover }) {
         markers={markers}
         onMarkerClick={onMarkerClick}
         onMarkerHover={onMarkerHover}
+        isModalOpen={isModalOpen}
       />
       {config.showAtmosphere && (
         <Atmosphere

@@ -8,6 +8,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './Components/Navbar.jsx'
 import Footer from './Components/Footer.jsx'
 import Preloader from './Components/Preloader.jsx'
+import ScrollToTop from './Components/ScrollToTop.jsx'
 
 
 
@@ -19,6 +20,7 @@ function App() {
 
   return (
     <div className="relative min-h-screen bg-bg text-on-surface font-body-md antialiased overflow-x-clip flex flex-col justify-between">
+      <ScrollToTop />
       <Preloader />
       <Navbar/>
       <main className="flex-grow">

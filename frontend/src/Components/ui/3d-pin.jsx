@@ -15,7 +15,7 @@ export const PinContainer = ({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => {
-        if (href) window.open(href, "_blank");
+        if (href) window.open(href, "_blank", "noopener,noreferrer");
       }}
       style={{
         perspective: "1000px",
