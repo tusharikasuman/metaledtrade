@@ -52,10 +52,12 @@ const MISSION_PILLARS = [
 ]
 
 const WHY_US = [
-    { title: 'Integrity & Honesty', desc: 'Trust is earned through transparency. We are upfront and honest in every transaction, which is why our partnerships stand the test of time.', icon: 'gavel' },
-    { title: 'Consistent, Timely Delivery', desc: 'Delays cost you dearly. Once we commit to a timeline, delivering on schedule becomes our absolute top priority.', icon: 'schedule' },
-    { title: 'Financial Strength', desc: 'A solid financial foundation lets us handle orders of any size, from clients anywhere in the world, without missing a beat.', icon: 'account_balance' },
-    { title: 'Product Expertise', desc: 'Our team brings deep, practical product knowledge to the table, helping us understand exactly what you need.', icon: 'workspace_premium' },
+    { title: 'Steel Expertise', desc: 'Deep understanding of steel products, specifications and markets.', icon: 'precision_manufacturing' },
+    { title: 'Global Sourcing', desc: 'Access to established producers and suppliers across major steel-producing regions.', icon: 'public' },
+    { title: 'Commercial Flexibility', desc: 'Transactions structured around customer and supplier requirements.', icon: 'tune' },
+    { title: 'Market Intelligence', desc: 'Understanding of regional pricing, supply and demand.', icon: 'insights' },
+    { title: 'Execution', desc: 'Coordinated sourcing, documentation, logistics and delivery.', icon: 'local_shipping' },
+    { title: 'Long-Term Relationships', desc: 'Focused on repeat business rather than one-off transactions.', icon: 'handshake' },
 ]
 
 const COMPETENCIES = [
@@ -533,10 +535,10 @@ function WhyUs() {
             <div className="max-w-6xl mx-auto px-6 md:px-12">
                 <FadeUp className="text-center mb-16">
                     <Eyebrow center>Competitive Edge</Eyebrow>
-                    <h2 className="font-display text-3xl md:text-5xl font-semibold text-ivory uppercase leading-[1.1]">Why choose us</h2>
+                    <h2 className="font-display text-3xl md:text-5xl font-semibold text-ivory uppercase leading-[1.1]">Why Metaled Trade</h2>
                 </FadeUp>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                     {WHY_US.map((w, i) => (
                         <FadeUp key={w.title} delay={i * 0.1} amount={0.2}>
                             <div className="group relative h-full p-8 bg-bg border border-outline-variant rounded-sm overflow-hidden transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_24px_50px_-20px_rgba(0,0,0,0.25)] hover:border-gold/40">
